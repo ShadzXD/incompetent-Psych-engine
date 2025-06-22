@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="BOYFRIEND_SCARED.png">
+	<!-- Created with Adobe Animate version 24.0.0.305 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="BF idle shaking0000" x="0" y="0" width="408" height="412" frameX="-1" frameY="-1" frameWidth="410" frameHeight="414"/>
+	<SubTexture name="BF idle shaking0001" x="417" y="0" width="408" height="413" frameX="-2" frameY="-1" frameWidth="410" frameHeight="414"/>
+	<SubTexture name="BF idle shaking0002" x="0" y="422" width="408" height="414" frameX="-1" frameY="0" frameWidth="410" frameHeight="414"/>
+	<SubTexture name="BF idle shaking0003" x="417" y="422" width="410" height="414"/>
+</TextureAtlas>
