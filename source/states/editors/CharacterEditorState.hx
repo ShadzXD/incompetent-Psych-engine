@@ -114,6 +114,7 @@ class CharacterEditorState extends MusicBeatState
 		cameraFollowPointer = new FlxSprite().loadGraphic(FlxGraphic.fromClass(GraphicCursorCross));
 		cameraFollowPointer.setGraphicSize(40, 40);
 		cameraFollowPointer.updateHitbox();
+		cameraFollowPointer.antialiasing = false;
 		add(cameraFollowPointer);
 
 		healthBar = new Bar(30, FlxG.height - 75);
@@ -438,7 +439,7 @@ class CharacterEditorState extends MusicBeatState
 				healthbar_colors: [161, 161, 161],
 				camera_position: [0, 0],
 				position: [0, 0],
-								vocals_file: null
+				vocals_file: null
 
 			};
 
@@ -647,7 +648,7 @@ class CharacterEditorState extends MusicBeatState
 			});
 
 		healthIconInputText = new FlxUIInputText(15, imageInputText.y + 35, 75, healthIcon.getCharacter(), 8);
-			vocalsInputText = new FlxUIInputText(15, healthIconInputText.y + 35, 75, character.vocalsFile != null ? character.vocalsFile : '', 8);
+		vocalsInputText = new FlxUIInputText(115, healthIconInputText.y, 75, character.vocalsFile != null ? character.vocalsFile : '', 8);
 
 		singDurationStepper = new FlxUINumericStepper(15, healthIconInputText.y + 45, 0.1, 4, 0, 999, 1);
 
@@ -687,7 +688,7 @@ class CharacterEditorState extends MusicBeatState
 
 		tab_group.add(new FlxText(15, imageInputText.y - 18, 0, 'Image file name:'));
 		tab_group.add(new FlxText(15, healthIconInputText.y - 18, 0, 'Health icon name:'));
-		tab_group.add(new FlxText(15, vocalsInputText.y - 18, 0, 'Vocals File Postfix:'));
+		tab_group.add(new FlxText(115, vocalsInputText.y - 18, 0, 'Vocals File Postfix:'));
 		tab_group.add(new FlxText(15, singDurationStepper.y - 18, 0, 'Sing Animation length:'));
 		tab_group.add(new FlxText(15, scaleStepper.y - 18, 0, 'Scale:'));
 		tab_group.add(new FlxText(positionXStepper.x, positionXStepper.y - 18, 0, 'Character X/Y:'));
@@ -700,6 +701,7 @@ class CharacterEditorState extends MusicBeatState
 		tab_group.add(singDurationStepper);
 		tab_group.add(scaleStepper);
 		tab_group.add(flipXCheckBox);
+		tab_group.add(vocalsInputText);
 		tab_group.add(noAntialiasingCheckBox);
 		tab_group.add(positionXStepper);
 		tab_group.add(positionYStepper);
@@ -805,22 +807,7 @@ class CharacterEditorState extends MusicBeatState
 		}
 		else
 			{
-				var split:Array<String> = character.imageFile.split(',');
-				var charFrames:FlxAtlasFrames = Paths.getAtlas(split[0].trim());
-				
-				if(split.length > 1)
-				{
-					var original:FlxAtlasFrames = charFrames;
-					charFrames = new FlxAtlasFrames(charFrames.parent);
-					charFrames.addAtlas(original, true);
-					for (i in 1...split.length)
-					{
-						var extraFrames:FlxAtlasFrames = Paths.getAtlas(split[i].trim());
-						if(extraFrames != null)
-							charFrames.addAtlas(extraFrames, true);
-					}
-				}
-				character.frames = charFrames;
+						character.frames = Paths.getMultiAtlas(character.imageFile.split(','));
 			}
 
 		for (anim in anims) {
