@@ -38,9 +38,9 @@ class CreditsState extends MusicBeatState
 		#end
 
 		var defaultList:Array<Array<String>> = [ //Name - Icon name - Description - Link - BG Color
-			['Incompetent! Psych Engine Fork'],
-			['ShadzXD' , 'shadz', 'did most of the stuff for the fork'],
-			['Incompetent! Special thanks!'],
+			['Incompetent! Credits'],
+			['ShadzXD' , 'shadz', 'did most of the stuff for the fork', 'https://x.com/ShadzDX'],
+			['Incompetent! Special thanks'],
 			['mikolka9144', 'missing_icon', 'Made P-slice, which has some code used for HTML5.', 'https://github.com/mikolka9144'],
 			['Psych Engine Team'],
 			['Shadow Mario',		'shadowmario',		'Main Programmer and Head of Psych Engine',					 'https://ko-fi.com/shadowmario',		'444444'],
