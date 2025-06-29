@@ -1,9 +1,9 @@
 # **Incompetent! Psych Engine**
 ![incompetent](https://github.com/user-attachments/assets/9621e3c9-2c7f-4150-90cc-d6fce8b2f030)
 
-A W.I.P fork of Psych Engine 0.7.3, inspired by [Doido Engine!](https://github.com/DoidoTeam/FNF-Doido-Engine)
+A fork of Psych Engine 0.7.3, inspired by [Doido Engine!](https://github.com/DoidoTeam/FNF-Doido-Engine)
 
-**Incompetent! Psych engine**, is a fork that focuses mainly on hard coding whilst also not altering Psych Engine drastically.
+**Incompetent! Psych engine**, is a fork that focuses mainly on making Psych engine more simple for hard coding use whilst, also not altering the codebase completely. 
 
 To compile the source code, use the command, *hmm install*.
 
