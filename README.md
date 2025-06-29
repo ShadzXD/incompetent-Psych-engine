@@ -14,10 +14,10 @@ To compile the source code, use the command, *hmm install*.
 - Some bug fixes to base Psych 0.7.3
 - Inbuilt camera movement on note hit. (Can be changed from the options)
 - Cleaned up Boyfriend Sprites!
+- HUD is split into classes for easier custom hud creation.
   
 **To be added!**
 
-- HUD to be split into classes for easier custom hud creation.
 - Source code file re-orginisation.
 - Some simple optimisations.
 
