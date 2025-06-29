@@ -5,6 +5,8 @@ A fork of Psych Engine 0.7.3, inspired by [Doido Engine!](https://github.com/Doi
 
 **Incompetent! Psych engine**, is a fork that focuses mainly on making Psych engine more simple for hard coding use whilst, also not altering the codebase completely. 
 
+**,This engine does NOT support the mod folder!**
+
 To compile the source code, use the command, *hmm install*.
 
 **Features!**
