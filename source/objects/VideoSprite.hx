@@ -168,6 +168,13 @@ class VideoSprite extends FlxSpriteGroup {
 		}
 		return canSkip;
 	}
+	#if hxvlc
+	public function precacheVideo(name:String)
+	{
+		videoSprite.load(Paths.video(name));
+
+	}
+	#end
 
 	function updateSkipAlpha()
 	{

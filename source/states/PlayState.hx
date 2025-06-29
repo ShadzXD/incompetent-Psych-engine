@@ -1422,6 +1422,8 @@ class PlayState extends MusicBeatState
 				trace('pre-loaded ' +  event.value1);
 				#if hxvlc
 				startVideo(event.value1, true, false, false, false);
+				videoCutscene.precacheVideo(Paths.video(event.value1));
+
 				#end
 
 		}
@@ -2172,7 +2174,7 @@ class PlayState extends MusicBeatState
 				FlxG.sound.play(Paths.sound(value1), flValue2);
 			case 'Play Video':
 				startVideo(value1, true, false, false, true);
-				canPause = false;
+				//canPause = false;
 			case 'Lyrics':
 				if(lyricsTxt != null)
 				{
