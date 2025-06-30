@@ -195,10 +195,6 @@ class PlayState extends MusicBeatState
 	public var cpuControlled:Bool = false;
 	public var practiceMode:Bool = false;
 
-	public var botplaySine:Float = 0;
-	public var botplayTxt:FlxText;
-
-
 	public var camHUD:FlxCamera;
 	public var camGame:FlxCamera;
 	public var camOther:FlxCamera;
@@ -478,6 +474,7 @@ class PlayState extends MusicBeatState
 
 		hudClass.cameras = [camHUD];
 		hudClass.visible = !ClientPrefs.data.hideHud;
+		hudClass.isBotplay = cpuControlled;
 		add(hudClass);
 
 		comboGroup = new FlxSpriteGroup();
@@ -551,17 +548,7 @@ class PlayState extends MusicBeatState
 
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
 		moveCameraSection();
-
 	
-		botplayTxt = new FlxText(400, timeBar.y + 55, FlxG.width - 800, "BOTPLAY", 32);
-		botplayTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		botplayTxt.scrollFactor.set();
-		botplayTxt.borderSize = 1.25;
-		botplayTxt.visible = cpuControlled;
-		uiGroup.add(botplayTxt);
-		if(ClientPrefs.data.downScroll)
-			botplayTxt.y = timeBar.y - 78;
-
 		uiGroup.cameras = [camHUD];
 		noteGroup.cameras = [camHUD];
 		comboGroup.cameras = [camHUD];
@@ -1637,10 +1624,6 @@ class PlayState extends MusicBeatState
 		setOnScripts('curDecStep', curDecStep);
 		setOnScripts('curDecBeat', curDecBeat);
 
-		if(botplayTxt != null && botplayTxt.visible) {
-			botplaySine += 180 * elapsed;
-			botplayTxt.alpha = 1 - Math.sin((Math.PI * botplaySine) / 180);
-		}
 
 		if (controls.PAUSE && startedCountdown && canPause)
 		{
@@ -1790,14 +1773,16 @@ class PlayState extends MusicBeatState
 
 		#if debug
 		if(!endingSong && !startingSong) {
-			if (FlxG.keys.justPressed.ONE) {
+			if (FlxG.keys.justPressed.NINE) {
 				KillNotes();
 				FlxG.sound.music.onComplete();
 			}
-			if(FlxG.keys.justPressed.TWO) { //Go 10 seconds into the future :O
+			if(FlxG.keys.justPressed.PAGEUP) { //Go 10 seconds into the future :O
 				setSongTime(Conductor.songPosition + 10000);
 				clearNotesBefore(Conductor.songPosition);
+				//trace(Conductor.songPosition );
 			}
+
 		}
 		#end
 
@@ -1858,7 +1843,7 @@ class PlayState extends MusicBeatState
 
 	function openCharacterEditor()
 	{
-				canResync = false;
+		canResync = false;
 
 		FlxG.camera.followLerp = 0;
 		persistentUpdate = false;
@@ -2517,7 +2502,7 @@ class PlayState extends MusicBeatState
 			numScore.acceleration.y = FlxG.random.int(200, 300) * playbackRate * playbackRate;
 			numScore.velocity.y -= FlxG.random.int(140, 160) * playbackRate;
 			numScore.velocity.x = FlxG.random.float(-5, 5) * playbackRate;
-			numScore.visible = !ClientPrefs.data.hideHud;
+			numScore.visible = !ClientPrefs.data.hideHud || !cpuControlled;
 			numScore.antialiasing = antialias;
 
 			//if (combo >= 10 || combo == 0)
@@ -2823,7 +2808,7 @@ class PlayState extends MusicBeatState
 				char.holdTimer = 0;
 			}
 		}
-		if(opponentVocals.length <= 0) vocals.volume = 1;
+		vocals.volume = 1;
 		strumPlayAnim(true, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate);
 		note.hitByOpponent = true;
 				if(note.alpha != 0)spawnHoldSplashOnNote(note);
@@ -3394,8 +3379,13 @@ class PlayState extends MusicBeatState
 			}
 			fullComboFunction();
 		}
-		hudClass.updateScore(badHit, songScore, songMisses, ratingName, ratingPercent); // score will only update after rating is calculated, if it's a badHit, it shouldn't bounce
-		if(!badHit)hudClass.doScoreBop();
+		if(!cpuControlled)
+		{
+			hudClass.updateScore(badHit, songScore, songMisses, ratingName, ratingPercent); // score will only update after rating is calculated, if it's a badHit, it shouldn't bounce
+			if(!badHit && ClientPrefs.data.scoreZoom)hudClass.doScoreBop();
+		} else hudClass.botplayStuff();
+	
+	
 		setOnScripts('rating', ratingPercent);
 		setOnScripts('ratingName', ratingName);
 		setOnScripts('ratingFC', ratingFC);

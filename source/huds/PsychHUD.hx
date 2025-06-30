@@ -43,7 +43,6 @@ class PsychHUD extends MainHUD
 		scoreTxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
 		scoreTxt.borderSize = 1.25;
-		updateScore(false);
 		add(scoreTxt);
     }
     override function update(elapsed:Float)
@@ -63,7 +62,7 @@ class PsychHUD extends MainHUD
 		iconP1.animation.curAnim.curFrame = (healthBar.percent < 20) ? 1 : 0; //If health is under 20%, change player icon to frame 1 (losing icon), otherwise, frame 0 (normal)
 		iconP2.animation.curAnim.curFrame = (healthBar.percent > 80) ? 1 : 0; //If health is over 80%, change opponent icon to frame 1 (losing icon), otherwise, frame 0 (normal)
     }
-    override public dynamic function updateScore(miss:Bool = false, ?score:Int, ?misses:Int, ?ratingName:String,?percent:Float)
+    override public function updateScore(miss:Bool = false, ?score:Int, ?misses:Int, ?ratingName:String,?percent:Float)
 	{
 		var str:String = ratingName;
 		
@@ -76,15 +75,14 @@ class PsychHUD extends MainHUD
 		+ ' | Rating: ${str}';
 		// "tempScore" variable is used to prevent another memory leak, just in case
 		// "\n" here prevents the text from being cut off by beat zooms
-
-				scoreTxt.text = tempScore;
-		//if (!miss && !cpuControlled)
-
+		 scoreTxt.text = tempScore;
 	} 
-	override public function doScoreBop():Void {
-		if(!ClientPrefs.data.scoreZoom)
-			return;
 
+	override public function botplayStuff():Void {
+	scoreTxt.text = botplayText;
+	}
+
+	override public function doScoreBop():Void {
 		if(scoreTxtTween != null)
 			scoreTxtTween.cancel();
 

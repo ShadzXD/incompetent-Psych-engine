@@ -10,7 +10,6 @@ class VanillaHUD extends MainHUD
 {
     public var healthBar:Bar;
     var healthLerp:Float = 1;
-	public var scoreText:FlxText;
     var iconOffset:Int = 26;
 
     public function new()
@@ -32,7 +31,7 @@ class VanillaHUD extends MainHUD
 		scoreText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreText.scrollFactor.set();
 		scoreText.updateHitbox();
-		updateScore(false);
+		//updateScore(false);
 		add(scoreText);
 
 		iconP1 = new HealthIcon(PlayState.instance.boyfriend.healthIcon, true);
@@ -64,11 +63,15 @@ class VanillaHUD extends MainHUD
 		iconP2.animation.curAnim.curFrame = (healthBar.percent > 80) ? 1 : 0; //If health is over 80%, change opponent icon to frame 1 (losing icon), otherwise, frame 0 (normal)
     }
 
-    override public dynamic function updateScore(miss:Bool = false, ?score:Int, ?misses:Int, ?ratingName:String,?percent:Float)
+    override public function updateScore(miss:Bool = false, ?score:Int, ?misses:Int, ?ratingName:String,?percent:Float)
 	{
 		var tempScore:String = 'Score: ${FlxStringUtil.formatMoney(score, false, true)}';
 		scoreText.text = tempScore;
-	} 
+	}
+	override public function botplayStuff():Void {
+		scoreText.text = botplayText;
+	}
+
     
 	override function beatHit()
 	{
