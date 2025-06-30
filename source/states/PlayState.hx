@@ -3379,16 +3379,22 @@ class PlayState extends MusicBeatState
 			}
 			fullComboFunction();
 		}
-		if(!cpuControlled)
-		{
-			hudClass.updateScore(badHit, songScore, songMisses, ratingName, ratingPercent); // score will only update after rating is calculated, if it's a badHit, it shouldn't bounce
-			if(!badHit && ClientPrefs.data.scoreZoom)hudClass.doScoreBop();
-		} else hudClass.botplayStuff();
+		
+		if(ClientPrefs.data.scoreZoom)hudClass.doScoreBop();
+		checkBotplay(badHit);
+		
+	
+		
 	
 	
 		setOnScripts('rating', ratingPercent);
 		setOnScripts('ratingName', ratingName);
 		setOnScripts('ratingFC', ratingFC);
+	}
+	public function checkBotplay(badHit:Bool = false)
+	{
+		if(!cpuControlled) hudClass.updateScore(badHit, songScore, songMisses, ratingName, ratingPercent); // score will only update after rating is calculated, if it's a badHit, it shouldn't bounce
+		else hudClass.botplayStuff();
 	}
 
 	#if ACHIEVEMENTS_ALLOWED
