@@ -147,36 +147,34 @@ class Paths
 	{
 		currentLevel = name.toLowerCase();
 	}
-
-	public static function getPath(file:String, ?type:AssetType = TEXT, ?library:Null<String> = null, ?modsAllowed:Bool = false):String
+	public static function getPath(file:String, ?type:AssetType = TEXT, ?parentfolder:String, ?modsAllowed:Bool = true):String
 	{
 		#if MODS_ALLOWED
 		if(modsAllowed)
 		{
 			var customFile:String = file;
-			if (library != null)
-				customFile = '$library/$file';
+			if (parentfolder != null) customFile = '$parentfolder/$file';
 
 			var modded:String = modFolders(customFile);
 			if(FileSystem.exists(modded)) return modded;
 		}
 		#end
 
-		if (library != null)
-			return getLibraryPath(file, library);
+		if (parentfolder != null)
+			return getFolderPath(file, parentfolder);
 
-		if (currentLevel != null)
+		if (currentLevel != null && currentLevel != 'shared')
 		{
-			var levelPath:String = '';
-			if(currentLevel != 'shared') {
-				levelPath = getLibraryPathForce(file, 'week_assets', currentLevel);
-				if (OpenFlAssets.exists(levelPath, type))
-					return levelPath;
-			}
+			var levelPath = getFolderPath(file, currentLevel);
+			if (OpenFlAssets.exists(levelPath, type))
+				return levelPath;
 		}
-
 		return getSharedPath(file);
 	}
+
+	inline static public function getFolderPath(file:String, folder = "shared")
+		return 'assets/$folder/$file';
+
 
 	static public function getLibraryPath(file:String, library = "shared")
 	{

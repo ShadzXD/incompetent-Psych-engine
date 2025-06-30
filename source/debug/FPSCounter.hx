@@ -43,35 +43,32 @@ class FPSCounter extends TextField
 
 	var deltaTimeout:Float = 0.0;
 
-	// Event Handlers
+// Event Handlers
 	private override function __enterFrame(deltaTime:Float):Void
 	{
-		// prevents the overlay from updating every frame, why would you need to anyways
-		if (deltaTimeout > 1000) {
-			deltaTimeout = 0.0;
-			return;
-		}
-
 		final now:Float = haxe.Timer.stamp() * 1000;
 		times.push(now);
 		while (times[0] < now - 1000) times.shift();
+		// prevents the overlay from updating every frame, why would you need to anyways @crowplexus
+		if (deltaTimeout < 50) {
+			deltaTimeout += deltaTime;
+			return;
+		}
 
 		currentFPS = times.length < FlxG.updateFramerate ? times.length : FlxG.updateFramerate;		
 		updateText();
-		deltaTimeout += deltaTime;
+		deltaTimeout = 0.0;
 	}
 
 	public dynamic function updateText():Void { // so people can override it in hscript
-		text = 'FPS: ${currentFPS} / ' + ClientPrefs.data.framerate
-		#if !html5
-		+ '\nMemory: ${flixel.util.FlxStringUtil.formatBytes(memoryMegas)}'
-		#end
-		+ '\nIncompetent! Psych Engine'; 
+		text = 'FPS: ${currentFPS}'
+		+ '\nMemory: ${flixel.util.FlxStringUtil.formatBytes(memoryMegas)}';
+
 		textColor = 0xFFFFFFFF;
 		if (currentFPS < FlxG.drawFramerate * 0.5)
 			textColor = 0xFFFF0000;
 	}
 
 	inline function get_memoryMegas():Float
-		return cast(System.totalMemory, UInt);
+		return cpp.vm.Gc.memInfo64(cpp.vm.Gc.MEM_INFO_USAGE);
 }
