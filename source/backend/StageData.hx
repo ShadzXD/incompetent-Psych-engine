@@ -85,18 +85,10 @@ class StageData {
 		var rawJson:String = null;
 		var path:String = Paths.getSharedPath('stages/' + stage + '.json');
 
-		#if MODS_ALLOWED
-		var modPath:String = Paths.modFolders('stages/' + stage + '.json');
-		if(FileSystem.exists(modPath)) {
-			rawJson = File.getContent(modPath);
-		} else if(FileSystem.exists(path)) {
-			rawJson = File.getContent(path);
-		}
-		#else
+	
 		if(Assets.exists(path)) {
 			rawJson = Assets.getText(path);
 		}
-		#end
 		else
 		{
 			return null;
