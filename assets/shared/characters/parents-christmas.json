@@ -13,8 +13,8 @@
 		},
 		{
 			"offsets": [
-				-47,
-				24
+				-661,
+				-445
 			],
 			"loop": false,
 			"anim": "singUP",
@@ -24,8 +24,8 @@
 		},
 		{
 			"offsets": [
-				-31,
-				-29
+				-657,
+				-444
 			],
 			"loop": false,
 			"anim": "singDOWN",
@@ -35,8 +35,8 @@
 		},
 		{
 			"offsets": [
-				-30,
-				16
+				-656,
+				-444
 			],
 			"loop": false,
 			"anim": "singLEFT",
@@ -46,8 +46,8 @@
 		},
 		{
 			"offsets": [
-				-1,
-				-23
+				-663,
+				-445
 			],
 			"loop": false,
 			"anim": "singRIGHT",
@@ -57,8 +57,8 @@
 		},
 		{
 			"offsets": [
-				-1,
-				-24
+				-662,
+				-445
 			],
 			"loop": false,
 			"anim": "singRIGHT-alt",
@@ -68,8 +68,8 @@
 		},
 		{
 			"offsets": [
-				-30,
-				-27
+				-661,
+				-444
 			],
 			"loop": false,
 			"anim": "singDOWN-alt",
@@ -79,8 +79,8 @@
 		},
 		{
 			"offsets": [
-				-30,
-				15
+				-660,
+				-445
 			],
 			"loop": false,
 			"anim": "singLEFT-alt",
@@ -90,8 +90,8 @@
 		},
 		{
 			"offsets": [
-				-47,
-				24
+				-659,
+				-447
 			],
 			"loop": false,
 			"anim": "singUP-alt",
@@ -101,82 +101,82 @@
 		},
 		{
 			"offsets": [
-				2,
-				0
+				-8,
+				10
 			],
+			"loop": true,
+			"fps": 24,
+			"anim": "idle-loop",
 			"indices": [
 				10,
 				11,
 				12,
 				13
 			],
-			"fps": 24,
-			"anim": "idle-loop",
-			"loop": true,
 			"name": "Parent Christmas Idle"
 		},
 		{
 			"offsets": [
-				-47,
-				24
+				-658,
+				-446
 			],
+			"loop": true,
+			"fps": 24,
+			"anim": "singUP-loop",
 			"indices": [
 				10,
 				11,
 				12,
 				13
 			],
-			"fps": 24,
-			"anim": "singUP-loop",
-			"loop": true,
 			"name": "Parent Up Note Dad"
 		},
 		{
 			"offsets": [
-				-30,
-				16
+				-660,
+				-444
 			],
+			"loop": true,
+			"fps": 24,
+			"anim": "singLEFT-loop",
 			"indices": [
 				12,
 				13,
 				14,
 				15
 			],
-			"fps": 24,
-			"anim": "singLEFT-loop",
-			"loop": true,
 			"name": "Parent Left Note Dad"
 		},
 		{
 			"offsets": [
-				-31,
-				-29
+				-657,
+				-443
 			],
+			"loop": true,
+			"fps": 24,
+			"anim": "singDOWN-loop",
 			"indices": [
 				11,
 				12,
 				13,
 				14
 			],
-			"fps": 24,
-			"anim": "singDOWN-loop",
-			"loop": true,
 			"name": "Parent Down Note Dad"
 		},
 		{
 			"offsets": [
-				-1,
-				-23
+				-661,
+				-443
 			],
+			"loop": true,
+			"fps": 24,
+			"anim": "singRIGHT-loop",
 			"indices": [
 				12,
 				13,
 				14,
 				15
 			],
-			"fps": 24,
-			"anim": "singRIGHT-loop",
-			"loop": true,
 			"name": "Parent Right Note Dad"
 		},
 		{
@@ -184,15 +184,15 @@
 				-1,
 				-24
 			],
+			"loop": true,
+			"fps": 24,
+			"anim": "singRIGHT-alt-loop",
 			"indices": [
 				11,
 				12,
 				13,
 				14
 			],
-			"fps": 24,
-			"anim": "singRIGHT-alt-loop",
-			"loop": true,
 			"name": "Parent Right Note Mom"
 		},
 		{
@@ -200,54 +200,55 @@
 				-47,
 				24
 			],
+			"loop": true,
+			"fps": 24,
+			"anim": "singUP-alt-loop",
 			"indices": [
 				10,
 				11,
 				12,
 				13
 			],
-			"fps": 24,
-			"anim": "singUP-alt-loop",
-			"loop": true,
 			"name": "Parent Up Note Mom"
 		},
 		{
 			"offsets": [
-				-30,
-				15
+				-660,
+				-455
 			],
+			"loop": true,
+			"fps": 24,
+			"anim": "singLEFT-alt-loop",
 			"indices": [
 				11,
 				12,
 				13,
 				14
 			],
-			"fps": 24,
-			"anim": "singLEFT-alt-loop",
-			"loop": true,
 			"name": "Parent Left Note Mom"
 		},
 		{
 			"offsets": [
-				-30,
-				-27
+				-661,
+				-439
 			],
+			"loop": true,
+			"fps": 24,
+			"anim": "singDOWN-alt-loop",
 			"indices": [
 				11,
 				12,
 				13,
 				14
 			],
-			"fps": 24,
-			"anim": "singDOWN-alt-loop",
-			"loop": true,
 			"name": "Parent Down Note Mom"
 		}
 	],
+	"vocals_file": "",
 	"no_antialiasing": false,
-	"image": "characters/Parents/mom_dad_christmas_assets",
+	"image": "characters/Parents/PARENTS_ATLAS",
 	"position": [
-		-500,
+		-380,
 		0
 	],
 	"healthicon": "parents",
@@ -258,9 +259,10 @@
 		174
 	],
 	"camera_position": [
-		0,
-		0
+		640,
+		320
 	],
 	"sing_duration": 4,
-	"scale": 1
+	"scale": 1,
+	"_editor_isPlayer": false
 }

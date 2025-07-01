@@ -1,35 +1,25 @@
 {
 	"animations": [
 		{
-			"offsets": [
-				1,
-				0
-			],
 			"loop": false,
-			"fps": 24,
-			"anim": "cheer",
-			"indices": [],
-			"name": "GF Cheer"
-		},
-		{
-			"offsets": [
-				-2,
-				-21
-			],
-			"loop": false,
-			"fps": 24,
-			"anim": "sad",
-			"indices": [],
-			"name": "gf sad"
-		},
-		{
 			"offsets": [
 				0,
 				-9
 			],
-			"loop": false,
+			"anim": "cheer",
 			"fps": 24,
+			"name": "GF Cheer",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				0,
+				-9
+			],
 			"anim": "danceLeft",
+			"fps": 24,
+			"name": "GF Dancing Beat",
 			"indices": [
 				30,
 				0,
@@ -47,17 +37,17 @@
 				12,
 				13,
 				14
-			],
-			"name": "GF Dancing Beat"
+			]
 		},
 		{
+			"loop": false,
 			"offsets": [
 				0,
 				-9
 			],
-			"loop": false,
-			"fps": 24,
 			"anim": "danceRight",
+			"fps": 24,
+			"name": "GF Dancing Beat",
 			"indices": [
 				15,
 				16,
@@ -74,16 +64,34 @@
 				27,
 				28,
 				29
+			]
+		},
+		{
+			"offsets": [
+				-51,
+				306
 			],
-			"name": "GF Dancing Beat"
+			"indices": [
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6
+			],
+			"fps": 24,
+			"anim": "sad",
+			"loop": false,
+			"name": "gf sad"
 		}
 	],
 	"vocals_file": "",
 	"no_antialiasing": false,
-	"image": "characters/GF/gfChristmas",
+	"image": "characters/GF/GF_ATLAS_CHRISTMAS",
 	"position": [
-		0,
-		0
+		320,
+		360
 	],
 	"healthicon": "gf",
 	"flip_x": false,

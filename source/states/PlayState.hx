@@ -3380,13 +3380,9 @@ class PlayState extends MusicBeatState
 			fullComboFunction();
 		}
 		
-		if(ClientPrefs.data.scoreZoom)hudClass.doScoreBop();
+		if(ClientPrefs.data.scoreZoom && !badHit)hudClass.doScoreBop();
 		checkBotplay(badHit);
 		
-	
-		
-	
-	
 		setOnScripts('rating', ratingPercent);
 		setOnScripts('ratingName', ratingName);
 		setOnScripts('ratingFC', ratingFC);
