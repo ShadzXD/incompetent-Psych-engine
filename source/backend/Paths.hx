@@ -606,10 +606,39 @@ class Paths
 	#end
 	public static function getContent(key:String):String
 	#if sys
-	return openfl.Assets.getText(getPath(key));
+	return openfl.Assets.getText(key);
 	#else
 	return openfl.Assets.getText(getPath(key));
 	#end
+
+	public static inline function exists(path:String) 
+	{
+        #if sys
+		return FileSystem.exists(path);
+		#else
+		return OpenFlAssets.exists(path, TEXT);
+		#end
+    }
+    public static function readDirectory(directory:String):Array<String>
+        {
+            #if MODS_ALLOWED
+            return FileSystem.readDirectory(directory);
+            #else
+            var dirs:Array<String> = [];
+            for(dir in Assets.list().filter(folder -> folder.startsWith(directory)))
+            {
+                @:privateAccess
+                for(library in lime.utils.Assets.libraries.keys())
+                {
+                    if(library != 'default' && Assets.exists('$library:$dir') && (!dirs.contains('$library:$dir') || !dirs.contains(dir)))
+                        dirs.push('$library:$dir');
+                    else if(Assets.exists(dir) && !dirs.contains(dir))
+                        dirs.push(dir);
+                }
+            }
+            return dirs;
+            #end
+        }
 	#if flxanimate
 	public static function loadAnimateAtlas(spr:FlxAnimate, folderOrImg:Dynamic, spriteJson:Dynamic = null, animationJson:Dynamic = null)
 	{

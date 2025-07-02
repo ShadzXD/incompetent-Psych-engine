@@ -27,7 +27,7 @@ class VanillaHUD extends MainHUD
 		healthBar.setColors(FlxColor.RED, FlxColor.LIME);
 		add(healthBar);
 
-		scoreText = new FlxText(-400, healthBar.y + 40, FlxG.width, "", 20);
+		scoreText = new FlxText(-400, healthBar.y + 34, FlxG.width, "", 20);
 		scoreText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreText.scrollFactor.set();
 		scoreText.updateHitbox();

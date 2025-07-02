@@ -3,7 +3,10 @@ package huds;
 import objects.HealthIcon;
 import objects.Bar;
 import flixel.util.FlxStringUtil;
-
+/*
+* Recreation of Psych Engine's hud.
+* You can extend this one if your hud is similiar.
+*/
 class PsychHUD extends MainHUD
 {
 	var scoreTxtTween:FlxTween;
@@ -78,9 +81,7 @@ class PsychHUD extends MainHUD
 		 scoreTxt.text = tempScore;
 	} 
 
-	override public function botplayStuff():Void {
-	scoreTxt.text = botplayText;
-	}
+	override public function botplayStuff() scoreTxt.text = botplayText;
 
 	override public function doScoreBop():Void {
 		if(scoreTxtTween != null)

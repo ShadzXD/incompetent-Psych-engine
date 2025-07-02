@@ -21,6 +21,6 @@ class MainHUD extends FlxGroup
 
 	public function doScoreBop():Void{}
 
-	public function healthStuff(value:Float){}
+	//public function healthStuff(value:Float){}
 	
 }
