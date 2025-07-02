@@ -314,9 +314,7 @@ class StoryMenuState extends MusicBeatState
 				FreeplayState.destroyFreeplayVocals();
 			});
 			
-			#if (MODS_ALLOWED && DISCORD_ALLOWED)
-			DiscordClient.loadModRPC();
-			#end
+	
 		}
 		else FlxG.sound.play(Paths.sound('cancelMenu'));
 	}

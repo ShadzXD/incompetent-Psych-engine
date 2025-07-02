@@ -604,13 +604,13 @@ class Paths
 		return 'mods/' + key;
 	}
 	#end
-	public static function getContent(key:String):String
-	#if sys
-	return openfl.Assets.getText(key);
-	#else
-	return openfl.Assets.getText(getPath(key));
-	#end
-
+   public static inline function getContent(path:String) {
+        #if sys
+		return (FileSystem.exists(path)) ? File.getContent(path) : null;
+		#else
+		return (OpenFlAssets.exists(path, TEXT)) ? Assets.getText(path) : null;
+		#end
+    }
 	public static inline function exists(path:String) 
 	{
         #if sys

@@ -22,10 +22,12 @@
 
 	<!--define name="HSCRIPT_ALLOWED" if="desktop"-->
 	<define name="LUA_ALLOWED" if="desktop" />
+	<define name="HSCRIPT_ALLOWED" />
 	<define name="ACHIEVEMENTS_ALLOWED" />
 	<define name="DISCORD_ALLOWED" if ="desktop" />
 	<define name="VIDEOS_ALLOWED"/> 
 	<define name="EDITORS_ALLOWED" if = "desktop"/> 
+	<define name="IRIS_DEBUG"/>
 
 	<!-- ____________________________ Window Settings ___________________________ -->
 
@@ -89,10 +91,10 @@
 
 	<!--Psych stuff needed-->
 	<haxelib name="linc_luajit" if="LUA_ALLOWED"/>
-	<haxelib name="SScript" if="HSCRIPT_ALLOWED"/>
 	<haxelib name="hxvlc" unless="html5"/>
 	<haxelib name="hxdiscord_rpc" if="DISCORD_ALLOWED"/>
 	<haxelib name="flxanimate"/>
+	<haxelib name="hscript-iris" if="HSCRIPT_ALLOWED"/>
 
 	<!-- Disable Discord IO Thread -->
 	<haxedef name="DISCORD_DISABLE_IO_THREAD" if="hxdiscord_rpc" />

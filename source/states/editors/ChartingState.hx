@@ -82,7 +82,8 @@ class ChartingState extends MusicBeatState
 		['Play Sound', "Value 1: Sound file name\nValue 2: Volume (Default: 1), ranges from 0 to 1"],
 		['Play Video', "Value 1: Video Name"],
 		['Lyrics', "Value 1: Enter Lyrics \nValue 2: Anything to remove text."],
-		['Zoom Camera', "Value 1: Change Camera Zoom.\n Value 2: How long to change."] 
+		['Zoom Camera', "Value 1: Change Camera Zoom.\n Value 2: How long to change."],
+		['Split Screen']
 	];
 
 	var _file:FileReference;
@@ -923,7 +924,7 @@ class ChartingState extends MusicBeatState
 				var fileName:String = file.toLowerCase().trim();
 				var wordLen:Int = 4; //length of word ".lua" and ".txt";
 				if((#if LUA_ALLOWED fileName.endsWith('.lua') || #end
-					#if HSCRIPT_ALLOWED (fileName.endsWith('.hx') && (wordLen = 3) == 3) || #end
+					#if HSCRIPT_ALLOWED (fileName.endsWith('.hx')) || #end
 					fileName.endsWith('.txt')) && fileName != 'readme.txt')
 				{
 					var fileToCheck:String = file.substr(0, file.length - wordLen);
