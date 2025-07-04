@@ -604,6 +604,8 @@ class Paths
 		return 'mods/' + key;
 	}
 	#end
+	//functions taken from pslice by mikolka!
+
    public static inline function getContent(path:String) {
         #if sys
 		return (FileSystem.exists(path)) ? File.getContent(path) : null;

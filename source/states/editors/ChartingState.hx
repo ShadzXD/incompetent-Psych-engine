@@ -43,6 +43,14 @@ import substates.Prompt;
 import flash.media.Sound;
 #end
 
+typedef EventsData =
+{
+	eventName:Array<String>,
+	eventDescriptions: Array<String>,
+	noteName:Array<String>
+
+}
+
 @:access(flixel.sound.FlxSound._sound)
 @:access(openfl.media.Sound.__buffer)
 
@@ -82,8 +90,7 @@ class ChartingState extends MusicBeatState
 		['Play Sound', "Value 1: Sound file name\nValue 2: Volume (Default: 1), ranges from 0 to 1"],
 		['Play Video', "Value 1: Video Name"],
 		['Lyrics', "Value 1: Enter Lyrics \nValue 2: Anything to remove text."],
-		['Zoom Camera', "Value 1: Change Camera Zoom.\n Value 2: How long to change."],
-		['Split Screen']
+		['Zoom Camera', "Value 1: Change Camera Zoom.\n Value 2: How long to change."]
 	];
 
 	var _file:FileReference;
@@ -192,6 +199,8 @@ class ChartingState extends MusicBeatState
 	var text:String = "";
 	public static var vortex:Bool = false;
 	public var mouseQuant:Bool = false;
+	var eventsJson:EventsData;
+
 	override function create()
 	{
 		if (PlayState.SONG != null)
@@ -214,6 +223,20 @@ class ChartingState extends MusicBeatState
 			addSection();
 			PlayState.SONG = _song;
 		}
+		eventsJson = tjson.TJSON.parse(Paths.getTextFromFile('custom_events/eventsInfo.json'));
+		for (i in 0...eventsJson.eventName.length)
+		{
+			trace(eventsJson.eventName[i]);
+			eventStuff.push([eventsJson.eventName[i], eventsJson.eventDescriptions[i]]);
+
+		}
+
+		for (i in 0...eventsJson.noteName.length)
+		{
+			noteTypeList.push(eventsJson.noteName[i]);
+
+		}
+
 
 		// Paths.clearMemory();
 
@@ -439,11 +462,8 @@ class ChartingState extends MusicBeatState
 
 			var songName:String = Paths.formatToSongPath(_song.song);
 			var file:String = Paths.json(songName + '/events');
-			#if sys
-			if (#if MODS_ALLOWED FileSystem.exists(Paths.modsJson(songName + '/events')) || #end FileSystem.exists(file))
-			#else
+			
 			if (OpenFlAssets.exists(file))
-			#end
 			{
 				clearEvents();
 				var events:SwagSong = Song.loadFromJson('events', songName);
@@ -485,13 +505,7 @@ class ChartingState extends MusicBeatState
 		stepperSpeed.value = _song.speed;
 		stepperSpeed.name = 'song_speed';
 		blockPressWhileTypingOnStepper.push(stepperSpeed);
-		#if MODS_ALLOWED
-		var directories:Array<String> = [Paths.mods('characters/'), Paths.mods(Mods.currentModDirectory + '/characters/'), Paths.getSharedPath('characters/')];
-		for(mod in Mods.getGlobalMods())
-			directories.push(Paths.mods(mod + '/characters/'));
-		#else
 		var directories:Array<String> = [Paths.getSharedPath('characters/')];
-		#end
 
 		var tempArray:Array<String> = [];
 		var characters:Array<String> = Mods.mergeAllTextsNamed('data/characterList.txt', Paths.getSharedPath());
@@ -501,23 +515,6 @@ class ChartingState extends MusicBeatState
 				tempArray.push(character);
 		}
 
-		#if MODS_ALLOWED
-		for (i in 0...directories.length) {
-			var directory:String = directories[i];
-			if(FileSystem.exists(directory)) {
-				for (file in FileSystem.readDirectory(directory)) {
-					var path = haxe.io.Path.join([directory, file]);
-					if (!FileSystem.isDirectory(path) && file.endsWith('.json')) {
-						var charToCheck:String = file.substr(0, file.length - 5);
-						if(charToCheck.trim().length > 0 && !charToCheck.endsWith('-dead') && !tempArray.contains(charToCheck)) {
-							tempArray.push(charToCheck);
-							characters.push(charToCheck);
-						}
-					}
-				}
-			}
-		}
-		#end
 		tempArray = [];
 
 		var player1DropDown = new FlxUIDropDownMenu(10, stepperSpeed.y + 45, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
@@ -547,13 +544,7 @@ class ChartingState extends MusicBeatState
 		player2DropDown.selectedLabel = _song.player2;
 		blockPressWhileScrolling.push(player2DropDown);
 
-		#if MODS_ALLOWED
-		var directories:Array<String> = [Paths.mods('stages/'), Paths.mods(Mods.currentModDirectory + '/stages/'), Paths.getSharedPath('stages/')];
-		for(mod in Mods.getGlobalMods())
-			directories.push(Paths.mods(mod + '/stages/'));
-		#else
 		var directories:Array<String> = [Paths.getSharedPath('stages/')];
-		#end
 
 		var stageFile:Array<String> = Mods.mergeAllTextsNamed('data/stageList.txt', Paths.getSharedPath());
 		var stages:Array<String> = [];
@@ -563,23 +554,7 @@ class ChartingState extends MusicBeatState
 			}
 			tempArray.push(stage);
 		}
-		#if MODS_ALLOWED
-		for (i in 0...directories.length) {
-			var directory:String = directories[i];
-			if(FileSystem.exists(directory)) {
-				for (file in FileSystem.readDirectory(directory)) {
-					var path = haxe.io.Path.join([directory, file]);
-					if (!FileSystem.isDirectory(path) && file.endsWith('.json')) {
-						var stageToCheck:String = file.substr(0, file.length - 5);
-						if(stageToCheck.trim().length > 0 && !tempArray.contains(stageToCheck)) {
-							tempArray.push(stageToCheck);
-							stages.push(stageToCheck);
-						}
-					}
-				}
-			}
-		}
-		#end
+	
 
 		if(stages.length < 1) stages.push('stage');
 
@@ -915,29 +890,6 @@ class ChartingState extends MusicBeatState
 			curNoteTypes.push(noteTypeList[key]);
 			key++;
 		}
-
-		#if sys
-		var foldersToCheck:Array<String> = Mods.directoriesWithFile(Paths.getSharedPath(), 'custom_notetypes/');
-		for (folder in foldersToCheck)
-			for (file in FileSystem.readDirectory(folder))
-			{
-				var fileName:String = file.toLowerCase().trim();
-				var wordLen:Int = 4; //length of word ".lua" and ".txt";
-				if((#if LUA_ALLOWED fileName.endsWith('.lua') || #end
-					#if HSCRIPT_ALLOWED (fileName.endsWith('.hx')) || #end
-					fileName.endsWith('.txt')) && fileName != 'readme.txt')
-				{
-					var fileToCheck:String = file.substr(0, file.length - wordLen);
-					if(!curNoteTypes.contains(fileToCheck))
-					{
-						curNoteTypes.push(fileToCheck);
-						key++;
-					}
-				}
-			}
-		#end
-
-
 		var displayNameList:Array<String> = curNoteTypes.copy();
 		for (i in 1...displayNameList.length) {
 			displayNameList[i] = i + '. ' + displayNameList[i];
@@ -974,13 +926,6 @@ class ChartingState extends MusicBeatState
 		#if LUA_ALLOWED
 		var eventPushedMap:Map<String, Bool> = new Map<String, Bool>();
 		var directories:Array<String> = [];
-
-		#if MODS_ALLOWED
-		directories.push(Paths.mods('custom_events/'));
-		directories.push(Paths.mods(Mods.currentModDirectory + '/custom_events/'));
-		for(mod in Mods.getGlobalMods())
-			directories.push(Paths.mods(mod + '/custom_events/'));
-		#end
 
 		for (i in 0...directories.length) {
 			var directory:String =  directories[i];

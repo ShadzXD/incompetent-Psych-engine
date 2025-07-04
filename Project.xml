@@ -21,11 +21,11 @@
 	<!-- ______________________ PSYCH ENGINE CUSTOMIZATION ______________________ -->
 
 	<!--define name="HSCRIPT_ALLOWED" if="desktop"-->
-	<define name="LUA_ALLOWED" if="desktop" />
+	<!--define name="LUA_ALLOWED" if="desktop"-->
 	<define name="HSCRIPT_ALLOWED" />
 	<define name="ACHIEVEMENTS_ALLOWED" />
 	<define name="DISCORD_ALLOWED" if ="desktop" />
-	<define name="VIDEOS_ALLOWED"/> 
+	<define name="VIDEOS_ALLOWED" unless ="32bits"/> 
 	<define name="EDITORS_ALLOWED" if = "desktop"/> 
 	<define name="IRIS_DEBUG"/>
 

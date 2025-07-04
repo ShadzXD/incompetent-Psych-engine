@@ -54,7 +54,10 @@ import psychlua.HScript;
 #end
 
 #if HSCRIPT_ALLOWED
+import psychlua.HScript.HScriptInfos;
 import crowplexus.iris.Iris;
+import crowplexus.hscript.Expr.Error as IrisError;
+import crowplexus.hscript.Printer;
 #end
 
 /**
@@ -402,7 +405,7 @@ class PlayState extends MusicBeatState
 		#end
 
 		// "GLOBAL" SCRIPTS
-		#if (HSCRIPT_ALLOWED && sys)
+		#if sys
 		for (folder in Mods.directoriesWithFile(Paths.getSharedPath(), 'scripts/'))
 			for (file in FileSystem.readDirectory(folder))
 			{
@@ -417,7 +420,19 @@ class PlayState extends MusicBeatState
 					initHScript(folder + file);
 				#end
 			}
-			#end
+		#else
+		/*
+			var fullScriptList:String = Assets.getText(Paths.getSharedPath('scripts/scriptList.txt'));
+		var scriptArray:Array<String> = fullScriptList.split('\n');
+		if(scriptArray.length != 0)
+		for(len in scriptArray)
+		{
+			trace(scriptArray);
+			initHScript(Paths.getSharedPath('scripts/'  + len  + '.hx'));
+
+		}
+			*/
+		#end
 		// STAGE SCRIPTS
 		#if LUA_ALLOWED
 		startLuasNamed('stages/' + curStage + '.lua');
@@ -577,13 +592,14 @@ class PlayState extends MusicBeatState
 		}
 
 		// SONG SPECIFIC SCRIPTS
+		var songScript:String = Paths.getSharedPath('data/$songName/script.hx');
 		#if(HSCRIPT_ALLOWED)
-		if(Paths.exists(Paths.getSharedPath('data/$songName/script.hx')))
+		if(Paths.exists(songScript))
 		{
-				trace('Song specific script for $songName exists!');
-		initHScript(Paths.getSharedPath('data/$songName/script.hx'));
+			trace('Song specific script for $songName exists!');
+			initHScript(songScript);
 
-		}else trace('not found!');
+		}
 	
 		
 		#end
@@ -747,20 +763,11 @@ class PlayState extends MusicBeatState
 		#if HSCRIPT_ALLOWED
 		var doPush:Bool = false;
 		var scriptFile:String = 'characters/' + name + '.hx';
-		#if MODS_ALLOWED
-		var replacePath:String = Paths.modFolders(scriptFile);
-		if(Paths.exists(replacePath))
-		{
-			scriptFile = replacePath;
+		
+		scriptFile = Paths.getSharedPath(scriptFile);
+		if(Paths.exists(scriptFile))
 			doPush = true;
-		}
-		else
-		#end
-		{
-			scriptFile = Paths.getSharedPath(scriptFile);
-			if(Paths.exists(scriptFile))
-				doPush = true;
-		}
+		
 
 		if(doPush)
 		{
@@ -1239,11 +1246,7 @@ class PlayState extends MusicBeatState
 		noteData = songData.notes;
 
 		var file:String = Paths.json(songName + '/events');
-		#if MODS_ALLOWED
-		if (FileSystem.exists(Paths.modsJson(songName + '/events')) || FileSystem.exists(file))
-		#else
 		if (OpenFlAssets.exists(file))
-		#end
 		{
 			var eventsData:Array<Dynamic> = Song.loadFromJson('events', songName).events;
 			for (event in eventsData) //Event Notes
@@ -2988,7 +2991,7 @@ class PlayState extends MusicBeatState
 		for (script in hscriptArray)
 			if(script != null)
 			{
-				script.call('onDestroy');
+				if(script.exists('onDestroy')) script.call('onDestroy');
 				script.destroy();
 			}
 
@@ -3118,11 +3121,14 @@ class PlayState extends MusicBeatState
 		
 		var scriptToLoad:String = Paths.getSharedPath(scriptFile);
 
-	
+		if(Paths.exists(scriptToLoad))
+		{
 			if (Iris.instances.exists(scriptToLoad)) return false;
 
 			initHScript(scriptToLoad);
 			return true;
+		}
+		return false;
 		
 	}
 
@@ -3131,17 +3137,15 @@ class PlayState extends MusicBeatState
 		var newScript:HScript = null;
 		try
 		{
-		
 			newScript = new HScript(null, file);
-			newScript.call('onCreate');
+			if (newScript.exists('onCreate')) newScript.call('onCreate');
 			trace('initialized hscript interp successfully: $file');
-
 			hscriptArray.push(newScript);
-
 		}
-		catch(e:Dynamic)
+		catch(e:IrisError)
 		{
-			addTextToDebug('ERROR ON LOADING ($file) - $e', FlxColor.RED);
+			var pos:HScriptInfos = cast {fileName: file, showLine: false};
+			Iris.error(Printer.errorToString(e, false), pos);
 			var newScript:HScript = cast (Iris.instances.get(file), HScript);
 			if(newScript != null)
 				newScript.destroy();
@@ -3217,8 +3221,9 @@ class PlayState extends MusicBeatState
 			if(script == null || !script.exists(funcToCall) || exclusions.contains(script.origin))
 				continue;
 
-			try {
-				var callValue = script.call(funcToCall, args);
+			var callValue = script.call(funcToCall, args);
+			if(callValue != null)
+			{
 				var myValue:Dynamic = callValue.signature;
 
 				// compiler fuckup fix
@@ -3232,10 +3237,6 @@ class PlayState extends MusicBeatState
 				if(myValue != null && !excludeValues.contains(myValue))
 					returnVal = myValue;
 			
-			}
-			catch(e:Dynamic)
-			{
-				addTextToDebug('ERROR (${script.origin}: $funcToCall) - $e', FlxColor.RED);
 			}
 		}
 		#end

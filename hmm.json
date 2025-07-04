@@ -68,6 +68,12 @@
       "dir": null,
       "ref": "master",
       "url": "https://github.com/superpowers04/linc_luajit"
+    },
+    {
+      "name": "hxscript-iris",
+      "type": "haxelib",
+      "version": "1.1.3"
     }
+
   ]
 }
