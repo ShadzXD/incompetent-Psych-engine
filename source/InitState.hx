@@ -39,12 +39,15 @@ class InitState
 
 		FlxG.mouse.visible = false;
      
+		#if !debug
 
+		//i fucking hate this setting so much.
         if(FlxG.save.data != null && FlxG.save.data.fullscreen)
 		{
 			FlxG.fullscreen = FlxG.save.data.fullscreen;
 			trace('LOADED FULLSCREEN SETTING!!');
 		}
+		#end
 
     }
 }

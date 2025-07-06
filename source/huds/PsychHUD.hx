@@ -15,14 +15,25 @@ class PsychHUD extends MainHUD
     public var healthBar:Bar;
 
     var healthLerp:Float = 1;
-    var iconOffset:Int = 26;
+	var timeTxt:FlxText;
+	var iconOffset:Int = 26;
 
     public function new()
     {
 		super();
-        
+	
+		//if (PlayState.isPixelStage == true) hudFont = 'pixel.otf';
+
+        //var showTime:Bool = (ClientPrefs.data.timeBarType != 'Disabled');
+		timeTxt = new FlxText(PlayState.STRUM_X + (FlxG.width / 2) - 248, ClientPrefs.data.downScroll ? FlxG.height - 44 : 19, 400, "", 27);
+		timeTxt.setFormat(Paths.font(hudFont), 27, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		timeTxt.scrollFactor.set();
+		timeTxt.alpha = 0;
+		timeTxt.borderSize = 1.25;
+		add(timeTxt);
+
 		healthBar = new Bar(0, FlxG.height * (!ClientPrefs.data.downScroll ? 0.88 : 0.1), 'healthBar', function(){
-			healthLerp = FlxMath.lerp(healthLerp, PlayState.instance.health, 0.12 / (ClientPrefs.data.framerate / 60));
+			healthLerp = FlxMath.lerp(healthLerp, healthStuff(), 0.12 / (ClientPrefs.data.framerate / 60));
 			return healthLerp;
 		}, 0, 2);		
 		healthBar.screenCenter(X);
@@ -43,13 +54,15 @@ class PsychHUD extends MainHUD
 		add(iconP2);
 
 		scoreTxt = new FlxText(0, healthBar.y + 40, FlxG.width, "", 20);
-		scoreTxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		scoreTxt.setFormat(Paths.font(hudFont), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
 		scoreTxt.borderSize = 1.25;
 		add(scoreTxt);
     }
+
     override function update(elapsed:Float)
     {
+		//TODO: PUT THE ICONS IN A GROUP!
         var mult:Float = FlxMath.lerp(1, iconP1.scale.x, Math.exp(-elapsed * 5));
 		iconP1.scale.set(mult, mult);
 		iconP1.updateHitbox();
@@ -64,6 +77,8 @@ class PsychHUD extends MainHUD
 		healthBar.percent = (newPercent != null ? newPercent : 0);
 		iconP1.animation.curAnim.curFrame = (healthBar.percent < 20) ? 1 : 0; //If health is under 20%, change player icon to frame 1 (losing icon), otherwise, frame 0 (normal)
 		iconP2.animation.curAnim.curFrame = (healthBar.percent > 80) ? 1 : 0; //If health is over 80%, change opponent icon to frame 1 (losing icon), otherwise, frame 0 (normal)
+
+		timeTxt.text = FlxStringUtil.formatTime(songSeconds, false) + ' // ' + FlxStringUtil.formatTime(songLength, false);
     }
     override public function updateScore(miss:Bool = false, ?score:Int, ?misses:Int, ?ratingName:String,?percent:Float)
 	{
@@ -72,12 +87,12 @@ class PsychHUD extends MainHUD
 		var percent:Float = CoolUtil.floorDecimal(percent * 100, 2);
 		str += ' (${percent}%)';
 		
-
+		// "tempScore" variable is used to prevent another memory leak, just in case
+		// "\n" here prevents the text from being cut off by beat zooms
 		var tempScore:String = 'Score: ${FlxStringUtil.formatMoney(score, false, true)}'
 		+ (' | Misses: ${misses}')
 		+ ' | Rating: ${str}';
-		// "tempScore" variable is used to prevent another memory leak, just in case
-		// "\n" here prevents the text from being cut off by beat zooms
+	
 		 scoreTxt.text = tempScore;
 	} 
 
@@ -103,15 +118,15 @@ class PsychHUD extends MainHUD
 
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
-    } 
-
-    // fun fact: Dynamic Functions can be overriden by just doing this
-	// `updateScore = function(miss:Bool = false) { ... }
-	// its like if it was a variable but its just a function!
-	// cool right? -Crow
+    }
     override public function reloadHealthBarColors() {
 		healthBar.setColors(FlxColor.fromRGB(PlayState.instance.dad.healthColorArray[0], PlayState.instance.dad.healthColorArray[1], PlayState.instance.dad.healthColorArray[2]),
 		FlxColor.fromRGB(PlayState.instance.boyfriend.healthColorArray[0], PlayState.instance.boyfriend.healthColorArray[1], PlayState.instance.boyfriend.healthColorArray[2]));
+	}
+
+	override function startSong()
+	{
+		FlxTween.tween(timeTxt, {alpha: 1}, 0.5, {ease: FlxEase.circOut});
 	}
 
 }

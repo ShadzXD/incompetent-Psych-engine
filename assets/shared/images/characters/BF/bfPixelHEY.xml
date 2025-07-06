@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Funkin Packer v0.1.3 https://neeeoo.github.io/funkin-packer/
+-->
+<TextureAtlas imagePath="texture.png" width="119" height="58">
+	<SubTexture name="bf pixel hey0000" x="0.167" y="0.167" width="59.118" height="58.11600000000001" frameX="-0" frameY="-0" frameWidth="59.118" frameHeight="58.11600000000001"/>
+	<SubTexture name="bf pixel hey0001" x="59.786" y="0.167" width="59.118" height="58.11600000000001" frameX="-0" frameY="-0" frameWidth="59.118" frameHeight="58.11600000000001"/>
+</TextureAtlas>

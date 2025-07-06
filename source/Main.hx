@@ -17,6 +17,7 @@ import openfl.events.Event;
 import openfl.display.StageScaleMode;
 import lime.app.Application;
 import states.TitleState;
+import flixel.input.keyboard.FlxKey;
 
 #if linux
 import lime.graphics.Image;
@@ -152,6 +153,18 @@ class Main extends Sprite
 			if (FlxG.game != null)
 			resetSpriteCache(FlxG.game);
 		});
+		// Prevent flixel from listening to key inputs when switching fullscreen mode
+		// also lets you fullscreen with F11
+		// thanks @nebulazorua, @crowplexus, @diogotvv
+		//taken from doido.
+		FlxG.stage.addEventListener(openfl.events.KeyboardEvent.KEY_DOWN, (e) ->
+		{
+			if (e.keyCode == FlxKey.F11)
+				FlxG.fullscreen = !FlxG.fullscreen;
+			
+			if (e.keyCode == FlxKey.ENTER && e.altKey)
+				e.stopImmediatePropagation();
+		}, false, 100);
 	}
 
 	static function resetSpriteCache(sprite:Sprite):Void {

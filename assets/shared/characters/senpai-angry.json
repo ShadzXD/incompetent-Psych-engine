@@ -56,13 +56,14 @@
 			"indices": []
 		}
 	],
+	"vocals_file": "",
 	"no_antialiasing": true,
 	"image": "characters/Senpai/senpai",
 	"position": [
 		150,
 		360
 	],
-	"healthicon": "senpai-pixel",
+	"healthicon": "senpai-mad-pixel",
 	"flip_x": false,
 	"healthbar_colors": [
 		255,
@@ -74,5 +75,6 @@
 		-330
 	],
 	"sing_duration": 4,
-	"scale": 6
+	"scale": 6,
+	"_editor_isPlayer": false
 }

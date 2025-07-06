@@ -56,6 +56,7 @@
 			"indices": []
 		}
 	],
+	"vocals_file": "",
 	"no_antialiasing": true,
 	"image": "characters/Spirit/spirit",
 	"position": [
@@ -74,5 +75,6 @@
 		0
 	],
 	"sing_duration": 4,
-	"scale": 6
+	"scale": 6,
+	"_editor_isPlayer": false
 }

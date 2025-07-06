@@ -4,7 +4,7 @@ import objects.HealthIcon;
 import objects.Bar;
 import flixel.util.FlxStringUtil;
 /*
-* Recreation of Base Friday Night funkin's hud (V-Slice)
+* Recreation of Base Friday Night Funkin's hud (V-Slice)
 */
 class VanillaHUD extends MainHUD
 {
@@ -15,9 +15,8 @@ class VanillaHUD extends MainHUD
     public function new()
     {
 		super();
-        
 		healthBar = new Bar(0, FlxG.height * (!ClientPrefs.data.downScroll ? 0.9 : 0.1), 'healthBar', function(){
-			healthLerp = FlxMath.lerp(healthLerp, PlayState.instance.health, 0.12 / (ClientPrefs.data.framerate / 60));
+			healthLerp = FlxMath.lerp(healthLerp, healthStuff(), 0.12 / (ClientPrefs.data.framerate / 60));
 			return healthLerp;
 		}, 0, 2);		
 		healthBar.screenCenter(X);
@@ -28,10 +27,9 @@ class VanillaHUD extends MainHUD
 		add(healthBar);
 
 		scoreText = new FlxText(-400, healthBar.y + 34, FlxG.width, "", 20);
-		scoreText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		scoreText.setFormat(Paths.font(hudFont), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreText.scrollFactor.set();
 		scoreText.updateHitbox();
-		//updateScore(false);
 		add(scoreText);
 
 		iconP1 = new HealthIcon(PlayState.instance.boyfriend.healthIcon, true);
@@ -69,9 +67,8 @@ class VanillaHUD extends MainHUD
 		var tempScore:String = 'Score: ${FlxStringUtil.formatMoney(score, false, true)}';
 		scoreText.text = tempScore;
 	}
-	override public function botplayStuff():Void {
-		scoreText.text = botplayText;
-	}
+
+	override public function botplayStuff()scoreText.text = botplayText;
     
 	override function beatHit()
 	{

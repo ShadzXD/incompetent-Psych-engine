@@ -9,7 +9,7 @@ import options.OptionsState;
 
 class MainMenuState extends MusicBeatState
 {
-	public static var psychEngineVersion:String = '0.2.0'; // This is also used for Discord RPC
+	public static var psychEngineVersion:String = '0.3.0'; // This is also used for Discord RPC
 	public static var curSelected:Int = 0;
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
@@ -84,7 +84,12 @@ class MainMenuState extends MusicBeatState
 			menuItem.screenCenter(X);
 		}
 
-		var psychVer:FlxText = new FlxText(12, FlxG.height - 24, 0, "Incompetent! Psych Engine v" + psychEngineVersion, 12);
+		var incVer:FlxText = new FlxText(5, FlxG.height - 38, 0, "Incompetent! Psych Engine v" + psychEngineVersion, 12);
+		incVer.scrollFactor.set();
+		incVer.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(incVer);
+
+		var psychVer:FlxText = new FlxText(5, FlxG.height - 20, 0, "Psych Engine v0.7.3", 12);
 		psychVer.scrollFactor.set();
 		psychVer.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(psychVer);
