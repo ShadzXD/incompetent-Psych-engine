@@ -26,5 +26,5 @@ To compile the source code, use the command, *hmm install*.
 
 # **KNOWN ISSUES**
 - HTML5 will stutter when playing a video mid song
-- 
+
 ![image](https://github.com/user-attachments/assets/f5c50563-6368-4746-8a68-74eebdbbb8a0)
