@@ -52,7 +52,7 @@
     },
     {
       "name": "hxdiscord_rpc",
-        "type": "haxelib",
+      "type": "haxelib",
       "version": "1.2.4"
     },
     {
