@@ -8,12 +8,12 @@
     {
       "name": "openfl",
       "type": "haxelib",
-      "version": "9.3.2"
+      "version": "9.4.1"
     },
     {
       "name": "flixel",
       "type": "haxelib",
-      "version": "5.6.1"
+      "version": "5.8.0"
     },
     {
       "name": "flixel-addons",
@@ -28,12 +28,14 @@
     {
       "name": "flixel-ui",
       "type": "haxelib",
-      "version": "2.5.0"
+      "version": "2.6.4"
     },
     {
       "name": "hxcpp",
-      "type": "haxelib",
-      "version": "4.3.2"
+      "type": "git",
+      "dir": null,
+      "ref": "master",
+      "url": "https://github.com/HaxeFoundation/hxcpp.git"
     },
     {
       "name": "hxvlc",

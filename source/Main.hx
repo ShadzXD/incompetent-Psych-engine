@@ -1,9 +1,4 @@
 package;
-
-#if android
-import android.content.Context;
-#end
-
 import debug.FPSCounter;
 
 import flixel.graphics.FlxGraphic;
@@ -66,12 +61,7 @@ class Main extends Sprite
 		#if (cpp && windows)
 		backend.Native.fixScaling();
 		#end
-		// Credits to MAJigsaw77 (he's the og author for this code)
-		#if android
-		Sys.setCwd(Path.addTrailingSlash(Context.getExternalFilesDir()));
-		#elseif ios
-		Sys.setCwd(lime.system.System.applicationStorageDirectory);
-		#end
+
 
 		if (stage != null)
 		{
