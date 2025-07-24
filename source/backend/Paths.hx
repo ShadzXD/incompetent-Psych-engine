@@ -268,76 +268,60 @@ class Paths
 	}
 
 	public static var currentTrackedAssets:Map<String, FlxGraphic> = [];
-	static public function image(key:String, ?library:String = null, ?allowGPU:Bool = true):FlxGraphic
+	static public function image(key:String, ?parentFolder:String = null, ?allowGPU:Bool = true):FlxGraphic
 	{
+		key = ('images/$key') + '.png';
 		var bitmap:BitmapData = null;
-		var file:String = null;
-
-		#if MODS_ALLOWED
-		file = modsImages(key);
-		if (currentTrackedAssets.exists(file))
+		if (currentTrackedAssets.exists(key))
 		{
-			localTrackedAssets.push(file);
-			return currentTrackedAssets.get(file);
+			localTrackedAssets.push(key);
+			return currentTrackedAssets.get(key);
 		}
-		else if (FileSystem.exists(file))
-			bitmap = BitmapData.fromFile(file);
-		else
-		#end
-		{
-			file = getPath('images/$key.png', IMAGE, library);
-			if (currentTrackedAssets.exists(file))
-			{
-				localTrackedAssets.push(file);
-				return currentTrackedAssets.get(file);
-			}
-			else if (OpenFlAssets.exists(file, IMAGE))
-				bitmap = OpenFlAssets.getBitmapData(file);
-		}
-
-		if (bitmap != null)
-		{
-			var retVal = cacheBitmap(file, bitmap, allowGPU);
-			if(retVal != null) return retVal;
-		}
-
-		trace('oh no its returning null NOOOO ($file)');
-		return null;
+		return cacheBitmap(key, parentFolder, bitmap, allowGPU);
 	}
 
-	static public function cacheBitmap(file:String, ?bitmap:BitmapData = null, ?allowGPU:Bool = true)
+	public static function cacheBitmap(key:String, ?parentFolder:String = null, ?bitmap:BitmapData, ?allowGPU:Bool = true):FlxGraphic
 	{
-		if(bitmap == null)
+		if (bitmap == null)
 		{
+			var file:String = getPath(key, IMAGE, parentFolder, true);
 			#if MODS_ALLOWED
 			if (FileSystem.exists(file))
 				bitmap = BitmapData.fromFile(file);
-			else
-			#end
+			else #end if (OpenFlAssets.exists(file, IMAGE))
+				bitmap = OpenFlAssets.getBitmapData(file);
+
+			if (bitmap == null)
 			{
-				if (OpenFlAssets.exists(file, IMAGE))
-					bitmap = OpenFlAssets.getBitmapData(file);
+				trace('Bitmap not found: $file | key: $key');
+				return null;
 			}
-
-			if(bitmap == null) return null;
 		}
 
-		localTrackedAssets.push(file);
-		if (allowGPU && ClientPrefs.data.cacheOnGPU)
+		if (allowGPU && ClientPrefs.data.cacheOnGPU && bitmap.image != null)
 		{
-			var texture:RectangleTexture = FlxG.stage.context3D.createRectangleTexture(bitmap.width, bitmap.height, BGRA, true);
-			texture.uploadFromBitmapData(bitmap);
-			bitmap.image.data = null;
-			bitmap.dispose();
+			bitmap.lock();
+			if (bitmap.__texture == null)
+			{
+				bitmap.image.premultiplied = true;
+				bitmap.getTexture(FlxG.stage.context3D);
+			}
+			bitmap.getSurface();
 			bitmap.disposeImage();
-			bitmap = BitmapData.fromTexture(texture);
+			bitmap.image.data = null;
+			bitmap.image = null;
+			bitmap.readable = true;
 		}
-		var newGraphic:FlxGraphic = FlxGraphic.fromBitmapData(bitmap, false, file);
-		newGraphic.persist = true;
-		newGraphic.destroyOnNoUse = false;
-		currentTrackedAssets.set(file, newGraphic);
-		return newGraphic;
+
+		var graph:FlxGraphic = FlxGraphic.fromBitmapData(bitmap, false, key);
+		graph.persist = true;
+		graph.destroyOnNoUse = false;
+
+		currentTrackedAssets.set(key, graph);
+		localTrackedAssets.push(key);
+		return graph;
 	}
+
 
 	static public function getTextFromFile(key:String, ?ignoreMods:Bool = false):String
 	{

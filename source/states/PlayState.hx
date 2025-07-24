@@ -260,6 +260,7 @@ class PlayState extends MusicBeatState
 	var lyricsTxt:FlxText;
 	var isZooming:Bool = false;
 	var hudClass:MainHUD;
+	var hasOpponentVocals:Bool = false;
 	override public function create()
 	{
 		//trace('Playback Rate: ' + playbackRate);
@@ -1187,17 +1188,21 @@ class PlayState extends MusicBeatState
 				vocals.loadEmbedded(playerVocals != null ? playerVocals : Paths.voices(songData.song));
 				
 				var oppVocals = Paths.voices(songData.song, (dad.vocalsFile == null || dad.vocalsFile.length < 1) ? 'Opponent' : dad.vocalsFile);
-				if(oppVocals != null && oppVocals.length > 0) opponentVocals.loadEmbedded(oppVocals);
+				if(oppVocals != null && oppVocals.length > 0)
+				{
+					opponentVocals.loadEmbedded(oppVocals);
+					hasOpponentVocals = true;
+				} 
 			}
 		}
 		catch (e:Dynamic) {}
-
+		trace('Has opponent Vocals: ' + hasOpponentVocals);
 		#if FLX_PITCH
 		vocals.pitch = playbackRate;
-		opponentVocals.pitch = playbackRate;
 		#end
 		FlxG.sound.list.add(vocals);
 		FlxG.sound.list.add(opponentVocals);
+		opponentVocals.pitch = playbackRate;
 
 		inst = new FlxSound();
 		try {
@@ -1533,8 +1538,10 @@ class PlayState extends MusicBeatState
 		#if FLX_PITCH FlxG.sound.music.pitch = playbackRate; #end
 		Conductor.songPosition = FlxG.sound.music.time + Conductor.offset;
 
-		var checkVocals = [vocals, opponentVocals];
-		for (voc in checkVocals)
+		var checkVocals;
+		if(hasOpponentVocals) checkVocals = [vocals, opponentVocals];
+		else checkVocals = [vocals];
+		for (voc in checkVocals) 
 		{
 			if (FlxG.sound.music.time < vocals.length)
 			{
@@ -2761,17 +2768,17 @@ class PlayState extends MusicBeatState
 		vocals.volume = 1;
 		strumPlayAnim(true, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate);
 		note.hitByOpponent = true;
-				if(note.alpha != 0)spawnHoldSplashOnNote(note);
+		spawnHoldSplashOnNote(note);
 
 		var result:Dynamic = callOnLuas('opponentNoteHit', [notes.members.indexOf(note), Math.abs(note.noteData), note.noteType, note.isSustainNote]);
 		if(result != LuaUtils.Function_Stop && result != LuaUtils.Function_StopHScript && result != LuaUtils.Function_StopAll) callOnHScript('opponentNoteHit', [note]);
 
 		if (!note.isSustainNote)
-			{
+		{
  				invalidateNote(note);
 
 				globalNoteHit(note, false);
-			}
+		}
 
 	}
 

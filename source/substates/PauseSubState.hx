@@ -296,7 +296,8 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.instance.paused = true; // For lua
 					PlayState.instance.vocals.volume = 0;
 					MusicBeatState.switchState(new OptionsState());
-			
+					PlayState.instance.canResync = false;
+
 					FlxG.sound.playMusic(Paths.music(Paths.formatToSongPath('breakfast')), pauseMusic.volume);
 					FlxTween.tween(FlxG.sound.music, {volume: 1}, 0.8);
 					FlxG.sound.music.time = pauseMusic.time;
@@ -306,6 +307,7 @@ class PauseSubState extends MusicBeatSubstate
 					#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
 					PlayState.deathCounter = 0;
 					PlayState.seenCutscene = false;
+					PlayState.instance.canResync = false;
 
 					Mods.loadTopMod();
 					if(PlayState.isStoryMode)
