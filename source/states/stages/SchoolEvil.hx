@@ -1,10 +1,10 @@
 package states.stages;
 
+import cutscenes.DialogueBox;
 import flixel.addons.effects.FlxTrail;
+import openfl.utils.Assets as OpenFlAssets;
 import states.stages.objects.*;
 import substates.GameOverSubstate;
-import cutscenes.DialogueBox;
-import openfl.utils.Assets as OpenFlAssets;
 
 class SchoolEvil extends BaseStage
 {
@@ -21,7 +21,7 @@ class SchoolEvil extends BaseStage
 
 		var bg:BGSprite;
 		if(!ClientPrefs.data.lowQuality)
-			bg = new BGSprite('weeb/animatedEvilSchool', posX, posY, 0.8, 0.9, ['background 2'], true);
+			bg = new BGSprite('weeb/animatedEvilSchool', posX, posY, 0.8, 0.9, ['background 2 instance 1'], true);
 		else
 			bg = new BGSprite('weeb/animatedEvilSchool_low', posX, posY, 0.8, 0.9);
 

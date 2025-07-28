@@ -1,9 +1,10 @@
 package backend;
 
-import flixel.addons.ui.FlxUIState;
-import flixel.addons.transition.FlxTransitionableState;
-import flixel.FlxState;
 import backend.PsychCamera;
+import flixel.FlxState;
+import flixel.addons.transition.FlxTransitionableState;
+import flixel.addons.ui.FlxUIState;
+import flixel.util.typeLimit.NextState;
 
 class MusicBeatState extends FlxUIState
 {
@@ -132,37 +133,21 @@ class MusicBeatState extends FlxUIState
 		curStep = lastChange.stepTime + Math.floor(shit);
 	}
 
-	public static function switchState(nextState:FlxState = null) {
-		if(nextState == null) nextState = FlxG.state;
-		if(nextState == FlxG.state)
+	override function startOutro(onOutroComplete:()->Void):Void
+	{
+		if (!FlxTransitionableState.skipNextTransIn)
 		{
-			resetState();
+			FlxG.state.openSubState(new CustomFadeTransition(0.6, false));
+
+			CustomFadeTransition.finishCallback = onOutroComplete;
+
 			return;
 		}
-
-		if(FlxTransitionableState.skipNextTransIn) FlxG.switchState(nextState);
-		else startTransition(nextState);
+	
 		FlxTransitionableState.skipNextTransIn = false;
+				onOutroComplete();
 	}
 
-	public static function resetState() {
-		if(FlxTransitionableState.skipNextTransIn) FlxG.resetState();
-		else startTransition();
-		FlxTransitionableState.skipNextTransIn = false;
-	}
-
-	// Custom made Trans in
-	public static function startTransition(nextState:FlxState = null)
-	{
-		if(nextState == null)
-			nextState = FlxG.state;
-
-		FlxG.state.openSubState(new CustomFadeTransition(0.5, false));
-		if(nextState == FlxG.state)
-			CustomFadeTransition.finishCallback = function() FlxG.resetState();
-		else
-			CustomFadeTransition.finishCallback = function() FlxG.switchState(nextState);
-	}
 
 	public static function getState():MusicBeatState {
 		return cast (FlxG.state, MusicBeatState);

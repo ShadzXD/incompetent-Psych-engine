@@ -1,10 +1,10 @@
 package states.editors;
 
-import objects.Note;
-import objects.StrumNote;
-import objects.NoteSplash;
 import flixel.addons.ui.FlxInputText;
 import flixel.addons.ui.FlxUINumericStepper;
+import objects.Note;
+import objects.NoteSplash;
+import objects.StrumNote;
 
 class NoteSplashDebugState extends MusicBeatState
 {
@@ -192,7 +192,7 @@ class NoteSplashDebugState extends MusicBeatState
 		var notTyping:Bool = !nameInputText.hasFocus && !imageInputText.hasFocus;
 		if(controls.BACK && notTyping)
 		{
-			MusicBeatState.switchState(new MasterEditorMenu());
+			FlxG.switchState(() -> new MasterEditorMenu());
 			FlxG.sound.playMusic(Paths.music('freakyMenu'));
 			FlxG.mouse.visible = false;
 		}

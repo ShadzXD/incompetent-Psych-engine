@@ -3,7 +3,7 @@
 		{
 			"offsets": [
 				-5,
-				1
+				0
 			],
 			"loop": false,
 			"fps": 24,
@@ -108,21 +108,64 @@
 			"fps": 24,
 			"anim": "hey",
 			"indices": [],
-			"name": "BF HEY"
+			"name": "BF HEY!!"
 		},
 		{
-			"loop": false,
 			"offsets": [
-				-20,
-				40
+				14,
+				18
 			],
-			"anim": "cheer",
+			"loop": false,
 			"fps": 24,
-			"name": "Cheer",
-			"indices": []
+			"anim": "hurt",
+			"indices": [],
+			"name": "BF hit"
+		},
+		{
+			"offsets": [
+				-4,
+				0
+			],
+			"loop": true,
+			"fps": 24,
+			"anim": "scared",
+			"indices": [],
+			"name": "BF idle shaking"
+		},
+		{
+			"offsets": [
+				-10,
+				-16
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "dodge",
+			"indices": [],
+			"name": "boyfriend dodge"
+		},
+		{
+			"offsets": [
+				294,
+				267
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "attack",
+			"indices": [],
+			"name": "boyfriend attack"
+		},
+		{
+			"offsets": [
+				-40,
+				-40
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "pre-attack",
+			"indices": [],
+			"name": "bf pre attack"
 		}
 	],
-	"vocals_file": "",
 	"no_antialiasing": false,
 	"image": "characters/BF/BOYFRIEND, characters/BF/BFCheer",
 	"position": [
@@ -141,6 +184,5 @@
 		0
 	],
 	"sing_duration": 4,
-	"scale": 1,
-	"_editor_isPlayer": true
+	"scale": 1
 }

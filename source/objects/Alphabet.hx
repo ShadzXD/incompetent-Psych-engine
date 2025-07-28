@@ -389,13 +389,13 @@ class AlphaCharacter extends FlxSprite
 			if(curLetter != null && curLetter.anim != null) alphaAnim = curLetter.anim;
 
 			var anim:String = alphaAnim + suffix;
-			animation.addByPrefix(anim, anim, 24);
+			animation.addByPrefix(anim, anim + " instance 1", 24);
 			animation.play(anim, true);
 			if(animation.curAnim == null)
 			{
 				if(suffix != ' bold') suffix = ' normal';
 				anim = 'question' + suffix;
-				animation.addByPrefix(anim, anim, 24);
+				animation.addByPrefix(anim, anim + " instance 1", 24);
 				animation.play(anim, true);
 			}
 		}
@@ -434,7 +434,7 @@ class AlphaCharacter extends FlxSprite
 		
 		if (lastAnim != null)
 		{
-			animation.addByPrefix(lastAnim, lastAnim, 24);
+			animation.addByPrefix(lastAnim, lastAnim + " instance 1", 24);
 			animation.play(lastAnim, true);
 			
 			updateHitbox();

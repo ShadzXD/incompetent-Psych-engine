@@ -1,18 +1,15 @@
 package states;
 
-import backend.WeekData;
 import backend.Highscore;
 import backend.Song;
-
-import objects.HealthIcon;
-import objects.MusicPlayer;
-
-import substates.GameplayChangersSubstate;
-import substates.ResetScoreSubState;
-
+import backend.WeekData;
+import flixel.addons.transition.FlxTransitionableState;
 import flixel.math.FlxMath;
 import flixel.util.FlxStringUtil;
-import flixel.addons.transition.FlxTransitionableState;
+import objects.HealthIcon;
+import objects.MusicPlayer;
+import substates.GameplayChangersSubstate;
+import substates.ResetScoreSubState;
 
 class FreeplayState extends MusicBeatState
 {
@@ -68,9 +65,9 @@ class FreeplayState extends MusicBeatState
 		{
 			FlxTransitionableState.skipNextTransIn = true;
 			persistentUpdate = false;
-			MusicBeatState.switchState(new states.ErrorState("NO WEEKS ADDED FOR FREEPLAY\n\nPress ACCEPT to go to the Week Editor Menu.\nPress BACK to return to Main Menu.",
-				function() MusicBeatState.switchState(new states.editors.WeekEditorState()),
-				function() MusicBeatState.switchState(new states.MainMenuState())));
+		FlxG.switchState(() -> new states.ErrorState("NO WEEKS ADDED FOR FREEPLAY\n\nPress ACCEPT to go to the Week Editor Menu.\nPress BACK to return to Main Menu.",
+					function() FlxG.switchState(() -> new states.editors.WeekEditorState()),
+					function() FlxG.switchState(() -> new states.MainMenuState())));
 			return;
 		}
 
@@ -313,7 +310,7 @@ class FreeplayState extends MusicBeatState
 					colorTween.cancel();
 				}
 				FlxG.sound.play(Paths.sound('cancelMenu'));
-				MusicBeatState.switchState(new MainMenuState());
+				FlxG.switchState(() -> new MainMenuState());
 			}
 		}
 

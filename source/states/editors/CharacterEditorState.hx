@@ -1,25 +1,22 @@
 package states.editors;
 
 import flixel.FlxObject;
-import flixel.graphics.FlxGraphic;
-
-import flixel.animation.FlxAnimation;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.addons.ui.*;
+import flixel.animation.FlxAnimation;
+import flixel.graphics.FlxGraphic;
+import flixel.graphics.frames.FlxAtlasFrames;
+import flixel.math.FlxPoint;
 import flixel.ui.FlxButton;
 import flixel.util.FlxDestroyUtil;
-
-import openfl.net.FileReference;
-import openfl.events.Event;
-import openfl.events.IOErrorEvent;
-import openfl.utils.Assets;
 import lime.system.Clipboard;
-
+import objects.Bar;
 import objects.Character;
 import objects.HealthIcon;
-import objects.Bar;
-import flixel.math.FlxPoint;
-import flixel.graphics.frames.FlxAtlasFrames;
+import openfl.events.Event;
+import openfl.events.IOErrorEvent;
+import openfl.net.FileReference;
+import openfl.utils.Assets;
 // flixel 5.7.0+ fix
 #if (FLX_DEBUG || flixel < version("5.7.0"))
 typedef PointerGraphic = flixel.system.debug.interaction.tools.Pointer.GraphicCursorCross;
@@ -1047,10 +1044,10 @@ class CharacterEditorState extends MusicBeatState
 			FlxG.mouse.visible = false;
 			if(!_goToPlayState)
 			{
-				MusicBeatState.switchState(new states.editors.MasterEditorMenu());
+				FlxG.switchState(() -> new states.editors.MasterEditorMenu());
 				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 			}
-			else MusicBeatState.switchState(new PlayState());
+			else FlxG.switchState(() -> new PlayState());
 			return;
 		}
 	}

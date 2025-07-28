@@ -1,16 +1,13 @@
 package substates;
 
-import backend.WeekData;
 import backend.Highscore;
 import backend.Song;
-
+import backend.WeekData;
 import flixel.addons.transition.FlxTransitionableState;
-
 import flixel.util.FlxStringUtil;
-
-import states.StoryMenuState;
-import states.FreeplayState;
 import options.OptionsState;
+import states.FreeplayState;
+import states.StoryMenuState;
 
 class PauseSubState extends MusicBeatSubstate
 {
@@ -225,7 +222,7 @@ class PauseSubState extends MusicBeatSubstate
 						var poop = Highscore.formatSong(name, curSelected);
 						PlayState.SONG = Song.loadFromJson(poop, name);
 						PlayState.storyDifficulty = curSelected;
-						MusicBeatState.resetState();
+						FlxG.resetState();
 						FlxG.sound.music.volume = 0;
 						PlayState.changedDifficulty = true;
 						PlayState.chartingMode = false;
@@ -295,7 +292,7 @@ class PauseSubState extends MusicBeatSubstate
 				case 'Options':
 					PlayState.instance.paused = true; // For lua
 					PlayState.instance.vocals.volume = 0;
-					MusicBeatState.switchState(new OptionsState());
+					FlxG.switchState(() -> new OptionsState());
 					PlayState.instance.canResync = false;
 
 					FlxG.sound.playMusic(Paths.music(Paths.formatToSongPath('breakfast')), pauseMusic.volume);
@@ -311,9 +308,9 @@ class PauseSubState extends MusicBeatSubstate
 
 					Mods.loadTopMod();
 					if(PlayState.isStoryMode)
-						MusicBeatState.switchState(new StoryMenuState());
+						FlxG.switchState(() -> new StoryMenuState());
 					else 
-						MusicBeatState.switchState(new FreeplayState());
+						FlxG.switchState(() -> new FreeplayState());
 
 					FlxG.sound.playMusic(Paths.music('freakyMenu'));
 					PlayState.changedDifficulty = false;
@@ -346,7 +343,7 @@ class PauseSubState extends MusicBeatSubstate
 			FlxTransitionableState.skipNextTransIn = true;
 			FlxTransitionableState.skipNextTransOut = true;
 		}
-		MusicBeatState.resetState();
+		FlxG.resetState();
 	}
 
 	override function destroy()

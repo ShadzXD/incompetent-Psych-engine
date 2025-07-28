@@ -35,6 +35,9 @@ class FlxSoundTray extends Sprite
     super();
     removeChildren();
 
+    FlxG.save.data.mute = false;
+    FlxG.save.data.volume = 10;
+
     var bg:Bitmap = new Bitmap(Assets.getBitmapData(Paths.getPath("images/soundtray/volumebox.png")));
     bg.scaleX = graphicScale;
     bg.scaleY = graphicScale;
@@ -94,7 +97,7 @@ class FlxSoundTray extends Sprite
         _timer -= (MS / 1000);
         alphaTarget = 1;
       }
-      else if (y >= -height)
+      else if (y >= -height && globalVolume > 0)
       {
         lerpYPos = -height - 10;
         alphaTarget = 0;
@@ -105,15 +108,8 @@ class FlxSoundTray extends Sprite
         visible = false;
         active = false;
   
-        #if FLX_SAVE
-        // Save sound preferences
-        if (FlxG.save.isBound)
-        {
-          FlxG.save.data.mute = FlxG.sound.muted;
-          FlxG.save.data.volume = FlxG.sound.volume;
-          FlxG.save.flush();
-        }
-        #end
+
+      
       }
     }
 
@@ -122,13 +118,14 @@ class FlxSoundTray extends Sprite
    *
    * @param	up Whether the volume is increasing.
    */
+   var globalVolume:Int;
     public function show(up:Bool = false):Void
     {
       _timer = 1;
       lerpYPos = 10;
       visible = true;
       active = true;
-      var globalVolume:Int = Math.round(FlxG.sound.volume * 10);
+      globalVolume = Math.round(FlxG.sound.volume * 10);
   
       if (FlxG.sound.muted || FlxG.sound.volume == 0)
       {

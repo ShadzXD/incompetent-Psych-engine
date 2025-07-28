@@ -204,11 +204,6 @@ class ClientPrefs {
 				data.gameplaySettings.set(name, value);
 		}
 		
-		// flixel automatically saves your volume!
-		if(FlxG.save.data.volume != null)
-			FlxG.sound.volume = FlxG.save.data.volume;
-		if (FlxG.save.data.mute != null)
-			FlxG.sound.muted = FlxG.save.data.mute;
 		
 		FlxSprite.defaultAntialiasing = data.antialiasing; //Makes Antialiasing a global thing. Remove this line if you are making a mod which is mainly pixel-sprite based.
 

@@ -1,41 +1,37 @@
 package states.editors;
 
+import backend.Section;
+import backend.Song;
+import backend.StageData;
 import flash.geom.Rectangle;
-import haxe.Json;
-import haxe.format.JsonParser;
-import haxe.io.Bytes;
-
 import flixel.FlxObject;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUICheckBox;
-import flixel.addons.ui.FlxUIInputText;
 import flixel.addons.ui.FlxUIDropDownMenu;
+import flixel.addons.ui.FlxUIInputText;
 import flixel.addons.ui.FlxUINumericStepper;
 import flixel.addons.ui.FlxUISlider;
 import flixel.addons.ui.FlxUITabMenu;
 import flixel.group.FlxGroup;
 import flixel.ui.FlxButton;
-
 import flixel.util.FlxSort;
+import haxe.Json;
+import haxe.format.JsonParser;
+import haxe.io.Bytes;
 import lime.media.AudioBuffer;
 import lime.utils.Assets;
+import objects.AttachedSprite;
+import objects.Character;
+import objects.HealthIcon;
+import objects.Note;
+import objects.NoteSplash;
+import objects.StrumNote;
 import openfl.events.Event;
 import openfl.events.IOErrorEvent;
 import openfl.media.Sound;
 import openfl.net.FileReference;
 import openfl.utils.Assets as OpenFlAssets;
-
-import backend.Song;
-import backend.Section;
-import backend.StageData;
-
-import objects.Note;
-import objects.StrumNote;
-import objects.NoteSplash;
-import objects.HealthIcon;
-import objects.AttachedSprite;
-import objects.Character;
 import substates.Prompt;
 
 
@@ -89,8 +85,9 @@ class ChartingState extends MusicBeatState
 		['Set Property', "Value 1: Variable name\nValue 2: New value"],
 		['Play Sound', "Value 1: Sound file name\nValue 2: Volume (Default: 1), ranges from 0 to 1"],
 		['Play Video', "Value 1: Video Name"],
-		['Lyrics', "Value 1: Enter Lyrics \nValue 2: Anything to remove text."],
-		['Zoom Camera', "Value 1: Change Camera Zoom.\n Value 2: How long to change."]
+		['Lyrics', "Value 1: Enter Lyrics \nValue 2: Anything to remove text."],		
+		['Zoom Camera', "Value 1: Change Camera Zoom.\n Value 2: How long to change."],
+		['Flash Camera', "Value 1: How long for the flash to disappear."]
 	];
 
 	var _file:FileReference;
@@ -454,7 +451,7 @@ class ChartingState extends MusicBeatState
 		var loadAutosaveBtn:FlxButton = new FlxButton(reloadSongJson.x, reloadSongJson.y + 30, 'Load Autosave', function()
 		{
 			PlayState.SONG = Song.parseJSONshit(FlxG.save.data.autosave);
-			MusicBeatState.resetState();
+			FlxG.resetState();
 		});
 
 		var loadEventJson:FlxButton = new FlxButton(loadAutosaveBtn.x, loadAutosaveBtn.y + 30, 'Load Events', function()
@@ -1819,7 +1816,7 @@ class ChartingState extends MusicBeatState
 				// Protect against lost data when quickly leaving the chart editor.
 				autosaveSong();
 				PlayState.chartingMode = false;
-				MusicBeatState.switchState(new states.editors.MasterEditorMenu());
+				FlxG.switchState(() -> new states.editors.MasterEditorMenu());
 				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 				FlxG.mouse.visible = false;
 				return;
@@ -3054,7 +3051,7 @@ class ChartingState extends MusicBeatState
 				}
 			}
 			else PlayState.SONG = Song.loadFromJson(song.toLowerCase(), song.toLowerCase());
-			MusicBeatState.resetState();
+			FlxG.resetState();
 		}
 		catch(e)
 		{

@@ -1,21 +1,18 @@
 package states;
 
 
-import flixel.input.keyboard.FlxKey;
+import InitState;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.graphics.frames.FlxFrame;
 import flixel.group.FlxGroup;
 import flixel.input.gamepad.FlxGamepad;
+import flixel.input.keyboard.FlxKey;
 import haxe.Json;
-
 import openfl.Assets;
-
-
 import shaders.ColorSwap;
-
-import states.StoryMenuState;
 import states.MainMenuState;
-import InitState;
+import states.StoryMenuState;
+
 
 typedef TitleData =
 {
@@ -55,9 +52,9 @@ class TitleState extends MusicBeatState
 		InitState.loadSaveShit();
 
 		#if FREEPLAY
-		MusicBeatState.switchState(new FreeplayState());
+		FlxG.switchState(() -> new FreeplayState());
 		#elseif CHARTING
-		MusicBeatState.switchState(new ChartingState());
+		FlxG.switchState(() -> new ChartingState());
 		#else
 		if (initialized)
 				startIntro();
@@ -250,7 +247,7 @@ class TitleState extends MusicBeatState
 
 				new FlxTimer().start(1, function(tmr:FlxTimer)
 				{
-					MusicBeatState.switchState(new MainMenuState());
+					FlxG.switchState(() -> new MainMenuState());
 					closedState = true;
 				});
 				// FlxG.sound.play(Paths.music('titleShoot'), 0.7);

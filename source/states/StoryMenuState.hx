@@ -1,19 +1,16 @@
 package states;
 
-import backend.WeekData;
 import backend.Highscore;
 import backend.Song;
-
-import flixel.group.FlxGroup;
+import backend.WeekData;
+import flixel.addons.transition.FlxTransitionableState;
 import flixel.graphics.FlxGraphic;
-
-import objects.MenuItem;
+import flixel.group.FlxGroup;
+import flixel.util.FlxStringUtil;
 import objects.MenuCharacter;
-
+import objects.MenuItem;
 import substates.GameplayChangersSubstate;
 import substates.ResetScoreSubState;
-import flixel.util.FlxStringUtil;
-import flixel.addons.transition.FlxTransitionableState;
 
 class StoryMenuState extends MusicBeatState
 {
@@ -57,9 +54,9 @@ class StoryMenuState extends MusicBeatState
 		{
 			FlxTransitionableState.skipNextTransIn = true;
 			persistentUpdate = false;
-			MusicBeatState.switchState(new states.ErrorState("NO WEEKS ADDED FOR STORY MODE\n\nPress ACCEPT to go to the Week Editor Menu.\nPress BACK to return to Main Menu.",
-				function() MusicBeatState.switchState(new states.editors.WeekEditorState()),
-				function() MusicBeatState.switchState(new states.MainMenuState())));
+			FlxG.switchState(() -> new states.ErrorState("NO WEEKS ADDED FOR STORY MODE\n\nPress ACCEPT to go to the Week Editor Menu.\nPress BACK to return to Main Menu.",
+				function() FlxG.switchState(() -> new states.editors.WeekEditorState()),
+				function() FlxG.switchState(() -> new states.MainMenuState())));
 			return;
 		}
 
@@ -260,7 +257,7 @@ class StoryMenuState extends MusicBeatState
 		{
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			movedBack = true;
-			MusicBeatState.switchState(new MainMenuState());
+			FlxG.switchState(() -> new MainMenuState());
 		}
 
 		super.update(elapsed);
