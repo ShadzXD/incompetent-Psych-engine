@@ -5,7 +5,7 @@ A fork of Psych Engine 0.7.3, inspired by [Doido Engine!](https://github.com/Doi
 
 **Incompetent! Psych engine**, is a fork that focuses mainly on making Psych engine more simple for hard coding use whilst, also not altering the codebase completely. 
 
-**This engine does NOT support the mod folder!**
+**This engine does NOT support the mod folder and LUA!**
 
 To compile the source code, use the command, *hmm install*.
 
@@ -17,13 +17,8 @@ To compile the source code, use the command, *hmm install*.
 - Some bug fixes to base Psych 0.7.3
 - Inbuilt camera movement on note hit. (Can be changed from the options)
 - Cleaned up Boyfriend Sprites!
-- HUD is split into classes for easier custom hud creation.
-  
-**To be added!**
-
-- Source code file re-orginisation.
-- Some simple optimisations.
-
+- HUD and Ratings have been split off to their own classes for PlayState clean up.
+- 
 # **KNOWN ISSUES**
 - HTML5 will stutter when playing a video mid song
 
