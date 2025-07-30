@@ -5,7 +5,6 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 using StringTools;
 enum PopUpType {
   FUNKIN;
-  OSHA;
   PIXEL;
 }
 class PopUpStuff extends FlxTypedGroup<FlxSprite>
@@ -17,7 +16,7 @@ class PopUpStuff extends FlxTypedGroup<FlxSprite>
 	public var hudType:PopUpType;
 	var size:Float = 0.6;
 	var speedRate:Float = 1;
-		var ratingsData:Array<Rating> = Rating.loadDefault();
+	var ratingsData:Array<Rating> = Rating.loadDefault();
 
 	override public function new(hud:PopUpType, ?fromPlayState:Bool = false)
 	{
@@ -114,9 +113,6 @@ class PopUpStuff extends FlxTypedGroup<FlxSprite>
 	{
 		switch(hudType)
 		{
-			case OSHA:
-			antialias = false;
-			uiPrefix = 'popups/oshawott/';
 			case FUNKIN:
 			uiPrefix = 'popups/base_game/';
 			case PIXEL:
