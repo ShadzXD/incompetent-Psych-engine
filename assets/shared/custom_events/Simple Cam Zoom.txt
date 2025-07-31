@@ -1,0 +1,8 @@
+Tweens the camera with custom easing
+
+Value 1: Zoom, Duration
+
+Example: 1.5,0.5
+Spaces are not allowed
+
+Value 2: Ease type
