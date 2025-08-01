@@ -767,12 +767,12 @@ class PlayState extends MusicBeatState
 	}
 
 	public var videoCutscene:VideoSprite = null;
-	public function startVideo(name:String, forMidSong:Bool = false, canSkip:Bool = true, loop:Bool = false, playOnLoad:Bool = true)
+	public function startVideo(name:String, forMidSong:Bool = false, canSkip:Bool = false, loop:Bool = false, playOnLoad:Bool = true)
 	{
 		#if VIDEOS_ALLOWED
 		inCutscene = !forMidSong;
-		canPause = forMidSong;
 		FlxG.log.add('Videos allowed');
+		canPause = forMidSong;
 
 		var foundFile:Bool = false;
 		var fileName:String = Paths.video(name);
@@ -1496,7 +1496,8 @@ class PlayState extends MusicBeatState
 	override function closeSubState()
 	{
 		super.closeSubState();
-		
+		if(videoCutscene != null) videoCutscene.resume();
+
 		stagesFunc(function(stage:BaseStage) stage.closeSubState());
 		if (paused)
 		{
@@ -1798,6 +1799,7 @@ class PlayState extends MusicBeatState
 					note.resetAnim = 0;
 				}
 		}
+		if(videoCutscene != null) videoCutscene.pause();
 		openSubState(new PauseSubState());
 
 		#if DISCORD_ALLOWED
@@ -2144,7 +2146,6 @@ class PlayState extends MusicBeatState
 				FlxG.sound.play(Paths.sound(value1), flValue2);
 			case 'Play Video':
 				startVideo(value1, true, false, false, true);
-				canPause = false;
 			case 'Lyrics':
 				if(lyricsTxt != null)
 				{

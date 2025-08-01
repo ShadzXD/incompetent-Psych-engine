@@ -8,9 +8,6 @@ class TextHUD extends MainHUD
 {
 	var scoreTxtTween:FlxTween;
 
-
-    var healthLerp:Float = 1;
-
     public function new()
     {
 		super();
@@ -23,7 +20,7 @@ class TextHUD extends MainHUD
 		add(timeTxt);
 
 	
-		scoreText = new FlxText(0, 0, FlxG.width, "", 20);
+		scoreText = new FlxText(0, FlxG.height * (!ClientPrefs.data.downScroll ? 0.9 : 0.1), FlxG.width, "", 20);
 		scoreText.setFormat(Paths.font(hudFont), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreText.scrollFactor.set();
 		scoreText.borderSize = 1.25;
