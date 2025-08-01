@@ -1391,8 +1391,7 @@ class PlayState extends MusicBeatState
 			case 'Play Video':
 				trace('pre-loaded ' +  event.value1);
 				#if hxvlc
-				startVideo(event.value1, true, false, false, false);
-				videoCutscene.precacheVideo(Paths.video(event.value1));
+				videoCutscene.precacheVideo(event.value1);
 
 				#end
 
