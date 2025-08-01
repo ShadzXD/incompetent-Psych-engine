@@ -1,6 +1,7 @@
 package huds;
 import flixel.group.FlxGroup;
 import objects.HealthIcon;
+import objects.Bar;
 
 @:access(states.PlayState)
 /*
@@ -12,6 +13,7 @@ class MainHUD extends FlxGroup
 	//Things you can edit by overriding in the subclass.
 	public var hudFont:String = 'vcr.ttf'; //font used in HUD
 	public var botplayText:String = 'BotPlay Enabled'; //text that displays whenever botplay is enabled.
+    public var healthBar:Bar;
 
 	public var iconP1:HealthIcon;
 	public var iconP2:HealthIcon;
@@ -19,7 +21,13 @@ class MainHUD extends FlxGroup
 	public var scoreText:FlxText;
 	public var songSeconds:Float;
 	public var songLength:Float;
+	var timeTxt:FlxText;
+	public function new()
+	{
+		super();
+	
 
+	}
     public function beatHit(){}
 
 	public function updateScore(miss:Bool = false, ?score:Int, ?misses:Int, ?ratingName:String, ?percent:Float){} 
@@ -37,5 +45,10 @@ class MainHUD extends FlxGroup
 
  	public function updateTime(t:Float){
 		songSeconds = t;
+	}
+	public  function initScriptVars()
+	{
+		trace('hi');
+			
 	}
 }

@@ -1,8 +1,9 @@
 package huds;
 
-import objects.HealthIcon;
-import objects.Bar;
 import flixel.util.FlxStringUtil;
+import objects.Bar;
+import objects.HealthIcon;
+
 /*
 * Recreation of Psych Engine's hud.
 * You can extend this one if your hud is similiar.
@@ -10,12 +11,9 @@ import flixel.util.FlxStringUtil;
 class PsychHUD extends MainHUD
 {
 	var scoreTxtTween:FlxTween;
-	public var scoreTxt:FlxText;
 
-    public var healthBar:Bar;
 
     var healthLerp:Float = 1;
-	var timeTxt:FlxText;
 	var iconOffset:Int = 26;
 
     public function new()
@@ -53,11 +51,11 @@ class PsychHUD extends MainHUD
 		iconP2.alpha = ClientPrefs.data.healthBarAlpha;
 		add(iconP2);
 
-		scoreTxt = new FlxText(0, healthBar.y + 40, FlxG.width, "", 20);
-		scoreTxt.setFormat(Paths.font(hudFont), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		scoreTxt.scrollFactor.set();
-		scoreTxt.borderSize = 1.25;
-		add(scoreTxt);
+		scoreText = new FlxText(0, healthBar.y + 40, FlxG.width, "", 20);
+		scoreText.setFormat(Paths.font(hudFont), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		scoreText.scrollFactor.set();
+		scoreText.borderSize = 1.25;
+		add(scoreText);
     }
 
     override function update(elapsed:Float)
@@ -93,18 +91,18 @@ class PsychHUD extends MainHUD
 		+ (' | Misses: ${misses}')
 		+ ' | Rating: ${str}';
 	
-		 scoreTxt.text = tempScore;
+		 scoreText.text = tempScore;
 	} 
 
-	override public function botplayStuff() scoreTxt.text = botplayText;
+	override public function botplayStuff() scoreText.text = botplayText;
 
 	override public function doScoreBop():Void {
 		if(scoreTxtTween != null)
 			scoreTxtTween.cancel();
 
-		scoreTxt.scale.x = 1.075;
-		scoreTxt.scale.y = 1.075;
-		scoreTxtTween = FlxTween.tween(scoreTxt.scale, {x: 1, y: 1}, 0.2, {
+		scoreText.scale.x = 1.075;
+		scoreText.scale.y = 1.075;
+		scoreTxtTween = FlxTween.tween(scoreText.scale, {x: 1, y: 1}, 0.2, {
 			onComplete: function(twn:FlxTween) {
 				scoreTxtTween = null;
 			}

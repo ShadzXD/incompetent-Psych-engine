@@ -248,7 +248,7 @@ class PlayState extends MusicBeatState
 	var camOffsetNoteHit:FlxPoint;
 
 	//EDIT THIS VALUE TO CHANGE HOW MUCH THE CAMERA MOVES ON NOTE HIT!
-	public var moveValue:Int = 15;
+	public var moveValue:Int = 20;
 
 	var camMoveTween:FlxTween;
 	var lyricsTxt:FlxText;
@@ -456,7 +456,8 @@ class PlayState extends MusicBeatState
 				gf.visible = false;
 		}
 		stagesFunc(function(stage:BaseStage) stage.createPost());
-		
+		videoGroup = new FlxTypedGroup<VideoSprite>();
+		add(videoGroup);
 		comboClass = new PopUpStuff(FUNKIN, true);
 		comboClass.cameras = [camHUD];
 		comboClass.visible = !ClientPrefs.data.hideHud;
@@ -467,14 +468,17 @@ class PlayState extends MusicBeatState
 		*/
 		if(songName == 'test')
 			hudClass = new VanillaHUD();
+		else if (songName == 'p3fes')
+			hudClass = new TextHUD();
 		else
 			hudClass = new PsychHUD();
 
 		hudClass.cameras = [camHUD];
 		hudClass.visible = !ClientPrefs.data.hideHud;
 		hudClass.isBotplay = cpuControlled;
+		hudClass.initScriptVars();
 		add(hudClass);
-
+		
 		comboGroup = new FlxSpriteGroup();
 		add(comboGroup);
 		uiGroup = new FlxSpriteGroup();
@@ -525,7 +529,8 @@ class PlayState extends MusicBeatState
 
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
 		moveCameraSection();
-	
+			uiGroup.cameras = [camHUD];
+
 		uiGroup.cameras = [camHUD];
 		noteGroup.cameras = [camHUD];
 		comboGroup.cameras = [camHUD];
@@ -569,8 +574,8 @@ class PlayState extends MusicBeatState
 		#end
 		switch(songName)
 		{
-		//	case 'tutorial':
-				//startVideo("test");
+			case 'tutorial':
+				startVideo("test");
 			default:
 				startCallback();
 		}
@@ -803,7 +808,7 @@ class PlayState extends MusicBeatState
 				videoCutscene.onSkip = onVideoEnd;
 			}
 			if (GameOverSubstate.instance != null && isDead) GameOverSubstate.instance.add(videoCutscene);
-			else add(videoCutscene);
+			else videoGroup.add(videoCutscene);
 			#if hxvlc
 			if (playOnLoad)
 				videoCutscene.play();
@@ -1766,6 +1771,9 @@ class PlayState extends MusicBeatState
 		setOnScripts('cameraX', camFollow.x);
 		setOnScripts('cameraY', camFollow.y);
 		setOnScripts('botPlay', cpuControlled);
+		setOnScripts('scoreText',hudClass.scoreText);
+		setOnScripts('iconP1',hudClass.iconP1);
+		setOnScripts('iconP2',hudClass.iconP2);
 		callOnScripts('onUpdatePost', [elapsed]);
 	}
 
@@ -2136,7 +2144,7 @@ class PlayState extends MusicBeatState
 				FlxG.sound.play(Paths.sound(value1), flValue2);
 			case 'Play Video':
 				startVideo(value1, true, false, false, true);
-				//canPause = false;
+				canPause = false;
 			case 'Lyrics':
 				if(lyricsTxt != null)
 				{
@@ -2378,6 +2386,7 @@ class PlayState extends MusicBeatState
 
 	public var totalPlayed:Int = 0;
 	public var totalNotesHit:Float = 0.0;
+	public var videoGroup:FlxTypedGroup<VideoSprite>;
 
 	// Stores Ratings and Combo Sprites in a group
 	public var comboGroup:FlxSpriteGroup;
@@ -3190,7 +3199,7 @@ class PlayState extends MusicBeatState
 		for (script in hscriptArray) {
 			if(exclusions.contains(script.origin))
 				continue;
-
+			trace(variable);
 			script.set(variable, arg);
 		}
 		#end

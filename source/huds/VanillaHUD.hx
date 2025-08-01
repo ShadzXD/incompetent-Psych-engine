@@ -8,7 +8,6 @@ import flixel.util.FlxStringUtil;
 */
 class VanillaHUD extends MainHUD
 {
-    public var healthBar:Bar;
     var healthLerp:Float = 1;
     var iconOffset:Int = 26;
 

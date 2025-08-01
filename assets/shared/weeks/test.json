@@ -8,8 +8,18 @@
 				35,
 				35
 			]
+		],
+			[
+			"p3fes",
+			"bf-pixel",
+			[
+				35,
+				35,
+				35
+			]
 		]
 	],
+	
 	"hiddenUntilUnlocked": false,
 	"hideFreeplay": false,
 	"weekBackground": "stage",
