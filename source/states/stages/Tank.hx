@@ -83,8 +83,6 @@ class Tank extends BaseStage
 					setStartCallback(ughIntro);
 				case 'guns':
 					setStartCallback(gunsIntro);
-				case 'stress':
-					setStartCallback(stressIntro);
 			}
 		}
 	}
@@ -298,7 +296,6 @@ class Tank extends BaseStage
 		pico = new FlxAnimate(gf.x + 150, gf.y + 450);
 		pico.showPivot = false;
 		Paths.loadAnimateAtlas(pico, 'cutscenes/picoAppears');
-		pico.antialiasing = ClientPrefs.data.antialiasing;
 		pico.anim.addBySymbol('dance', 'GF Dancing at Gunpoint', 24, true);
 		pico.anim.addBySymbol('dieBitch', 'GF Time to Die sequence', 24, false);
 		pico.anim.addBySymbol('picoAppears', 'Pico Saves them sequence', 24, false);
@@ -308,12 +305,11 @@ class Tank extends BaseStage
 		cutsceneHandler.push(pico);
 
 		boyfriendCutscene = new FlxSprite(boyfriend.x + 5, boyfriend.y + 20);
-		boyfriendCutscene.antialiasing = ClientPrefs.data.antialiasing;
 		boyfriendCutscene.frames = Paths.getSparrowAtlas('characters/BOYFRIEND');
 		boyfriendCutscene.animation.addByPrefix('idle', 'BF idle dance', 24, false);
 		boyfriendCutscene.animation.play('idle', true);
 		boyfriendCutscene.animation.curAnim.finish();
-		addBehindBF(boyfriendCutscene);
+		add(boyfriendCutscene);
 		cutsceneHandler.push(boyfriendCutscene);
 
 		var cutsceneSnd:FlxSound = new FlxSound().loadEmbedded(Paths.sound('stressCutscene'));
