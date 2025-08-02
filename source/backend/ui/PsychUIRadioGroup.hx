@@ -330,7 +330,7 @@ class PsychUIRadioItem extends PsychUICheckBox
 	}
 	override function boxGraphic()
 	{
-		box.loadGraphic(Paths.image('psych-ui/radio', 'embed'), true, 16, 16);
+		box.loadGraphic('assets/embed/images/psych-ui/radio.png', true, 16, 16);
 		box.animation.add('false', [0]);
 		box.animation.add('true', [1]);
 		box.animation.play('false');
