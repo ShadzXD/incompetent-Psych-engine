@@ -9,7 +9,7 @@ import states.editors.MasterEditorMenu;
 
 class MainMenuState extends MusicBeatState
 {
-	public static var psychEngineVersion:String = '0.4.0'; // This is also used for Discord RPC
+	public static var psychEngineVersion:String = '0.5.0'; // This is also used for Discord RPC
 	public static var curSelected:Int = 0;
 
 	var menuItems:FlxTypedGroup<FlxSprite>;

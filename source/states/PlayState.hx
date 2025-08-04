@@ -52,8 +52,6 @@ import crowplexus.iris.Iris;
 import psychlua.HScript.HScriptInfos;
 #end
 
-
-
 /**
  * This is where all the Gameplay stuff happens and is managed
  *
@@ -466,23 +464,20 @@ class PlayState extends MusicBeatState
 		* Most UI hud elements have been moved to their own seperate class.
 		* Please go to them if you want to change the ui.
 		*/
-		if(songName == 'test')
-			hudClass = new VanillaHUD();
-		else if (songName == 'p3fes')
-			hudClass = new TextHUD();
-		else
-			hudClass = new PsychHUD();
-
+		switch(songName)
+		{
+			case 'test':
+				hudClass = new VanillaHUD();
+			case 'p3fes':
+				hudClass = new TextHUD();
+			default:
+				hudClass = new PsychHUD();
+		}
 		hudClass.cameras = [camHUD];
 		hudClass.visible = !ClientPrefs.data.hideHud;
 		hudClass.isBotplay = cpuControlled;
-		hudClass.initScriptVars();
 		add(hudClass);
 		
-		comboGroup = new FlxSpriteGroup();
-		add(comboGroup);
-		uiGroup = new FlxSpriteGroup();
-		add(uiGroup);
 		noteGroup = new FlxTypedGroup<FlxBasic>();
 		add(noteGroup);
 		add(grpHoldSplashes);
@@ -529,11 +524,8 @@ class PlayState extends MusicBeatState
 
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
 		moveCameraSection();
-			uiGroup.cameras = [camHUD];
 
-		uiGroup.cameras = [camHUD];
 		noteGroup.cameras = [camHUD];
-		comboGroup.cameras = [camHUD];
 		grpHoldSplashes.cameras = [camHUD];
 
 		startingSong = true;
@@ -2144,6 +2136,7 @@ class PlayState extends MusicBeatState
 				if(flValue2 == null) flValue2 = 1;
 				FlxG.sound.play(Paths.sound(value1), flValue2);
 			case 'Play Video':
+				trace('CALLED PLAY VIDEO EVENT');
 				startVideo(value1, true, false, false, true);
 			case 'Lyrics':
 				if(lyricsTxt != null)
@@ -2388,10 +2381,6 @@ class PlayState extends MusicBeatState
 	public var totalNotesHit:Float = 0.0;
 	public var videoGroup:FlxTypedGroup<VideoSprite>;
 
-	// Stores Ratings and Combo Sprites in a group
-	public var comboGroup:FlxSpriteGroup;
-	// Stores HUD Objects in a Group
-	public var uiGroup:FlxSpriteGroup;
 	// Stores Note Objects in a Group
 	public var noteGroup:FlxTypedGroup<FlxBasic>;
 
@@ -2399,13 +2388,7 @@ class PlayState extends MusicBeatState
 	{
 		var noteDiff:Float = Math.abs(note.strumTime - Conductor.songPosition + ClientPrefs.data.ratingOffset);
 		vocals.volume = 1;
-
-		if (!ClientPrefs.data.comboStacking && comboGroup.members.length > 0) {
-			for (spr in comboGroup) {
-				spr.destroy();
-				comboGroup.remove(spr);
-			}
-		}
+	
 
 		var score:Int = 350;
 
@@ -3199,7 +3182,6 @@ class PlayState extends MusicBeatState
 		for (script in hscriptArray) {
 			if(exclusions.contains(script.origin))
 				continue;
-			trace(variable);
 			script.set(variable, arg);
 		}
 		#end

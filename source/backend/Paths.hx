@@ -503,6 +503,7 @@ class Paths
 		localTrackedAssets.push(gottenPath);
 		return currentTrackedSounds.get(gottenPath);
 	}
+
 	static public function getMultiAtlas(keys:Array<String>, ?parentFolder:String = null, ?allowGPU:Bool = true):FlxAtlasFrames
 	{
 		
@@ -521,76 +522,70 @@ class Paths
 		}
 		return parentFrames;
 	}
-	#if MODS_ALLOWED
-	inline static public function mods(key:String = '') {
-		return 'mods/' + key;
-	}
-
-	inline static public function modsFont(key:String) {
-		return modFolders('fonts/' + key);
-	}
-
-	inline static public function modsJson(key:String) {
-		return modFolders('data/' + key + '.json');
-	}
-
-	inline static public function modsVideo(key:String) {
-		return modFolders('videos/' + key + '.' + VIDEO_EXT);
-	}
-
-	inline static public function modsSounds(path:String, key:String) {
-		return modFolders(path + '/' + key + '.' + SOUND_EXT);
-	}
-
-	inline static public function modsImages(key:String) {
-		return modFolders('images/' + key + '.png');
-	}
-
-	inline static public function modsXml(key:String) {
-		return modFolders('images/' + key + '.xml');
-	}
-
-	inline static public function modsTxt(key:String) {
-		return modFolders('images/' + key + '.txt');
-	}
-
-	inline static public function modsImagesJson(key:String) {
-		return modFolders('images/' + key + '.json');
-	}
-
-	/* Goes unused for now
-
-	inline static public function modsShaderFragment(key:String, ?library:String)
+	
+	/*
+	* Unused version of getMultiAtlas function that I wrote,
+	* This version loads spritesheets only if a PlayAnimation event is found in Playstate.
+	* Is skipped if it isnt on playstate and loads everything anyway.
+	* Not a huge fan so I decided to scrap it.
+	*/
+	
+	/*
+	static public function getMultiAtlas(keys:Array<String>, ?parentFolder:String = null, ?allowGPU:Bool = true):FlxAtlasFrames
 	{
-		return modFolders('shaders/'+key+'.frag');
-	}
-	inline static public function modsShaderVertex(key:String, ?library:String)
-	{
-		return modFolders('shaders/'+key+'.vert');
-	}
-	inline static public function modsAchievements(key:String) {
-		return modFolders('achievements/' + key + '.json');
-	}*/
+		var allowMultiSpriteSheet:Bool = false;
+		trace(PlayState.instance);
+		//basic ass linear search lol
+		trace('attempting to load multiatlas');
+		if(PlayState.instance != null)
+		{
+			var eventsChart:SwagSong;
+			try
+			{
+				eventsChart = Song.getChart('events', PlayState.instance.songName);
+				trace('found event json');
+					for (event in eventsChart.events) //Event Notes
+					{
+						trace(event[1][0][0]);
+						if(event[1][0][0] == 'Play Animation')
+						{
+							trace('FOUND PLAY ANIMATION EVENT!');
+							allowMultiSpriteSheet = true;
+							break;
+						
+						}
+					}
+					
+			}
+				catch(e:Dynamic) {
+				trace('diudnt find events, so  dont load anytrhing');
+					 allowMultiSpriteSheet = false;
+				}
+		} else  allowMultiSpriteSheet = true;
+	
 
-	static public function modFolders(key:String) {
-		if(Mods.currentModDirectory != null && Mods.currentModDirectory.length > 0) {
-			var fileToCheck:String = mods(Mods.currentModDirectory + '/' + key);
-			if(FileSystem.exists(fileToCheck)) {
-				return fileToCheck;
+
+		trace(allowMultiSpriteSheet);
+		var parentFrames:FlxAtlasFrames = Paths.getAtlas(keys[0].trim());
+		if(keys.length > 1 && allowMultiSpriteSheet)
+		{
+			var original:FlxAtlasFrames = parentFrames;
+			parentFrames = new FlxAtlasFrames(parentFrames.parent);
+			parentFrames.addAtlas(original, true);
+			for (i in 1...keys.length)
+			{
+				var extraFrames:FlxAtlasFrames = Paths.getAtlas(keys[i].trim(), parentFolder, allowGPU);
+				if(extraFrames != null)
+					parentFrames.addAtlas(extraFrames, true);
 			}
 		}
-
-		for(mod in Mods.getGlobalMods()){
-			var fileToCheck:String = mods(mod + '/' + key);
-			if(FileSystem.exists(fileToCheck))
-				return fileToCheck;
-		}
-		return 'mods/' + key;
+		trace(parentFrames);
+		return parentFrames;
 	}
-	#end
-	//functions taken from pslice by mikolka!
+	*/
 
-   public static inline function getContent(path:String) {
+	//functions taken from pslice by mikolka!
+  	public static inline function getContent(path:String) {
         #if sys
 		return (FileSystem.exists(path)) ? File.getContent(path) : null;
 		#else
@@ -606,13 +601,11 @@ class Paths
 		#end
     }
     public static function readDirectory(directory:String):Array<String>
+    {
+      
+		var dirs:Array<String> = [];
+        for(dir in Assets.list().filter(folder -> folder.startsWith(directory)))
         {
-            #if MODS_ALLOWED
-            return FileSystem.readDirectory(directory);
-            #else
-            var dirs:Array<String> = [];
-            for(dir in Assets.list().filter(folder -> folder.startsWith(directory)))
-            {
                 @:privateAccess
                 for(library in lime.utils.Assets.libraries.keys())
                 {
@@ -621,10 +614,11 @@ class Paths
                     else if(Assets.exists(dir) && !dirs.contains(dir))
                         dirs.push(dir);
                 }
-            }
-            return dirs;
-            #end
-        }
+         }
+		return dirs;
+
+     
+    }
 	#if flxanimate
 	public static function loadAnimateAtlas(spr:FlxAnimate, folderOrImg:Dynamic, spriteJson:Dynamic = null, animationJson:Dynamic = null)
 	{

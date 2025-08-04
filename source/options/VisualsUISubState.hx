@@ -135,12 +135,6 @@ class VisualsUISubState extends BaseOptionsMenu
 		addOption(option);
 		#end
 
-		var option:Option = new Option('Combo Stacking',
-			"If unchecked, Ratings and Combo won't stack, saving on System Memory and making them easier to read",
-			'comboStacking',
-			'bool');
-		addOption(option);
-
 		var option:Option = new Option('Camera Note Movement',
 		"If unchecked, wont do Camera movement on note hit.",
 		'camNoteMovement',
