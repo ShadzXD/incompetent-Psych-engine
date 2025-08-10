@@ -187,6 +187,7 @@ class PlayState extends MusicBeatState
 	public var practiceMode:Bool = false;
 
 	public var camHUD:FlxCamera;
+	public var camPreHUD:FlxCamera;
 	public var camGame:FlxCamera;
 	public var camOther:FlxCamera;
 	public var cameraSpeed:Float = 1;
@@ -285,13 +286,19 @@ class PlayState extends MusicBeatState
 		practiceMode = ClientPrefs.getGameplaySetting('practice');
 		cpuControlled = ClientPrefs.getGameplaySetting('botplay');
 
-		// var gameCam:FlxCamera = FlxG.camera;
 		camGame = initPsychCamera();
+
+		//camera used for stuff like images or videos below the hud.
+		camPreHUD = new FlxCamera();
+		camPreHUD.bgColor.alpha = 0;
+
 		camHUD = new FlxCamera();
-		camOther = new FlxCamera();
 		camHUD.bgColor.alpha = 0;
+
+		camOther = new FlxCamera();
 		camOther.bgColor.alpha = 0;
 
+	 	FlxG.cameras.add(camPreHUD, false);
 		FlxG.cameras.add(camHUD, false);
 		FlxG.cameras.add(camOther, false);
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
@@ -411,6 +418,14 @@ class PlayState extends MusicBeatState
 					initHScript(folder + file);
 				#end
 			}
+		#else
+		//HTML5 SCRIPT SECTION!
+		//insert a value in the array like follows - 'SCRIPT_NAME.hx'
+		//PLEASE DO NOTE: THIS DOESNT WORK WITH LUA, HTML5 AND LUA ARE NOT NATIVELY COMPATIBLE!!!!!!!
+		var globalscripts:Array<String> = [];
+
+		for(script in globalscripts)
+			initHScript(Paths.getSharedPath('scripts/'+ script));
 		#end
 		// STAGE SCRIPTS
 		#if LUA_ALLOWED
@@ -454,12 +469,14 @@ class PlayState extends MusicBeatState
 				gf.visible = false;
 		}
 		stagesFunc(function(stage:BaseStage) stage.createPost());
-		videoGroup = new FlxTypedGroup<VideoSprite>();
-		add(videoGroup);
-		comboClass = new PopUpStuff(FUNKIN, true);
-		comboClass.cameras = [camHUD];
-		comboClass.visible = !ClientPrefs.data.hideHud;
-		add(comboClass);
+		if(!cpuControlled)
+		{
+			comboClass = new PopUpStuff(FUNKIN, true);
+			comboClass.cameras = [camHUD];
+			comboClass.visible = !ClientPrefs.data.hideHud;
+			add(comboClass);
+		}
+	
 		/*
 		* Most UI hud elements have been moved to their own seperate class.
 		* Please go to them if you want to change the ui.
@@ -468,14 +485,13 @@ class PlayState extends MusicBeatState
 		{
 			case 'test':
 				hudClass = new VanillaHUD();
-			case 'p3fes':
+			case 'get-out-the-way':
 				hudClass = new TextHUD();
 			default:
 				hudClass = new PsychHUD();
 		}
 		hudClass.cameras = [camHUD];
 		hudClass.visible = !ClientPrefs.data.hideHud;
-		hudClass.isBotplay = cpuControlled;
 		add(hudClass);
 		
 		noteGroup = new FlxTypedGroup<FlxBasic>();
@@ -484,7 +500,6 @@ class PlayState extends MusicBeatState
 
 		Conductor.songPosition = -5000 / Conductor.songPosition;
 		
-	
 		strumLineNotes = new FlxTypedGroup<StrumNote>();
 		noteGroup.add(strumLineNotes);
 
@@ -580,9 +595,7 @@ class PlayState extends MusicBeatState
 		if(ClientPrefs.data.hitsoundVolume > 0) Paths.sound('hitsound');
 		for (i in 1...4) Paths.sound('missnote$i');
 		Paths.image('alphabet');
-
-		if (PauseSubState.songName != null)
-			Paths.music(PauseSubState.songName);
+		Paths.music('breakfast'); 
 
 
 		resetRPC();
@@ -631,6 +644,7 @@ class PlayState extends MusicBeatState
 		}
 		playbackRate = value;
 		FlxG.animationTimeScale = value;
+		Conductor.offset = Reflect.hasField(PlayState.SONG, 'offset') ? (PlayState.SONG.offset / value) : 0;
 		Conductor.safeZoneOffset = (ClientPrefs.data.safeFrames / 60) * 1000 * value;
 		setOnScripts('playbackRate', playbackRate);
 		#else
@@ -778,9 +792,15 @@ class PlayState extends MusicBeatState
 		{
 			FlxG.log.add('found video!');
 			videoCutscene = new VideoSprite(fileName, forMidSong, canSkip, loop);
-			#if hxvlc
-			if(forMidSong) videoCutscene.videoSprite.bitmap.rate = playbackRate;
-			#end
+			
+			if(forMidSong)
+			{
+				videoCutscene.cameras = [camPreHUD];
+				#if hxvlc
+				videoCutscene.videoSprite.bitmap.rate = playbackRate;
+				#end
+			} 
+		
 			// Finish callback
 			if (!forMidSong)
 			{
@@ -800,7 +820,7 @@ class PlayState extends MusicBeatState
 				videoCutscene.onSkip = onVideoEnd;
 			}
 			if (GameOverSubstate.instance != null && isDead) GameOverSubstate.instance.add(videoCutscene);
-			else videoGroup.add(videoCutscene);
+			else add(videoCutscene);
 			#if hxvlc
 			if (playOnLoad)
 				videoCutscene.play();
@@ -1383,6 +1403,7 @@ class PlayState extends MusicBeatState
 			case 'Play Video':
 				trace('pre-loaded ' +  event.value1);
 				#if hxvlc
+				startVideo(event.value1, true, false, false, false);
 				videoCutscene.precacheVideo(event.value1);
 
 				#end
@@ -1516,13 +1537,10 @@ class PlayState extends MusicBeatState
 		value = FlxMath.roundDecimal(value, 5); //Fix Float imprecision
 		health = value;
 		if (health >= 2) health = 2;
+		hudClass.healthStuff(health);
 		return health;
 	}
 
-	public function get_health():Float // You can alter how icon animations work here
-	{
-		return health;
-	}
 	override public function onFocusLost():Void
 	{
 		#if DISCORD_ALLOWED
@@ -1828,16 +1846,22 @@ class PlayState extends MusicBeatState
 		paused = true;
 		if(FlxG.sound.music != null)
 			FlxG.sound.music.stop();
-		#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
+		#if DISCORD_ALLOWED
+		DiscordClient.changePresence("Chart Editor", null, null, true);
+		DiscordClient.resetClientID();
+		#end
 		FlxG.switchState(() -> new CharacterEditorState(SONG.player2));
 	}
 
 	public var isDead:Bool = false; //Don't mess with this on Lua!!!
+	public var gameOverTimer:FlxTimer;
+
 	function doDeathCheck(?skipHealthCheck:Bool = false) {
-		if (((skipHealthCheck && instakillOnMiss) || health <= 0) && !practiceMode && !isDead)
+		if (((skipHealthCheck && instakillOnMiss) || health <= 0) && !practiceMode && !isDead && gameOverTimer == null)
 		{
 			var ret:Dynamic = callOnScripts('onGameOver', null, true);
-			if(ret != LuaUtils.Function_Stop) {
+			if(ret != LuaUtils.Function_Stop)
+			{
 				FlxG.animationTimeScale = 1;
 				boyfriend.stunned = true;
 				deathCounter++;
@@ -1845,7 +1869,6 @@ class PlayState extends MusicBeatState
 				paused = true;
 				canResync = false;
 				canPause = false;
-
 				#if VIDEOS_ALLOWED
 				if(videoCutscene != null)
 				{
@@ -1854,24 +1877,36 @@ class PlayState extends MusicBeatState
 				}
 				#end
 
-				vocals.stop();
-				opponentVocals.stop();
-				FlxG.sound.music.stop();
-
 				persistentUpdate = false;
 				persistentDraw = false;
 				FlxTimer.globalManager.clear();
 				FlxTween.globalManager.clear();
-				#if LUA_ALLOWED
-				modchartTimers.clear();
-				modchartTweens.clear();
-				#end
+				FlxG.camera.setFilters([]);
 
-				openSubState(new GameOverSubstate());
+				if(GameOverSubstate.deathDelay > 0)
+				{
+					gameOverTimer = new FlxTimer().start(GameOverSubstate.deathDelay, function(_)
+					{
+						vocals.stop();
+						opponentVocals.stop();
+						FlxG.sound.music.stop();
+						openSubState(new GameOverSubstate(boyfriend));
+						gameOverTimer = null;
+					});
+				}
+				else
+				{
+					vocals.stop();
+					opponentVocals.stop();
+					FlxG.sound.music.stop();
+					openSubState(new GameOverSubstate(boyfriend));
+				}
+
+				// MusicBeatState.switchState(new GameOverState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
 				#if DISCORD_ALLOWED
 				// Game Over doesn't get his its variable because it's only used here
-				if(autoUpdateRPC) DiscordClient.changePresence("Game Over - " + detailsText, SONG.song + " (" + storyDifficultyText + ")");
+				if(autoUpdateRPC) DiscordClient.changePresence("Game Over - " + detailsText, SONG.song);
 				#end
 				isDead = true;
 				return true;
@@ -1879,7 +1914,6 @@ class PlayState extends MusicBeatState
 		}
 		return false;
 	}
-
 	public function checkEventNote() {
 		while(eventNotes.length > 0) {
 			var leStrumTime:Float = eventNotes[0].strumTime;
@@ -2048,6 +2082,7 @@ class PlayState extends MusicBeatState
 							boyfriend.alpha = 0.00001;
 							boyfriend = boyfriendMap.get(value2);
 							boyfriend.alpha = lastAlpha;
+							if(hudClass.iconP1 != null)
 							hudClass.iconP1.changeIcon(boyfriend.healthIcon);
 						}
 						setOnScripts('boyfriendName', boyfriend.curCharacter);
@@ -2070,6 +2105,7 @@ class PlayState extends MusicBeatState
 								gf.visible = false;
 							}
 							dad.alpha = lastAlpha;
+							if(hudClass.iconP2 != null)
 							hudClass.iconP2.changeIcon(dad.healthIcon);
 						}
 						setOnScripts('dadName', dad.curCharacter);
@@ -2136,7 +2172,8 @@ class PlayState extends MusicBeatState
 				if(flValue2 == null) flValue2 = 1;
 				FlxG.sound.play(Paths.sound(value1), flValue2);
 			case 'Play Video':
-				trace('CALLED PLAY VIDEO EVENT');
+							FlxG.log.add('called video');
+
 				startVideo(value1, true, false, false, true);
 			case 'Lyrics':
 				if(lyricsTxt != null)
@@ -2379,7 +2416,6 @@ class PlayState extends MusicBeatState
 
 	public var totalPlayed:Int = 0;
 	public var totalNotesHit:Float = 0.0;
-	public var videoGroup:FlxTypedGroup<VideoSprite>;
 
 	// Stores Note Objects in a Group
 	public var noteGroup:FlxTypedGroup<FlxBasic>;
@@ -2424,9 +2460,13 @@ class PlayState extends MusicBeatState
 			if (PlayState.isPixelStage) uiSuffix = '-pixel';
 			antialias = !isPixelStage;
 		}
-		if (combo >= 5) comboClass.displayCombo(combo);
+		if(!cpuControlled)
+		{
+			if (combo >= 5) comboClass.displayCombo(combo);
 
-		comboClass.displayRating(daRating.image);
+			comboClass.displayRating(daRating.image);
+		}
+	
 	}
 
 	public var strumsBlocked:Array<Bool> = [];
@@ -2649,7 +2689,8 @@ class PlayState extends MusicBeatState
 
 		var lastCombo:Int = combo;
 		combo = 0;
-
+		if(lastCombo >= 5)
+		comboClass.displayCombo(combo);
 		health -= subtract * healthLoss;
 		if(!practiceMode) songScore -= 10;
 		if(!endingSong) songMisses++;
@@ -3032,7 +3073,6 @@ class PlayState extends MusicBeatState
 	#if HSCRIPT_ALLOWED
 	public function startHScriptsNamed(scriptFile:String)
 	{
-		
 		var scriptToLoad:String = Paths.getSharedPath(scriptFile);
 
 		if(Paths.exists(scriptToLoad))
@@ -3043,7 +3083,6 @@ class PlayState extends MusicBeatState
 			return true;
 		}
 		return false;
-		
 	}
 
 	public function initHScript(file:String)

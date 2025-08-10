@@ -3,10 +3,9 @@ package backend;
 import backend.PsychCamera;
 import flixel.FlxState;
 import flixel.addons.transition.FlxTransitionableState;
-import flixel.addons.ui.FlxUIState;
 import flixel.util.typeLimit.NextState;
 
-class MusicBeatState extends FlxUIState
+class MusicBeatState extends FlxState
 {
 	private var curSection:Int = 0;
 	private var stepsToDo:Int = 0;

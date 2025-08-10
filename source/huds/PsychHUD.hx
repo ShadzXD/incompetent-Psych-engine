@@ -31,7 +31,7 @@ class PsychHUD extends MainHUD
 		add(timeTxt);
 
 		healthBar = new Bar(0, FlxG.height * (!ClientPrefs.data.downScroll ? 0.88 : 0.1), 'healthBar', function(){
-			healthLerp = FlxMath.lerp(healthLerp, healthStuff(), 0.12 / (ClientPrefs.data.framerate / 60));
+			healthLerp = FlxMath.lerp(healthLerp, health, 0.12 / (ClientPrefs.data.framerate / 60));
 			return healthLerp;
 		}, 0, 2);		
 		healthBar.screenCenter(X);

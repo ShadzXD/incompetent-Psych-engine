@@ -13,15 +13,15 @@
 	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
 		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
 	<!-- <app preloader="Preloader" resizable="true" /> -->
-	<app preloader="flixel.system.FlxPreloader" />
+	<app preloader="IncompetentPreloader" />
+
 
 	<!--Minimum without FLX_NO_GAMEPAD: 11.8, without FLX_NO_NATIVE_CURSOR: 11.2-->
 	<set name="SWF_VERSION" value="11.8" />
 	
 	<!-- ______________________ PSYCH ENGINE CUSTOMIZATION ______________________ -->
 
-	<!--define name="HSCRIPT_ALLOWED" if="desktop"-->
-	<!--define name="LUA_ALLOWED" if="desktop"-->
+	<!--define name="LUA_ALLOWED"/-->
 	<define name="HSCRIPT_ALLOWED" />
 	<define name="ACHIEVEMENTS_ALLOWED" />
 	<define name="DISCORD_ALLOWED" if ="desktop" />
@@ -58,7 +58,7 @@
 	<!-- __________________________ Game Assets & Etc. __________________________ -->
 	
 	<!-- Turn on Crash Handler -->
-	<define name="CRASH_HANDLER" if="desktop release" />
+	<define name="CRASH_HANDLER" unless="debug"/>
 
 	<!-- Assets -->
 	<assets path="assets/fonts" />

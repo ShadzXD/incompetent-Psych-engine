@@ -179,7 +179,6 @@ class FunkinLua {
 		set('framerate', ClientPrefs.data.framerate);
 		set('ghostTapping', ClientPrefs.data.ghostTapping);
 		set('hideHud', ClientPrefs.data.hideHud);
-		set('timeBarType', ClientPrefs.data.timeBarType);
 		set('scoreZoom', ClientPrefs.data.scoreZoom);
 		set('cameraZoomOnBeat', ClientPrefs.data.camZooms);
 		set('flashingLights', ClientPrefs.data.flashing);
@@ -823,9 +822,10 @@ class FunkinLua {
 			}
 
 			if(PlayState.isStoryMode)
-				MusicBeatState.switchState(new StoryMenuState());
+				FlxG.switchState(() -> new StoryMenuState());
 			else
-				MusicBeatState.switchState(new FreeplayState());
+				FlxG.switchState(() -> new FreeplayState());
+
 
 			#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
 
@@ -1195,15 +1195,7 @@ class FunkinLua {
 			if (right != null && right != '')
 				right_color = CoolUtil.colorFromString(right);
 		});
-		Lua_helper.add_callback(lua, "setTimeBarColors", function(left:String, right:String) {
-			var left_color:Null<FlxColor> = null;
-			var right_color:Null<FlxColor> = null;
-			if (left != null && left != '')
-				left_color = CoolUtil.colorFromString(left);
-			if (right != null && right != '')
-				right_color = CoolUtil.colorFromString(right);
-			game.timeBar.setColors(left_color, right_color);
-		});
+
 
 		Lua_helper.add_callback(lua, "setObjectCamera", function(obj:String, camera:String = '') {
 			var real = game.getLuaObject(obj);

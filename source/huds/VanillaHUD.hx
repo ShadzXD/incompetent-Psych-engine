@@ -15,7 +15,7 @@ class VanillaHUD extends MainHUD
     {
 		super();
 		healthBar = new Bar(0, FlxG.height * (!ClientPrefs.data.downScroll ? 0.9 : 0.1), 'healthBar', function(){
-			healthLerp = FlxMath.lerp(healthLerp, healthStuff(), 0.12 / (ClientPrefs.data.framerate / 60));
+			healthLerp = FlxMath.lerp(healthLerp, health, 0.12 / (ClientPrefs.data.framerate / 60));
 			return healthLerp;
 		}, 0, 2);		
 		healthBar.screenCenter(X);

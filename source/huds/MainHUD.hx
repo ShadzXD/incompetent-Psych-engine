@@ -17,11 +17,11 @@ class MainHUD extends FlxGroup
 
 	public var iconP1:HealthIcon;
 	public var iconP2:HealthIcon;
-	public var isBotplay:Bool;
 	public var scoreText:FlxText;
 	public var songSeconds:Float;
 	public var songLength:Float;
 	var timeTxt:FlxText;
+	public var health:Float = 1;
 	public function new()
 	{
 		super();
@@ -38,8 +38,8 @@ class MainHUD extends FlxGroup
 
 	public function doScoreBop():Void{}
 
-	public function healthStuff():Float{
-		return PlayState.instance.get_health();
+	public function healthStuff(h:Float){
+		health = h;
 	}
 	public function startSong():Void{}
 

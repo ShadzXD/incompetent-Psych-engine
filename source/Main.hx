@@ -13,6 +13,7 @@ import openfl.display.StageScaleMode;
 import lime.app.Application;
 import states.TitleState;
 import flixel.input.keyboard.FlxKey;
+import flixel.addons.transition.FlxTransitionableState;
 
 #if linux
 import lime.graphics.Image;
@@ -104,7 +105,7 @@ class Main extends Sprite
 		addChild(new FlxGame(game.width, game.height, game.initialState, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
 
 		#if !mobile
-		fpsVar = new FPSCounter(10, 3, 0xFFFFFF);
+		fpsVar = new FPSCounter(0 , 0);
 		addChild(fpsVar);
 		Lib.current.stage.align = "tl";
 		Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
@@ -169,15 +170,13 @@ class Main extends Sprite
 	#if CRASH_HANDLER
 	function onCrash(e:UncaughtErrorEvent):Void
 	{
+		e.preventDefault();
+		e.stopImmediatePropagation();
 		var errMsg:String = "";
-		var path:String;
 		var callStack:Array<StackItem> = CallStack.exceptionStack(true);
-		var dateNow:String = Date.now().toString();
 
-		dateNow = dateNow.replace(" ", "_");
-		dateNow = dateNow.replace(":", "'");
-
-		path = "./crash/" + "PsychEngine_" + dateNow + ".txt";
+		FlxTransitionableState.skipNextTransIn = true;
+        FlxTransitionableState.skipNextTransOut = true;
 
 		for (stackItem in callStack)
 		{
@@ -186,11 +185,24 @@ class Main extends Sprite
 				case FilePos(s, file, line, column):
 					errMsg += file + " (line " + line + ")\n";
 				default:
+					#if sys
 					Sys.println(stackItem);
+					#end
 			}
 		}
 
-		errMsg += "\nUncaught Error: " + e.error + "\nPlease report this error to the GitHub page: https://github.com/ShadowMario/FNF-PsychEngine\n\n> Crash Handler written by: sqirra-rng";
+		errMsg += "\nUncaught Error: " + e.error + "\nPlease report this error to the GitHub page: https://github.com/ShadzXD/incompetent-Psych-engine/issues";
+		
+		#if sys
+		//create a crashlog if file creation is supported
+		var path:String;
+
+		var dateNow:String = Date.now().toString();
+		dateNow = dateNow.replace(" ", "_");
+		dateNow = dateNow.replace(":", "'");
+
+		path = "./crash/" + "PsychEngine_" + dateNow + ".txt";
+
 
 		if (!FileSystem.exists("./crash/"))
 			FileSystem.createDirectory("./crash/");
@@ -199,12 +211,12 @@ class Main extends Sprite
 
 		Sys.println(errMsg);
 		Sys.println("Crash dump saved in " + Path.normalize(path));
+		#end
 
-		Application.current.window.alert(errMsg, "Error!");
+		FlxG.switchState(() -> new states.errors.CrashState(errMsg));
 		#if DISCORD_ALLOWED
 		DiscordClient.shutdown();
 		#end
-		Sys.exit(1);
 	}
 	#end
 }
