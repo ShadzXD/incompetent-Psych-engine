@@ -5,7 +5,7 @@ A fork of Psych Engine 0.7.3, inspired by [Doido Engine!](https://github.com/Doi
 
 **Incompetent! Psych engine**, is a fork that focuses mainly on making Psych engine more simple for hard coding use whilst, also not altering the codebase completely. 
 
-**Features!**
+# **Features!**
 
 - Allows compilation to HTML5!
 - New Events for midsong.
@@ -20,7 +20,7 @@ A fork of Psych Engine 0.7.3, inspired by [Doido Engine!](https://github.com/Doi
 
 **HScript is not 100% Compatible with HTML5! Stages will not work!**
 
-**How to compile!**
+# **How to compile!**
 
 1. Open a terminal of choice and do the command: *haxelib install hmm*
 2. After hmm is installed, do: *hmm install*
@@ -28,6 +28,6 @@ A fork of Psych Engine 0.7.3, inspired by [Doido Engine!](https://github.com/Doi
 4. If everything is installed correctly, use the command *lime test windows* or *lime test html5*, depending on which platform you want to use.
 5. Game should fully compile with no errors!
 
-[REPORT ISSUES HERE](https://github.com/ShadzXD/incompetent-Psych-engine/issues)
+REPORT ISSUES TO THE GITHUB
 
 ![image](https://github.com/user-attachments/assets/f5c50563-6368-4746-8a68-74eebdbbb8a0)
