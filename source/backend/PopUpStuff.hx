@@ -17,7 +17,7 @@ class PopUpStuff extends FlxTypedGroup<FlxSprite>
 	var size:Float = 0.6;
 	var speedRate:Float = 1;
 	var ratingsData:Array<Rating> = Rating.loadDefault();
-
+	// Stores Ratings and Combo Sprites in a group
 	override public function new(hud:PopUpType, ?fromPlayState:Bool = false)
 	{
 		super();

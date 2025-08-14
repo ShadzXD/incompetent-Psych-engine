@@ -36,7 +36,6 @@ class TitleState extends MusicBeatState
 
 	var titleJSON:TitleData;
 
-
 	override public function create():Void
 	{
 		Paths.clearStoredMemory();
@@ -244,7 +243,6 @@ class TitleState extends MusicBeatState
 
 				transitioning = true;
 				// FlxG.sound.music.stop();
-
 				new FlxTimer().start(1, function(tmr:FlxTimer)
 				{
 					FlxG.switchState(() -> new MainMenuState());

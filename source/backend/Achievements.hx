@@ -25,6 +25,7 @@ typedef Achievement =
 class Achievements {
 	public static function init()
 	{
+		#if !CUSTOM_ACHIEVEMENTS_ONLY
 		createAchievement('friday_night_play',		{name: "Freaky on a Friday Night", description: "Play on a Friday... Night.", hidden: true});
 		createAchievement('week1_nomiss',			{name: "She Calls Me Daddy Too", description: "Beat Week 1 on Hard with no Misses."});
 		createAchievement('week2_nomiss',			{name: "No More Tricks", description: "Beat Week 2 on Hard with no Misses."});
@@ -40,7 +41,8 @@ class Achievements {
 		createAchievement('hype',					{name: "Hyperactive", description: "Finish a Song without going back to Idle."});
 		createAchievement('two_keys',				{name: "Just the Two of Us", description: "Finish a Song pressing only two keys."});
 		createAchievement('toastie',				{name: "Toaster Gamer", description: "Have you tried to run the game on a toaster?"});
-		createAchievement('debugger',				{name: "Debugger", description: "Beat the \"Test\" Stage from the Chart Editor.", hidden: true});
+		#end
+		createAchievement('debugger',				{name: "Debugger", description: "Beat the \"Test\" Stage from the Chart Editor.", hidden: false});
 		
 		//dont delete this thing below
 		_originalLength = _sortID + 1;

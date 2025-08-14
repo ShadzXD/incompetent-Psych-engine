@@ -2,7 +2,7 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="Friday Night Funkin': Psych Engine" file="PsychEngine" packageName="com.shadowmario.psychengine" package="com.shadowmario.psychengine" main="Main" version="0.2.8" company="ShadowMario" />
+	<app title="Incompetent! Psych Engine" file="PsychEngine" packageName="com.shadowmario.psychengine" package="com.shadowmario.psychengine" main="Main" version="0.2.8" company="ShadowMario" />
 
 	<!--Switch Export with Unique ApplicationID and Icon-->
 	<set name="APP_ID" value="0x0100f6c013bbc000" />
@@ -13,33 +13,35 @@
 	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
 		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
 	<!-- <app preloader="Preloader" resizable="true" /> -->
-	<app preloader="flixel.system.FlxPreloader" />
+	<app preloader="IncompetentPreloader" />
+
 
 	<!--Minimum without FLX_NO_GAMEPAD: 11.8, without FLX_NO_NATIVE_CURSOR: 11.2-->
 	<set name="SWF_VERSION" value="11.8" />
 	
 	<!-- ______________________ PSYCH ENGINE CUSTOMIZATION ______________________ -->
 
-	<!--define name="HSCRIPT_ALLOWED" if="desktop"-->
-	<!--define name="LUA_ALLOWED" if="desktop"-->
+	<!--define name="LUA_ALLOWED"/-->
 	<define name="HSCRIPT_ALLOWED" />
 	<define name="ACHIEVEMENTS_ALLOWED" />
+	<!--define name="CUSTOM_ACHIEVEMENTS_ONLY" if = "ACHIEVEMENTS_ALLOWED"/-->
 	<define name="DISCORD_ALLOWED" if ="desktop" />
 	<define name="VIDEOS_ALLOWED" unless ="32bits"/> 
 	<define name="EDITORS_ALLOWED" if = "desktop"/> 
 	<define name="IRIS_DEBUG"/>
+	<define name="BASE_GAME_FILES"/> <!--REMOVE THIS LINE TO REMOVE ALL BASE GAME FILES!-->
 
 	<!-- ____________________________ Window Settings ___________________________ -->
 
 	<!--These window settings apply to all targets-->
-	<window width="1280" height="720" fps="60" background="#000000" hardware="true" vsync="false" allow-high-dpi="true"/>
+	<window width="1280" height="720" fps="60" background="#000000" hardware="true" vsync="false"/>
 
 
 	<!--HTML5-specific-->
 	<window if="html5" resizable="true" />
 
 	<!--Desktop-specific-->
-	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" vsync="false"/>
+	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" vsync="false"  allow-high-dpi="true"/>
 
 	<!--Mobile-specific-->
 	<window if="mobile" orientation="landscape" fullscreen="true" width="0" height="0" resizable="false"/>
@@ -58,25 +60,25 @@
 	<!-- __________________________ Game Assets & Etc. __________________________ -->
 	
 	<!-- Turn on Crash Handler -->
-	<define name="CRASH_HANDLER" if="desktop release" />
+	<define name="CRASH_HANDLER" unless="debug"/>
 
 	<!-- Assets -->
 	<assets path="assets/fonts" />
 	<assets path="assets/shared"        exclude="*.ogg" if="web"/>
 	<assets path="assets/shared"        exclude="*.mp3" unless="web"/>
-	<assets path="assets/movies"        library="movies"/>
-	<assets path="assets/songs"         library="songs"         exclude="*.ogg" if="web"/>
-	<assets path="assets/songs"         library="songs"         exclude="*.mp3" unless="web"/>
-	<assets path="assets/week_assets"   library="week_assets"   rename="assets" exclude="*.ogg" if="web"/>
-	<assets path="assets/week_assets"   library="week_assets"   rename="assets" exclude="*.mp3" unless="web"/>
+	<assets path="assets/movies"/>
+	<assets path="assets/embed"         exclude="*.ogg" if="web" embed="true"/>
+	<assets path="assets/embed"         exclude="*.mp3" unless="web" embed="true"/>
+	<assets path="assets/songs"          exclude="*.ogg" if="web"/>
+	<assets path="assets/songs"         exclude="*.mp3" unless="web"/>
+	<assets path="assets/week_assets"    rename="assets" exclude="*.ogg" if="web"/>
+	<assets path="assets/week_assets"    rename="assets" exclude="*.mp3" unless="web"/>
 
-	<library name="movies"        preload="true"/>
-	<library name="songs"         preload="true" />
-	<library name="week_assets"   preload="true" />
-
-	<section if="MODS_ALLOWED">
-		<assets path='example_mods' rename='mods' embed='false'/>
+	<section if="BASE_GAME_FILES">
+		<assets path="assets/base_game" rename="assets" exclude="*.ogg" if="web"/>
+		<assets path="assets/base_game" rename="assets" exclude="*.mp3"  unless="web"/>
 	</section>
+
 	<!-- OpenAL config -->
 	<section if="desktop">
 		<assets path="alsoft.txt" rename="plugins/alsoft.ini" type="text" if="windows"/>
@@ -151,6 +153,7 @@
 	<!--Macro fixes-->
 	<haxeflag name="--macro" value="allowPackage('flash')" />
 	<haxeflag name="--macro" value="include('my.pack')" />
+	<haxedef name="hscriptPos" if="HSCRIPT_ALLOWED" />
 
 	<!-- _________________________________ Custom _______________________________ -->
 

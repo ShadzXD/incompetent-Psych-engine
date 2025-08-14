@@ -13,6 +13,13 @@ import openfl.display.StageScaleMode;
 import lime.app.Application;
 import states.TitleState;
 import flixel.input.keyboard.FlxKey;
+import flixel.addons.transition.FlxTransitionableState;
+
+#if HSCRIPT_ALLOWED
+import crowplexus.iris.Iris;
+import psychlua.HScript.HScriptInfos;
+#end
+
 
 #if linux
 import lime.graphics.Image;
@@ -58,10 +65,10 @@ class Main extends Sprite
 	public function new()
 	{
 		super();
+
 		#if (cpp && windows)
 		backend.Native.fixScaling();
 		#end
-
 
 		if (stage != null)
 		{
@@ -71,6 +78,8 @@ class Main extends Sprite
 		{
 			addEventListener(Event.ADDED_TO_STAGE, init);
 		}
+
+	
 	}
 
 	private function init(?E:Event):Void
@@ -104,7 +113,7 @@ class Main extends Sprite
 		addChild(new FlxGame(game.width, game.height, game.initialState, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
 
 		#if !mobile
-		fpsVar = new FPSCounter(10, 3, 0xFFFFFF);
+		fpsVar = new FPSCounter(0 , 0);
 		addChild(fpsVar);
 		Lib.current.stage.align = "tl";
 		Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
@@ -130,7 +139,67 @@ class Main extends Sprite
 		#if DISCORD_ALLOWED
 		DiscordClient.prepare();
 		#end
+		
+		#if hxvlc
+		hxvlc.util.Handle.init(#if (hxvlc >= "1.8.0")  ['--no-lua'] #end);
+		#end
 
+		#if HSCRIPT_ALLOWED
+		Iris.warn = function(x, ?pos:haxe.PosInfos) {
+			Iris.logLevel(WARN, x, pos);
+			var newPos:HScriptInfos = cast pos;
+			if (newPos.showLine == null) newPos.showLine = true;
+			var msgInfo:String = (newPos.funcName != null ? '(${newPos.funcName}) - ' : '')  + '${newPos.fileName}:';
+			#if LUA_ALLOWED
+			if (newPos.isLua == true) {
+				msgInfo += 'HScript:';
+				newPos.showLine = false;
+			}
+			#end
+			if (newPos.showLine == true) {
+				msgInfo += '${newPos.lineNumber}:';
+			}
+			msgInfo += ' $x';
+			if (PlayState.instance != null)
+				PlayState.instance.addTextToDebug('WARNING: $msgInfo', FlxColor.YELLOW);
+		}
+		Iris.error = function(x, ?pos:haxe.PosInfos) {
+			Iris.logLevel(ERROR, x, pos);
+			var newPos:HScriptInfos = cast pos;
+			if (newPos.showLine == null) newPos.showLine = true;
+			var msgInfo:String = (newPos.funcName != null ? '(${newPos.funcName}) - ' : '')  + '${newPos.fileName}:';
+			#if LUA_ALLOWED
+			if (newPos.isLua == true) {
+				msgInfo += 'HScript:';
+				newPos.showLine = false;
+			}
+			#end
+			if (newPos.showLine == true) {
+				msgInfo += '${newPos.lineNumber}:';
+			}
+			msgInfo += ' $x';
+			if (PlayState.instance != null)
+				PlayState.instance.addTextToDebug('ERROR: $msgInfo', FlxColor.RED);
+		}
+		Iris.fatal = function(x, ?pos:haxe.PosInfos) {
+			Iris.logLevel(FATAL, x, pos);
+			var newPos:HScriptInfos = cast pos;
+			if (newPos.showLine == null) newPos.showLine = true;
+			var msgInfo:String = (newPos.funcName != null ? '(${newPos.funcName}) - ' : '')  + '${newPos.fileName}:';
+			#if LUA_ALLOWED
+			if (newPos.isLua == true) {
+				msgInfo += 'HScript:';
+				newPos.showLine = false;
+			}
+			#end
+			if (newPos.showLine == true) {
+				msgInfo += '${newPos.lineNumber}:';
+			}
+			msgInfo += ' $x';
+			if (PlayState.instance != null)
+				PlayState.instance.addTextToDebug('FATAL: $msgInfo', 0xFFBB0000);
+		}
+		#end
 		// shader coords fix
 		FlxG.signals.gameResized.add(function (w, h) {
 		     if (FlxG.cameras != null) {
@@ -169,15 +238,13 @@ class Main extends Sprite
 	#if CRASH_HANDLER
 	function onCrash(e:UncaughtErrorEvent):Void
 	{
+		e.preventDefault();
+		e.stopImmediatePropagation();
 		var errMsg:String = "";
-		var path:String;
 		var callStack:Array<StackItem> = CallStack.exceptionStack(true);
-		var dateNow:String = Date.now().toString();
 
-		dateNow = dateNow.replace(" ", "_");
-		dateNow = dateNow.replace(":", "'");
-
-		path = "./crash/" + "PsychEngine_" + dateNow + ".txt";
+		FlxTransitionableState.skipNextTransIn = true;
+        FlxTransitionableState.skipNextTransOut = true;
 
 		for (stackItem in callStack)
 		{
@@ -186,11 +253,24 @@ class Main extends Sprite
 				case FilePos(s, file, line, column):
 					errMsg += file + " (line " + line + ")\n";
 				default:
+					#if sys
 					Sys.println(stackItem);
+					#end
 			}
 		}
 
-		errMsg += "\nUncaught Error: " + e.error + "\nPlease report this error to the GitHub page: https://github.com/ShadowMario/FNF-PsychEngine\n\n> Crash Handler written by: sqirra-rng";
+		errMsg += "\nUncaught Error: " + e.error + "\nPlease report this error to the GitHub page: https://github.com/ShadzXD/incompetent-Psych-engine/issues";
+		
+		#if sys
+		//create a crashlog if file creation is supported
+		var path:String;
+
+		var dateNow:String = Date.now().toString();
+		dateNow = dateNow.replace(" ", "_");
+		dateNow = dateNow.replace(":", "'");
+
+		path = "./crash/" + "PsychEngine_" + dateNow + ".txt";
+
 
 		if (!FileSystem.exists("./crash/"))
 			FileSystem.createDirectory("./crash/");
@@ -199,12 +279,12 @@ class Main extends Sprite
 
 		Sys.println(errMsg);
 		Sys.println("Crash dump saved in " + Path.normalize(path));
+		#end
 
-		Application.current.window.alert(errMsg, "Error!");
+		FlxG.switchState(() -> new states.errors.CrashState(errMsg));
 		#if DISCORD_ALLOWED
 		DiscordClient.shutdown();
 		#end
-		Sys.exit(1);
 	}
 	#end
 }

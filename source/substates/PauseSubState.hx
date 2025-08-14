@@ -343,6 +343,7 @@ class PauseSubState extends MusicBeatSubstate
 			FlxTransitionableState.skipNextTransIn = true;
 			FlxTransitionableState.skipNextTransOut = true;
 		}
+		
 		FlxG.resetState();
 	}
 

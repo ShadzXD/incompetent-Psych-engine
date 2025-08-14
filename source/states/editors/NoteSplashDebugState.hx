@@ -35,6 +35,7 @@ class NoteSplashDebugState extends MusicBeatState
 
 	override function create()
 	{
+		
 		FlxG.camera.bgColor = FlxColor.fromHSL(0, 0, 0.5);
 		selection = new FlxSprite(0, 270).makeGraphic(150, 150, FlxColor.BLACK);
 		selection.alpha = 0.4;
@@ -356,7 +357,7 @@ class NoteSplashDebugState extends MusicBeatState
 		#end
 	}
 	
-	override function getEvent(id:String, sender:Dynamic, data:Dynamic, ?params:Array<Dynamic>)
+	function getEvent(id:String, sender:Dynamic, data:Dynamic, ?params:Array<Dynamic>)
 	{
 		if (id == FlxUINumericStepper.CHANGE_EVENT && (sender is FlxUINumericStepper))
 		{

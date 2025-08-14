@@ -62,7 +62,7 @@ class LoadingState extends MusicBeatState
 					if (PlayState.SONG.needsVoices)
 						checkLoadSong(getVocalPath());
 				}
-				if(directory != null && directory.length > 0 && directory != 'shared') {
+				if(directory != null && directory.length > 0) {
 					checkLibrary('week_assets');
 				}
 
