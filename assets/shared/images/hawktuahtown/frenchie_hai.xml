@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<TextureAtlas imagePath="frenchie hai.png">
-	<!-- Created with Adobe Animate version 24.0.7.61 -->
-	<!-- http://www.adobe.com/products/animate.html -->
-	<SubTexture name="frenchie hai idle0000" x="10" y="10" width="83" height="114" frameX="-2" frameY="0" frameWidth="88" frameHeight="114"/>
-	<SubTexture name="frenchie hai idle0001" x="10" y="10" width="83" height="114" frameX="-2" frameY="0" frameWidth="88" frameHeight="114"/>
-	<SubTexture name="frenchie hai idle0002" x="103" y="10" width="88" height="110" frameX="0" frameY="-4" frameWidth="88" frameHeight="114"/>
-	<SubTexture name="frenchie hai idle0003" x="103" y="10" width="88" height="110" frameX="0" frameY="-4" frameWidth="88" frameHeight="114"/>
-</TextureAtlas>

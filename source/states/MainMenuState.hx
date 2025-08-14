@@ -86,7 +86,7 @@ class MainMenuState extends MusicBeatState
 		incVer.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(incVer);
 
-		var psychVer:FlxText = new FlxText(5, FlxG.height - 20, 0, "Psych Engine v0.7.3", 12);
+		var psychVer:FlxText = new FlxText(5, FlxG.height - 20, 0, "Psych Engine v1.0.4", 12);
 		psychVer.scrollFactor.set();
 		psychVer.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(psychVer);

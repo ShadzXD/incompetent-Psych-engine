@@ -29,6 +29,7 @@
 	<define name="VIDEOS_ALLOWED" unless ="32bits"/> 
 	<define name="EDITORS_ALLOWED" if = "desktop"/> 
 	<define name="IRIS_DEBUG"/>
+	<define name="BASE_GAME_FILES"/> <!--REMOVE THIS LINE TO REMOVE ALL BASE GAME FILES!-->
 
 	<!-- ____________________________ Window Settings ___________________________ -->
 
@@ -65,14 +66,18 @@
 	<assets path="assets/fonts" />
 	<assets path="assets/shared"        exclude="*.ogg" if="web"/>
 	<assets path="assets/shared"        exclude="*.mp3" unless="web"/>
-	<assets path="assets/movies"        library="movies"/>
+	<assets path="assets/movies"/>
 	<assets path="assets/embed"         exclude="*.ogg" if="web" embed="true"/>
 	<assets path="assets/embed"         exclude="*.mp3" unless="web" embed="true"/>
-	<assets path="assets/songs"         library="songs"         exclude="*.ogg" if="web"/>
-	<assets path="assets/songs"         library="songs"         exclude="*.mp3" unless="web"/>
-	<assets path="assets/week_assets"   library="week_assets"   rename="assets" exclude="*.ogg" if="web"/>
-	<assets path="assets/week_assets"   library="week_assets"   rename="assets" exclude="*.mp3" unless="web"/>
+	<assets path="assets/songs"          exclude="*.ogg" if="web"/>
+	<assets path="assets/songs"         exclude="*.mp3" unless="web"/>
+	<assets path="assets/week_assets"    rename="assets" exclude="*.ogg" if="web"/>
+	<assets path="assets/week_assets"    rename="assets" exclude="*.mp3" unless="web"/>
 
+	<section if="BASE_GAME_FILES">
+		<assets path="assets/base_game" rename="assets" exclude="*.ogg" if="web"/>
+		<assets path="assets/base_game" rename="assets" exclude="*.mp3"  unless="web"/>
+	</section>
 
 	<!-- OpenAL config -->
 	<section if="desktop">

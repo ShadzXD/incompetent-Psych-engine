@@ -39,6 +39,7 @@ class CreditsState extends MusicBeatState
 			['ShadzXD' , 'shadz', 'did most of the stuff for the fork', 'https://x.com/ShadzDX'],
 			['Incompetent! Special thanks'],
 			['mikolka9144', 'missing_icon', 'Made P-slice, which has some code used for HTML5.', 'https://github.com/mikolka9144'],
+			['Itz_Miles', 'missing_icon', 'Reworked and optimized version of the FPS Counter.', 'https://x.com/Itz_MilesDev'],
 			['Psych Engine Team'],
 			['Shadow Mario',		'shadowmario',		'Main Programmer and Head of Psych Engine',					 'https://ko-fi.com/shadowmario',		'444444'],
 			['Riveren',				'riveren',			'Main Artist/Animator of Psych Engine',						 'https://twitter.com/riverennn',		'14967B'],
