@@ -33,7 +33,7 @@ class FPSCounter extends TextField
 
 		selectable = false;
 		mouseEnabled = false;
-		defaultTextFormat = new TextFormat("VCR OSD Mono", 15, 0xF8F8F8);
+		defaultTextFormat = new TextFormat("VCR OSD Mono", 17, 0xFFFFFF);
 		autoSize = LEFT;
 		multiline = true;
 		backgroundColor = 0xFF000000;
@@ -64,7 +64,8 @@ class FPSCounter extends TextField
 
 		then = now;
 		currentFPS = times.length < FlxG.updateFramerate ? times.length : FlxG.updateFramerate;
-		text = 'FPS: $currentFPS[${Std.int(1000 / currentFPS)}ms]\nRAM: ${flixel.util.FlxStringUtil.formatBytes(System.totalMemory)}';
+		text = 'FPS: $currentFPS / ' + ClientPrefs.data.framerate
+	 + '\nRAM: ${flixel.util.FlxStringUtil.formatBytes(System.totalMemory)}';
 		// The frametime is currently a lie. Using deltaTime causes the TextField to regen more frequently, which is hideously memory intensive.
 
 	}

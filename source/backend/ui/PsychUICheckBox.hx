@@ -17,14 +17,11 @@ class PsychUICheckBox extends FlxSpriteGroup
 		super(x, y);
 
 		box = new FlxSprite();
-		box.antialiasing = false;
 		boxGraphic();
 		add(box);
 
 		text = new FlxText(box.width + 4, 0, textWid, label);
 		text.y += box.height/2 - text.height/2;
-		text.antialiasing = false;
-
 		add(text);
 
 		this.onClick = callback;

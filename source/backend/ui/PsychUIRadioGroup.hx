@@ -35,14 +35,12 @@ class PsychUIRadioGroup extends FlxSpriteGroup
 		arrowUp.animation.add('normal', [0]);
 		arrowUp.animation.add('press', [1]);
 		arrowUp.animation.play('normal');
-		arrowUp.antialiasing = false;
 		arrowUp.visible = false;
 		arrowDown = new FlxSprite().loadGraphic('assets/embed/images/psych-ui/arrow_down.png', true, 24, 18);
 		arrowDown.animation.add('normal', [0]);
 		arrowDown.animation.add('press', [1]);
 		arrowDown.animation.play('normal');
 		arrowDown.visible = false;
-		arrowDown.antialiasing = false;
 
 		this.space = space;
 		this.textWidth = textWidth;

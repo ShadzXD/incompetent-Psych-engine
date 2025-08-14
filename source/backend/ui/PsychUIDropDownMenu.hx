@@ -29,7 +29,6 @@ class PsychUIDropDownMenu extends PsychUIInputText
 		button.animation.add('normal', [0], false);
 		button.animation.add('pressed', [1], false);
 		button.animation.play('normal', true);
-		button.antialiasing = false;
 		add(button);
 
 		onSelect = callback;
@@ -244,7 +243,6 @@ class PsychUIDropDownItem extends FlxSpriteGroup
 
 		text = new FlxText(0, 0, width, 8);
 		text.color = FlxColor.BLACK;
-		text.antialiasing = false;
 		add(text);
 	}
 

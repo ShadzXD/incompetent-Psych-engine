@@ -1,8 +1,0 @@
-Enables a dual screen like effect. Toggles automatically when used.
-!!!Only slide duration and ease type have an effect when toggling the event off!!!
-
-Value 1: (Slide duration, Ease type, Left zoom, Right zoom, Swap sides)
-Example: 0.2,sineOut,1.2,1.2,false    |    (Defaults: 0, linear, defaultCamZoom, defaultCamZoom, false)
-
-Value 2: (Camera offsets: Left x, Left y, Right x, Right y)
-Example: -200,60,20.5,-30    |    (Defaults: 0, 0, 0, 0)

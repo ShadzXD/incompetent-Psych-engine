@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="clouds.png">
+	<!-- Created with Adobe Animate version 24.0.7.61 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="cloud0000" x="10" y="10" width="3264" height="672" frameX="0" frameY="-1" frameWidth="3264" frameHeight="674"/>
+	<SubTexture name="cloud0001" x="10" y="10" width="3264" height="672" frameX="0" frameY="-1" frameWidth="3264" frameHeight="674"/>
+	<SubTexture name="cloud0002" x="10" y="692" width="3263" height="674" frameX="0" frameY="0" frameWidth="3264" frameHeight="674"/>
+	<SubTexture name="cloud0003" x="10" y="692" width="3263" height="674" frameX="0" frameY="0" frameWidth="3264" frameHeight="674"/>
+</TextureAtlas>

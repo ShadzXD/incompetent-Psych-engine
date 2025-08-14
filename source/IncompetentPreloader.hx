@@ -3,11 +3,7 @@ package;
 import flixel.system.FlxBasePreloader;
 import flash.display.*;
 import flash.Lib;
-import flash.text.*;
 import openfl.display.Sprite;
-import flash.text.Font;
-import flash.text.TextField;
-import flash.text.TextFormat;
 import flixel.math.FlxMath;
 
 @:bitmap("assets/shared/images/preloader.png")class LogoImage extends BitmapData{}
@@ -19,7 +15,6 @@ class IncompetentPreloader extends FlxBasePreloader
         super(MinDisplayTime, AllowedURLS);
     }
         var logo:Sprite;
-        var text:TextField;
 
     override  function create() {
         this._width = Lib.current.stage.stageWidth;

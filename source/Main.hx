@@ -15,6 +15,12 @@ import states.TitleState;
 import flixel.input.keyboard.FlxKey;
 import flixel.addons.transition.FlxTransitionableState;
 
+#if HSCRIPT_ALLOWED
+import crowplexus.iris.Iris;
+import psychlua.HScript.HScriptInfos;
+#end
+
+
 #if linux
 import lime.graphics.Image;
 #end
@@ -59,10 +65,10 @@ class Main extends Sprite
 	public function new()
 	{
 		super();
+
 		#if (cpp && windows)
 		backend.Native.fixScaling();
 		#end
-
 
 		if (stage != null)
 		{
@@ -72,6 +78,8 @@ class Main extends Sprite
 		{
 			addEventListener(Event.ADDED_TO_STAGE, init);
 		}
+
+	
 	}
 
 	private function init(?E:Event):Void
@@ -131,7 +139,67 @@ class Main extends Sprite
 		#if DISCORD_ALLOWED
 		DiscordClient.prepare();
 		#end
+		
+		#if hxvlc
+		hxvlc.util.Handle.init(#if (hxvlc >= "1.8.0")  ['--no-lua'] #end);
+		#end
 
+		#if HSCRIPT_ALLOWED
+		Iris.warn = function(x, ?pos:haxe.PosInfos) {
+			Iris.logLevel(WARN, x, pos);
+			var newPos:HScriptInfos = cast pos;
+			if (newPos.showLine == null) newPos.showLine = true;
+			var msgInfo:String = (newPos.funcName != null ? '(${newPos.funcName}) - ' : '')  + '${newPos.fileName}:';
+			#if LUA_ALLOWED
+			if (newPos.isLua == true) {
+				msgInfo += 'HScript:';
+				newPos.showLine = false;
+			}
+			#end
+			if (newPos.showLine == true) {
+				msgInfo += '${newPos.lineNumber}:';
+			}
+			msgInfo += ' $x';
+			if (PlayState.instance != null)
+				PlayState.instance.addTextToDebug('WARNING: $msgInfo', FlxColor.YELLOW);
+		}
+		Iris.error = function(x, ?pos:haxe.PosInfos) {
+			Iris.logLevel(ERROR, x, pos);
+			var newPos:HScriptInfos = cast pos;
+			if (newPos.showLine == null) newPos.showLine = true;
+			var msgInfo:String = (newPos.funcName != null ? '(${newPos.funcName}) - ' : '')  + '${newPos.fileName}:';
+			#if LUA_ALLOWED
+			if (newPos.isLua == true) {
+				msgInfo += 'HScript:';
+				newPos.showLine = false;
+			}
+			#end
+			if (newPos.showLine == true) {
+				msgInfo += '${newPos.lineNumber}:';
+			}
+			msgInfo += ' $x';
+			if (PlayState.instance != null)
+				PlayState.instance.addTextToDebug('ERROR: $msgInfo', FlxColor.RED);
+		}
+		Iris.fatal = function(x, ?pos:haxe.PosInfos) {
+			Iris.logLevel(FATAL, x, pos);
+			var newPos:HScriptInfos = cast pos;
+			if (newPos.showLine == null) newPos.showLine = true;
+			var msgInfo:String = (newPos.funcName != null ? '(${newPos.funcName}) - ' : '')  + '${newPos.fileName}:';
+			#if LUA_ALLOWED
+			if (newPos.isLua == true) {
+				msgInfo += 'HScript:';
+				newPos.showLine = false;
+			}
+			#end
+			if (newPos.showLine == true) {
+				msgInfo += '${newPos.lineNumber}:';
+			}
+			msgInfo += ' $x';
+			if (PlayState.instance != null)
+				PlayState.instance.addTextToDebug('FATAL: $msgInfo', 0xFFBB0000);
+		}
+		#end
 		// shader coords fix
 		FlxG.signals.gameResized.add(function (w, h) {
 		     if (FlxG.cameras != null) {

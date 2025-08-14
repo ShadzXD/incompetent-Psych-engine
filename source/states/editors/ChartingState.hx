@@ -86,10 +86,8 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		['Set Property', "Value 1: Variable name\nValue 2: New value"],
 		['Play Sound', "Value 1: Sound file name\nValue 2: Volume (Default: 1), ranges from 0 to 1"],
 		['Play Video', "Value 1: Video Name"],
-		['Lyrics', "Value 1: Enter Lyrics \nValue 2: Anything to remove text."],		
-		['Zoom Camera', "Value 1: Change Camera Zoom.\n Value 2: How long to change."],
-		['Flash Camera', "Value 1: How long for the flash to disappear."]
-	];
+		['Zoom Camera', "Value 1: Change Camera Zoom.\n Value 2: How long to change."]
+		];
 	
 	public static var keysArray:Array<FlxKey> = [ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT]; //Used for Vortex Editor
 	public static var SHOW_EVENT_COLUMN = true;

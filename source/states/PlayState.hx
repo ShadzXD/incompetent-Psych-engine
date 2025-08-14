@@ -250,7 +250,6 @@ class PlayState extends MusicBeatState
 	public var moveValue:Int = 20;
 
 	var camMoveTween:FlxTween;
-	var lyricsTxt:FlxText;
 	var isZooming:Bool = false;
 	var hudClass:MainHUD;
 	var hasOpponentVocals:Bool = false;
@@ -433,6 +432,7 @@ class PlayState extends MusicBeatState
 		#end
 
 		#if HSCRIPT_ALLOWED
+		FlxG.log.add('LOADING ' + curStage);
 		startHScriptsNamed('stages/' + curStage + '.hx');
 		#end
 
@@ -576,13 +576,12 @@ class PlayState extends MusicBeatState
 			initHScript(songScript);
 
 		}
-	
-		
 		#end
 		switch(songName)
 		{
 			case 'tutorial':
-				startVideo("test");
+				//startVideo("test");
+				skipCountdown = true;
 			default:
 				startCallback();
 		}
@@ -946,6 +945,7 @@ class PlayState extends MusicBeatState
 			{
 				setSongTime(0);
 				return true;
+
 			}
 			moveCameraSection();
 
@@ -1718,8 +1718,11 @@ class PlayState extends MusicBeatState
 					if(startedCountdown)
 					{
 						var fakeCrochet:Float = (60 / SONG.bpm) * 1000;
-						notes.forEachAlive(function(daNote:Note)
+						var i:Int = 0;
+						while(i < notes.length)
 						{
+							var daNote:Note = notes.members[i];
+							if(daNote == null) continue;
 							var strumGroup:FlxTypedGroup<StrumNote> = playerStrums;
 							if(!daNote.mustPress) strumGroup = opponentStrums;
 
@@ -1745,7 +1748,8 @@ class PlayState extends MusicBeatState
 								daNote.active = daNote.visible = false;
 								invalidateNote(daNote);
 							}
-						});
+							if(daNote.exists) i++;
+						}
 					}
 					else
 					{
@@ -1761,7 +1765,11 @@ class PlayState extends MusicBeatState
 		}
 		
 		if(FlxG.keys.justPressed.F5)
+		{
+			FlxTransitionableState.skipNextTransIn = true;
+			FlxTransitionableState.skipNextTransOut = true;
 			FlxG.resetState();
+		}
 
 		#if debug
 		if(!endingSong && !startingSong) {
@@ -2172,32 +2180,12 @@ class PlayState extends MusicBeatState
 				if(flValue2 == null) flValue2 = 1;
 				FlxG.sound.play(Paths.sound(value1), flValue2);
 			case 'Play Video':
-							FlxG.log.add('called video');
-
+				FlxG.log.add('called video');
 				startVideo(value1, true, false, false, true);
-			case 'Lyrics':
-				if(lyricsTxt != null)
-				{
-					lyricsTxt.destroy();
-				} 
-				lyricsTxt = new FlxText(0, FlxG.height * 0.7, FlxG.width, "", 32);
-				lyricsTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-				lyricsTxt.scrollFactor.set();
-				lyricsTxt.borderSize = 2;
-				lyricsTxt.text = value1;
-				lyricsTxt.screenCenter(X);
-				lyricsTxt.cameras = [camOther];
-				add(lyricsTxt);
 
-				if(value2 == "remove")
-				{
-					lyricsTxt.kill();
-					lyricsTxt.destroy();
-				}
-				
 			case 'Zoom Camera':
 			isZooming = true;
-			FlxTween.tween(FlxG.camera, {zoom: flValue1}, flValue2, {ease: FlxEase.quartInOut, onComplete:function(twn:FlxTween)
+			FlxTween.tween(FlxG.camera, {zoom: flValue1}, flValue2, {ease: FlxEase.linear, onComplete:function(twn:FlxTween)
 			{
 				defaultCamZoom = flValue1;
 				isZooming = false;
@@ -2487,7 +2475,7 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	private function keyPressed(key:Int)
+		private function keyPressed(key:Int)
 	{
 		if(cpuControlled || paused || inCutscene || key < 0 || key >= playerStrums.length || !generatedMusic || endingSong || boyfriend.stunned) return;
 
@@ -2496,16 +2484,14 @@ class PlayState extends MusicBeatState
 
 		// more accurate hit time for the ratings?
 		var lastTime:Float = Conductor.songPosition;
-		if(Conductor.songPosition >= 0) Conductor.songPosition = FlxG.sound.music.time;
+		if(Conductor.songPosition >= 0) Conductor.songPosition = FlxG.sound.music.time + Conductor.offset;
 
 		// obtain notes that the player can hit
 		var plrInputNotes:Array<Note> = notes.members.filter(function(n:Note):Bool {
-			var canHit:Bool = !strumsBlocked[n.noteData] && n.canBeHit && n.mustPress && !n.tooLate && !n.wasGoodHit && !n.blockHit;
-			return n != null && canHit && !n.isSustainNote && n.noteData == key;
+			var canHit:Bool = n != null && !strumsBlocked[n.noteData] && n.canBeHit && n.mustPress && !n.tooLate && !n.wasGoodHit && !n.blockHit;
+			return canHit && !n.isSustainNote && n.noteData == key;
 		});
 		plrInputNotes.sort(sortHitNotes);
-
-		var shouldMiss:Bool = !ClientPrefs.data.ghostTapping;
 
 		if (plrInputNotes.length != 0) { // slightly faster than doing `> 0` lol
 			var funnyNote:Note = plrInputNotes[0]; // front note
@@ -2526,10 +2512,12 @@ class PlayState extends MusicBeatState
 			}
 			goodNoteHit(funnyNote);
 		}
-		else if(shouldMiss)
+		else
 		{
-			callOnScripts('onGhostTap', [key]);
-			noteMissPress(key);
+			if (ClientPrefs.data.ghostTapping)
+				callOnScripts('onGhostTap', [key]);
+			else
+				noteMissPress(key);
 		}
 
 		// Needed for the  "Just the Two of Us" achievement.
@@ -2547,6 +2535,7 @@ class PlayState extends MusicBeatState
 		}
 		callOnScripts('onKeyPress', [key]);
 	}
+
 
 	public static function sortHitNotes(a:Note, b:Note):Int
 	{
@@ -3301,6 +3290,7 @@ class PlayState extends MusicBeatState
 			{
 				switch(name)
 				{
+					#if !CUSTOM_ACHIEVEMENTS_ONLY
 					case 'ur_bad':
 						unlock = (ratingPercent < 0.2 && !practiceMode);
 
@@ -3318,7 +3308,7 @@ class PlayState extends MusicBeatState
 
 					case 'toastie':
 						unlock = (!ClientPrefs.data.cacheOnGPU && !ClientPrefs.data.shaders && ClientPrefs.data.lowQuality && !ClientPrefs.data.antialiasing);
-
+					#end
 					case 'debugger':
 						unlock = (songName == 'test' && !usedPractice);
 				}

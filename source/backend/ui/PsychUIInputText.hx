@@ -67,7 +67,6 @@ class PsychUIInputText extends FlxSpriteGroup
 		this.behindText = new FlxSprite(1, 1).makeGraphic(1, 1, FlxColor.WHITE);
 		this.selection = new FlxSprite().makeGraphic(1, 1, FlxColor.WHITE);
 		this.textObj = new FlxText(1, 1, Math.max(1, wid - 2), '', size);
-		this.textObj.antialiasing = false;
 		this.caret = new FlxSprite().makeGraphic(1, 1, FlxColor.WHITE);
 		add(this.bg);
 		add(this.behindText);
