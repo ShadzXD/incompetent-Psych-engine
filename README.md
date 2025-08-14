@@ -5,12 +5,6 @@ A fork of Psych Engine 0.7.3, inspired by [Doido Engine!](https://github.com/Doi
 
 **Incompetent! Psych engine**, is a fork that focuses mainly on making Psych engine more simple for hard coding use whilst, also not altering the codebase completely. 
 
-**This engine does NOT support the mod folder and LUA!**
-
-**Hscript is not 100% Compatible with HTML5!**
-
-To compile the source code, use the command, *hmm install*.
-
 **Features!**
 
 - Allows compilation to HTML5!
@@ -21,5 +15,19 @@ To compile the source code, use the command, *hmm install*.
 - Cleaned up Boyfriend Sprites!
 - HUD and Ratings have been split off to their own classes for PlayState clean up.
 - Alot of Features from Psych 1.0.x Backported.
+
+**This engine does NOT support the mod folder and LUA!**
+
+**HScript is not 100% Compatible with HTML5! Stages will not work!**
+
+**How to compile!**
+
+1. Open a terminal of choice and do the command: *haxelib install hmm*
+2. After hmm is installed, do: *hmm install*
+3. If it asks you at any point to choose a location where to install the libraries, use: *.haxelib* 
+4. If everything is installed correctly, use the command *lime test windows* or *lime test html5*, depending on which platform you want to use.
+5. Game should fully compile with no errors!
+
+[REPORT ISSUES HERE](https://github.com/ShadzXD/incompetent-Psych-engine/issues)
 
 ![image](https://github.com/user-attachments/assets/f5c50563-6368-4746-8a68-74eebdbbb8a0)
