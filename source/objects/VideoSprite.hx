@@ -4,17 +4,16 @@ import flixel.addons.display.FlxPieDial;
 
 #if hxvlc
 import hxvlc.flixel.FlxVideoSprite;
-#end
-
-
+#else
 import openfl.events.NetStatusEvent;
 import openfl.media.SoundTransform;
 import openfl.media.Video;
 import openfl.net.NetConnection;
 import openfl.net.NetStream;
+#end
+
 class VideoSprite extends FlxSpriteGroup {
 	#if VIDEOS_ALLOWED
-
 	public var finishCallback:Void->Void = null;
 	public var onSkip:Void->Void = null;
 
@@ -37,7 +36,6 @@ class VideoSprite extends FlxSpriteGroup {
 
 		this.videoName = videoName;
 		scrollFactor.set();
-		if(!isWaiting)
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 
 		waiting = isWaiting;
@@ -51,32 +49,36 @@ class VideoSprite extends FlxSpriteGroup {
 		}
 
 		// initialize sprites
-		#if hxvlc
+			#if hxvlc
 		videoSprite = new FlxVideoSprite();
-			// callbacks
+		videoSprite.antialiasing = ClientPrefs.data.antialiasing;
 		if(!shouldLoop) videoSprite.bitmap.onEndReached.add(finishVideo);
-
-		videoSprite.bitmap.onFormatSetup.add(function()
+		videoSprite.load(videoName, shouldLoop ? ['input-repeat=65545'] : null);
+	videoSprite.bitmap.onFormatSetup.add(function()
 		{
+			/*
+			#if hxvlc
+			var wd:Int = videoSprite.bitmap.formatWidth;
+			var hg:Int = videoSprite.bitmap.formatHeight;
+			trace('Video Resolution: ${wd}x${hg}');
+			videoSprite.scale.set(FlxG.width / wd, FlxG.height / hg);
+			#end
+			*/
 			videoSprite.setGraphicSize(FlxG.width);
 			videoSprite.updateHitbox();
 			videoSprite.screenCenter();
 		});
 
-		// start video and adjust resolution to screen size
-		videoSprite.load(videoName, shouldLoop ? ['input-repeat=65545'] : null);
 		#elseif html5
 		videoSprite = new FlxVideo(videoName);
 		videoSprite.finishCallback= finishVideo;
 		FlxG.log.add('loaded HTML5 video:  $videoName.mp4');
-
-
-       // finishcallback = finishCallBack;
 		#end
+		// callbacks
 		add(videoSprite);
 		if(canSkip) this.canSkip = true;
-
 	
+		// start video and adjust resolution to screen size
 	}
 
 	var alreadyDestroyed:Bool = false;
@@ -112,12 +114,8 @@ class VideoSprite extends FlxSpriteGroup {
 		{
 			if(finishCallback != null)
 				finishCallback();
-				destroy();
-
-		#if !hxvlc
-			videoSprite.finishVideo();
-		#end
-		
+			
+			destroy();
 		}
 	}
 
@@ -174,13 +172,6 @@ class VideoSprite extends FlxSpriteGroup {
 		}
 		return canSkip;
 	}
-	#if hxvlc
-	public function precacheVideo(name:String)
-	{
-		videoSprite.load(Paths.video(name));
-
-	}
-	#end
 
 	function updateSkipAlpha()
 	{
@@ -190,19 +181,16 @@ class VideoSprite extends FlxSpriteGroup {
 		skipSprite.alpha = FlxMath.remapToRange(skipSprite.amount, 0.025, 1, 0, 1);
 	}
 	#if hxvlc
+
 	public function play() videoSprite?.play();
 	public function resume() videoSprite?.resume();
 	public function pause() videoSprite?.pause();
 	#elseif html5
-	//public function play() videoSprite?.play();
 	public function resume() videoSprite?.resumeVideo();
 	public function pause() videoSprite?.pauseVideo();
 	#end
 	#end
 }
-
-
-
 /**
  * Plays a video via a NetStream. Only works on HTML5.
  * This does NOT replace hxvlc, nor does hxvlc replace this.
@@ -210,6 +198,7 @@ class VideoSprite extends FlxSpriteGroup {
  */
 class FlxVideo extends FlxSprite
 {
+#if html5
   var video:Video;
   var netStream:NetStream;
   var videoPath:String;
@@ -354,4 +343,5 @@ class FlxVideo extends FlxSprite
   {
     if (event.info.code == 'NetStream.Play.Complete') finishVideo();
   }
+  #end
 }
