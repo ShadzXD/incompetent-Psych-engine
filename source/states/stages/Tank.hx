@@ -77,13 +77,13 @@ class Tank extends BaseStage
 		
 		if (isStoryMode && !seenCutscene)
 		{
-			switch (songName)
-			{
-				case 'ugh':
-					setStartCallback(ughIntro);
-				case 'guns':
-					setStartCallback(gunsIntro);
-			}
+			//switch (songName)
+			//{
+				//case 'ugh':
+					//setStartCallback(ughIntro);
+				//case 'guns':
+					//setStartCallback(gunsIntro);
+			//}
 		}
 	}
 	override function createPost()
@@ -131,8 +131,8 @@ class Tank extends BaseStage
 
 	// Cutscenes
 	var cutsceneHandler:CutsceneHandler;
-	var tankman:FlxAnimate;
-	var pico:FlxAnimate;
+	//var tankman:FlxAnimate;
+	//var pico:FlxAnimate;
 	var boyfriendCutscene:FlxSprite;
 	function prepareCutscene()
 	{
@@ -141,14 +141,14 @@ class Tank extends BaseStage
 		dadGroup.alpha = 0.00001;
 		camHUD.visible = false;
 		//inCutscene = true; //this would stop the camera movement, oops
-
+		/*
 		tankman = new FlxAnimate(dad.x + 419, dad.y + 225);
 		tankman.showPivot = false;
 		Paths.loadAnimateAtlas(tankman, 'cutscenes/tankman');
 		tankman.antialiasing = ClientPrefs.data.antialiasing;
 		addBehindDad(tankman);
 		cutsceneHandler.push(tankman);
-
+		*/
 		cutsceneHandler.finishCallback = function()
 		{
 			var timeForStuff:Float = Conductor.crochet / 1000 * 4.5;
@@ -190,10 +190,10 @@ class Tank extends BaseStage
 		
 		camFollow.setPosition(dad.x + 280, dad.y + 170);
 	}
-
+	/*
 	function ughIntro()
 	{
-		prepareCutscene();
+		//prepareCutscene();
 		cutsceneHandler.endTime = 12;
 		cutsceneHandler.music = 'DISTORTO';
 		Paths.sound('wellWellWell');
@@ -261,7 +261,7 @@ class Tank extends BaseStage
 		cutsceneHandler.onStart = function()
 		{
 			tightBars.play(true);
-						audioPlaying = tightBars;
+			audioPlaying = tightBars;
 
 			FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom * 1.2}, 4, {ease: FlxEase.quadInOut});
 			FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom * 1.2 * 1.2}, 0.5, {ease: FlxEase.quadInOut, startDelay: 4});
@@ -398,7 +398,7 @@ class Tank extends BaseStage
 			zoomBack();
 		});
 	}
-
+	*/
 	function zoomBack()
 	{
 		var calledTimes:Int = 0;

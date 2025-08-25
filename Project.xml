@@ -95,7 +95,7 @@
 	<haxelib name="linc_luajit" if="LUA_ALLOWED"/>
 	<haxelib name="hxvlc" unless="html5"/>
 	<haxelib name="hxdiscord_rpc" if="DISCORD_ALLOWED"/>
-	<haxelib name="flxanimate"/>
+	<haxelib name="flixel-animate"/>
 	<haxelib name="hscript-iris" if="HSCRIPT_ALLOWED"/>
 
 	<!-- Disable Discord IO Thread -->

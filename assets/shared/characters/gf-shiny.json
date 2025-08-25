@@ -17,7 +17,7 @@
 			"indices": [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]
 		},
 		{
-			"offsets": [-1, -24],
+			"offsets": [0, 0],
 			"loop": false,
 			"fps": 24,
 			"anim": "cheer",
@@ -25,7 +25,7 @@
 			"name": "hey_atlas"
 		},
 		{
-			"offsets": [0, -13],
+			"offsets": [0, -19],
 			"loop": false,
 			"fps": 24,
 			"anim": "singLEFT",
@@ -33,7 +33,7 @@
 			"name": "left_atlas"
 		},
 		{
-			"offsets": [-1, -42],
+			"offsets": [0, -20],
 			"loop": false,
 			"fps": 24,
 			"anim": "singDOWN",
@@ -41,7 +41,7 @@
 			"name": "down_atlas"
 		},
 		{
-			"offsets": [0, -20],
+			"offsets": [0, 4],
 			"loop": false,
 			"fps": 24,
 			"anim": "singUP",
@@ -49,7 +49,7 @@
 			"name": "up_atlas"
 		},
 		{
-			"offsets": [0, -14],
+			"offsets": [0, -20],
 			"loop": false,
 			"fps": 24,
 			"anim": "singRIGHT",
@@ -57,7 +57,7 @@
 			"name": "right"
 		},
 		{
-			"offsets": [-3, -26],
+			"offsets": [-2, -17],
 			"loop": true,
 			"fps": 24,
 			"anim": "scared",
@@ -65,38 +65,21 @@
 			"name": "scared_atlas"
 		},
 		{
-			"offsets": [-3, -26],
+			"offsets": [-2, -22],
 			"loop": false,
 			"fps": 24,
 			"anim": "sad",
 			"indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
 			"name": "cry_atlas"
-		},
-		{
-			"loop": false,
-			"offsets": [45, -34],
-			"anim": "hairBlow",
-			"fps": 24,
-			"name": "GF Dancing Beat Hair blowing",
-			"indices": []
-		},
-		{
-			"loop": false,
-			"offsets": [0, -9],
-			"anim": "hairFall",
-			"fps": 24,
-			"name": "GF Dancing Beat Hair Landing",
-			"indices": []
 		}
 	],
-	"vocals_file": "",
 	"no_antialiasing": false,
-	"image": "characters/GF/GF_ATLAS",
+	"image": "characters/GF/GF_SHINY_ATLAS",
 	"position": [0, 0],
 	"healthicon": "gf",
 	"flip_x": false,
 	"healthbar_colors": [165, 0, 77],
-	"camera_position": [-1020, -180],
+	"camera_position": [180, 380],
 	"sing_duration": 4,
 	"scale": 1,
 	"_editor_isPlayer": false
