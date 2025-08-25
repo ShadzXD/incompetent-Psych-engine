@@ -20,13 +20,11 @@ class MainHUD extends FlxGroup
 	public var scoreText:FlxText;
 	public var songSeconds:Float;
 	public var songLength:Float;
-	var timeTxt:FlxText;
+	public var timeTxt:FlxText;
 	public var health:Float = 1;
 	public function new()
 	{
 		super();
-	
-
 	}
     public function beatHit(){}
 
@@ -45,10 +43,5 @@ class MainHUD extends FlxGroup
 
  	public function updateTime(t:Float){
 		songSeconds = t;
-	}
-	public  function initScriptVars()
-	{
-		trace('hi');
-			
 	}
 }

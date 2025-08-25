@@ -12,7 +12,7 @@ import flixel.util.FlxStringUtil;
 import flixel.animation.FlxAnimationController;
 import flixel.input.keyboard.FlxKey;
 import openfl.events.KeyboardEvent;
-import backend.PopUpStuff;
+import objects.PopUpStuff;
 
 class EditorPlayState extends MusicBeatSubstate
 {
@@ -90,11 +90,6 @@ class EditorPlayState extends MusicBeatSubstate
 		startOffset = Conductor.crochet;
 		timerToStart = startOffset;
 
-			
-		comboClass = new PopUpStuff(FUNKIN);
-		comboClass.visible = !ClientPrefs.data.hideHud;
-		add(comboClass);
-
 		if(ClientPrefs.data.hitsoundVolume > 0) Paths.sound('hitsound');
 
 		/* setting up Editor PlayState stuff */
@@ -104,6 +99,10 @@ class EditorPlayState extends MusicBeatSubstate
 		bg.alpha = 0.9;
 		add(bg);
 		
+		comboClass = new PopUpStuff(FUNKIN);
+		comboClass.visible = !ClientPrefs.data.hideHud;
+		add(comboClass);
+
 		/**** NOTES ****/
 		comboGroup = new FlxSpriteGroup();
 		add(comboGroup);

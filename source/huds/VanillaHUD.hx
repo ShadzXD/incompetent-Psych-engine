@@ -14,8 +14,9 @@ class VanillaHUD extends MainHUD
     public function new()
     {
 		super();
-		healthBar = new Bar(0, FlxG.height * (!ClientPrefs.data.downScroll ? 0.9 : 0.1), 'healthBar', function(){
-			healthLerp = FlxMath.lerp(healthLerp, health, 0.12 / (ClientPrefs.data.framerate / 60));
+		var lerpValue:Float =  0.14 / (ClientPrefs.data.framerate / 60);
+		healthBar = new Bar(0, FlxG.height * (!ClientPrefs.data.downScroll ? 0.88 : 0.1), 'healthBar', function(){
+			healthLerp = FlxMath.lerp(healthLerp, health, lerpValue);
 			return healthLerp;
 		}, 0, 2);		
 		healthBar.screenCenter(X);
@@ -46,11 +47,9 @@ class VanillaHUD extends MainHUD
     {
         var mult:Float = FlxMath.lerp(1, iconP1.scale.x, Math.exp(-elapsed * 5));
 		iconP1.scale.set(mult, mult);
-		iconP1.updateHitbox();
 
 		var mult:Float = FlxMath.lerp(1, iconP2.scale.x, Math.exp(-elapsed * 5));
 		iconP2.scale.set(mult, mult);
-		iconP2.updateHitbox();
 
 		iconP1.x = healthBar.barCenter + (150 * iconP1.scale.x - 150) / 2 - iconOffset;
 		iconP2.x = healthBar.barCenter - (150 * iconP2.scale.x) / 2 - iconOffset * 2;
@@ -71,11 +70,11 @@ class VanillaHUD extends MainHUD
     
 	override function beatHit()
 	{
-		iconP1.scale.set(1.2, 1.2);
-		iconP2.scale.set(1.2, 1.2);
-
+		iconP1.scale.set(1.25, 1.25);
+		iconP2.scale.set(1.25, 1.25);
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
+
     } 
 
 }

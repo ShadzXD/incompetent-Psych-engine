@@ -1,7 +1,6 @@
 package states;
 
 import backend.Highscore;
-import backend.PopUpStuff;
 import backend.Rating;
 import backend.Song;
 import backend.StageData;
@@ -18,7 +17,6 @@ import flixel.util.FlxSave;
 import flixel.util.FlxSort;
 import flixel.util.FlxStringUtil;
 import haxe.Json;
-import huds.*;
 import lime.utils.Assets;
 import objects.*;
 import objects.Note.EventNote;
@@ -32,6 +30,10 @@ import states.editors.ChartingState;
 import states.stages.objects.*;
 import substates.GameOverSubstate;
 import substates.PauseSubState;
+
+import huds.*;
+import objects.PopUpStuff;
+
 #if !flash
 import flixel.addons.display.FlxRuntimeShader;
 import openfl.filters.ShaderFilter;
@@ -307,7 +309,7 @@ class PlayState extends MusicBeatState
 		persistentDraw = true;
 
 		if (SONG == null)
-			SONG = Song.loadFromJson('tutorial');
+			SONG = Song.loadFromJson('test');
 
 		Conductor.mapBPMChanges(SONG);
 		Conductor.bpm = SONG.bpm;
@@ -469,13 +471,11 @@ class PlayState extends MusicBeatState
 				gf.visible = false;
 		}
 		stagesFunc(function(stage:BaseStage) stage.createPost());
-		if(!cpuControlled)
-		{
-			comboClass = new PopUpStuff(FUNKIN, true);
-			comboClass.cameras = [camHUD];
-			comboClass.visible = !ClientPrefs.data.hideHud;
-			add(comboClass);
-		}
+	
+		comboClass = new PopUpStuff(FUNKIN, true, cpuControlled);
+		comboClass.cameras = [camHUD];
+		comboClass.visible = !ClientPrefs.data.hideHud;
+		add(comboClass);
 	
 		/*
 		* Most UI hud elements have been moved to their own seperate class.
@@ -579,9 +579,6 @@ class PlayState extends MusicBeatState
 		#end
 		switch(songName)
 		{
-			case 'tutorial':
-				//startVideo("test");
-				skipCountdown = true;
 			default:
 				startCallback();
 		}
@@ -2435,16 +2432,6 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		var uiPrefix:String = "";
-		var uiSuffix:String = '';
-		var antialias:Bool = ClientPrefs.data.antialiasing;
-
-		if (stageUI != "normal")
-		{
-			uiPrefix = '${stageUI}UI/';
-			if (PlayState.isPixelStage) uiSuffix = '-pixel';
-			antialias = !isPixelStage;
-		}
 		if(!cpuControlled)
 		{
 			if (combo >= 5) comboClass.displayCombo(combo);
@@ -2695,7 +2682,7 @@ class PlayState extends MusicBeatState
 			var animToPlay:String = singAnimations[Std.int(Math.abs(Math.min(singAnimations.length-1, direction)))] + 'miss' + suffix;
 			char.playAnim(animToPlay, true);
 
-			if(char != gf && lastCombo > 5 && gf != null && gf.animOffsets.exists('sad'))
+			if(char != gf && gf != null && lastCombo > 5 && gf.animOffsets.exists('sad'))
 			{
 				gf.playAnim('sad');
 				gf.specialAnim = true;

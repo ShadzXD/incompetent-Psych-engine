@@ -1,8 +1,9 @@
 package huds;
 
 import flixel.util.FlxStringUtil;
+
 /*
-* Hud that only includes Text 
+* Hud that only includes Score Text and Timer. 
 */
 class TextHUD extends MainHUD
 {

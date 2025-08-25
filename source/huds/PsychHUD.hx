@@ -29,9 +29,11 @@ class PsychHUD extends MainHUD
 		timeTxt.alpha = 0;
 		timeTxt.borderSize = 1.25;
 		add(timeTxt);
-
+		
+		//Less CPU Intesive like this.
+		var lerpValue:Float =  0.12 / (ClientPrefs.data.framerate / 60);
 		healthBar = new Bar(0, FlxG.height * (!ClientPrefs.data.downScroll ? 0.88 : 0.1), 'healthBar', function(){
-			healthLerp = FlxMath.lerp(healthLerp, health, 0.12 / (ClientPrefs.data.framerate / 60));
+			healthLerp = FlxMath.lerp(healthLerp, health, lerpValue);
 			return healthLerp;
 		}, 0, 2);		
 		healthBar.screenCenter(X);
@@ -63,11 +65,9 @@ class PsychHUD extends MainHUD
 		//TODO: PUT THE ICONS IN A GROUP!
         var mult:Float = FlxMath.lerp(1, iconP1.scale.x, Math.exp(-elapsed * 5));
 		iconP1.scale.set(mult, mult);
-		iconP1.updateHitbox();
 
 		var mult:Float = FlxMath.lerp(1, iconP2.scale.x, Math.exp(-elapsed * 5));
 		iconP2.scale.set(mult, mult);
-		iconP2.updateHitbox();
 
 		iconP1.x = healthBar.barCenter + (150 * iconP1.scale.x - 150) / 2 - iconOffset;
 		iconP2.x = healthBar.barCenter - (150 * iconP2.scale.x) / 2 - iconOffset * 2;
@@ -116,6 +116,7 @@ class PsychHUD extends MainHUD
 
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
+
     }
     override public function reloadHealthBarColors() {
 		healthBar.setColors(FlxColor.fromRGB(PlayState.instance.dad.healthColorArray[0], PlayState.instance.dad.healthColorArray[1], PlayState.instance.dad.healthColorArray[2]),

@@ -1,12 +1,14 @@
-package backend;
+package objects;
 
 import flixel.group.FlxGroup.FlxTypedGroup;
-
+import backend.Rating;
 using StringTools;
+
 enum PopUpType {
   FUNKIN;
   PIXEL;
 }
+
 class PopUpStuff extends FlxTypedGroup<FlxSprite>
 {
 	var antialias:Bool = true;
@@ -17,15 +19,21 @@ class PopUpStuff extends FlxTypedGroup<FlxSprite>
 	var size:Float = 0.6;
 	var speedRate:Float = 1;
 	var ratingsData:Array<Rating> = Rating.loadDefault();
+	var isBotplay:Bool = false;
 	// Stores Ratings and Combo Sprites in a group
-	override public function new(hud:PopUpType, ?fromPlayState:Bool = false)
+	override public function new(hud:PopUpType, ?fromPlayState:Bool = false, ?botplay:Bool = false)
 	{
 		super();
+
 		placement = FlxG.width * 0.35;
+
 		hudType = hud;
+
 		if(PlayState.isPixelStage) hudType = PIXEL;
 		
 		if(fromPlayState)speedRate = PlayState.instance.playbackRate;
+
+		isBotplay = botplay;
 		loadStuff();
 	}
 
@@ -99,6 +107,23 @@ class PopUpStuff extends FlxTypedGroup<FlxSprite>
 		}
 	}
 
+	private function loadStuff()
+	{
+		switch(hudType)
+		{
+			case FUNKIN:
+			uiPrefix = 'popups/base_game/';
+
+			case PIXEL:
+			uiPrefix = 'pixelUI/';
+			uiSuffix = '-pixel';
+			size = 5;
+			antialias = false;
+		}
+
+		if(!isBotplay) cachePopUpScore();
+	}
+
 	private function cachePopUpScore()
 	{
 		trace('precaching');
@@ -107,21 +132,5 @@ class PopUpStuff extends FlxTypedGroup<FlxSprite>
 			Paths.image(uiPrefix + rating.image + uiSuffix);
 		for (i in 0...10)
 			Paths.image(uiPrefix + 'num' + i + uiSuffix);
-	}
-
-	private function loadStuff()
-	{
-		switch(hudType)
-		{
-			case FUNKIN:
-			uiPrefix = 'popups/base_game/';
-			case PIXEL:
-			uiPrefix = 'pixelUI/';
-			uiSuffix = '-pixel';
-			size = 6;
-			antialias = false;
-
-		}
-		cachePopUpScore();
 	}
 }
