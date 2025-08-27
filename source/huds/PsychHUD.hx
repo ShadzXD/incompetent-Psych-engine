@@ -27,6 +27,7 @@ class PsychHUD extends MainHUD
 		timeTxt.setFormat(Paths.font(hudFont), 27, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		timeTxt.scrollFactor.set();
 		timeTxt.alpha = 0;
+		timeTxt.visible = ClientPrefs.data.showTime;
 		timeTxt.borderSize = 1.25;
 		add(timeTxt);
 		

@@ -60,11 +60,11 @@
       "version": "1.2.4"
     },
     {
-      "name": "flxanimate",
+      "name": "flixel-animate",
       "type": "git",
-      "dir": null,
-      "ref": "dev",
-      "url": "https://github.com/ShadzXD/flxanimate"
+      "dir": "8c65d5b797359b0b9c77bdf57823fa0484ca9379",
+      "ref": "main",
+      "url": "https://github.com/MaybeMaru/flixel-animate"
     },
     {
       "name": "linc_luajit",

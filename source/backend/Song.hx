@@ -183,4 +183,16 @@ class Song
 		}
 		return songJson;
 	}
+
+	/*
+	* Checks if theres metadata available for the selected song.
+	*/
+	public static inline function metaDataCheck(songName:String):Bool
+	{
+		var	string:String = Paths.formatToSongPath(songName);
+		trace(string);
+		trace((Paths.json(string +'/metadata')));
+		if(Assets.exists(Paths.json(string +'/metadata'))) return true;
+		else return false;
+	}
 }

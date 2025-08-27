@@ -141,6 +141,11 @@ class VisualsUISubState extends BaseOptionsMenu
 		'bool');
 		addOption(option);
 
+		var option:Option = new Option('Show Time',
+			'If un-checked, will not show time on songs.',
+			'showTime',
+			'bool');
+		addOption(option);
 		super();
 		add(notes);
 	}

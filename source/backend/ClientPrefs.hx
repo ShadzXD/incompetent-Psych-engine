@@ -42,7 +42,6 @@ import states.TitleState;
 	public var noReset:Bool = false;
 	public var healthBarAlpha:Float = 1;
 	public var hitsoundVolume:Float = 0;
-	public var checkForUpdates:Bool = true;
 	public var comboStacking:Bool = true;
 	public var gameplaySettings:Map<String, Dynamic> = [
 		'scrollspeed' => 1.0,
@@ -74,6 +73,8 @@ import states.TitleState;
 	public var safeFrames:Float = 10;
 	public var discordRPC:Bool = true;
 	public var camNoteMovement:Bool = true;
+	public var showTime:Bool = false;
+
 }
 
 class ClientPrefs {

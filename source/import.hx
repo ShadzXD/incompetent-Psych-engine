@@ -39,9 +39,8 @@ import objects.BGSprite;
 import states.PlayState;
 import states.LoadingState;
 
-#if flxanimate
-import flxanimate.*;
-#end
+import animate.FlxAnimate;
+import animate.FlxAnimateFrames;
 import backend.ui.*; //Psych-UI
 
 //Flixel

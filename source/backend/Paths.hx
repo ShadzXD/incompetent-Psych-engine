@@ -149,16 +149,7 @@ class Paths
 
 	public static function getPath(file:String, ?type:AssetType = TEXT, ?parentfolder:String, ?modsAllowed:Bool = true):String
 	{
-		#if MODS_ALLOWED
-		if(modsAllowed)
-		{
-			var customFile:String = file;
-			if (parentfolder != null) customFile = '$parentfolder/$file';
-
-			var modded:String = modFolders(customFile);
-			if(FileSystem.exists(modded)) return modded;
-		}
-		#end
+	
 
 		if (parentfolder != null)
 			return getFolderPath(file, parentfolder);
@@ -459,93 +450,5 @@ class Paths
 		return OpenFlAssets.exists(path, TEXT);
 		#end
     }
-    public static function readDirectory(directory:String):Array<String>
-    {
-      
-		var dirs:Array<String> = [];
-        for(dir in Assets.list().filter(folder -> folder.startsWith(directory)))
-        {
-                @:privateAccess
-                for(library in lime.utils.Assets.libraries.keys())
-                {
-                    if(library != 'default' && Assets.exists('$library:$dir') && (!dirs.contains('$library:$dir') || !dirs.contains(dir)))
-                        dirs.push('$library:$dir');
-                    else if(Assets.exists(dir) && !dirs.contains(dir))
-                        dirs.push(dir);
-                }
-         }
-		return dirs;
-
-     
-    }
-	#if flxanimate
-	public static function loadAnimateAtlas(spr:FlxAnimate, folderOrImg:Dynamic, spriteJson:Dynamic = null, animationJson:Dynamic = null)
-	{
-		var changedAnimJson = false;
-		var changedAtlasJson = false;
-		var changedImage = false;
-		
-		if(spriteJson != null)
-		{
-			changedAtlasJson = true;
-			spriteJson = getContent(spriteJson);
-		}
-
-		if(animationJson != null) 
-		{
-			changedAnimJson = true;
-			animationJson = getContent(animationJson);
-		}
-
-		// is folder or image path
-		if(Std.isOfType(folderOrImg, String))
-		{
-			var originalPath:String = folderOrImg;
-			for (i in 0...10)
-			{
-				var st:String = '$i';
-				if(i == 0) st = '';
-
-				if(!changedAtlasJson)
-				{
-					spriteJson = getTextFromFile('images/$originalPath/spritemap$st.json');
-					if(spriteJson != null)
-					{
-						//trace('found Sprite Json');
-						changedImage = true;
-						changedAtlasJson = true;
-						folderOrImg = image('$originalPath/spritemap$st');
-						break;
-					}
-				}
-				else if(fileExists('images/$originalPath/spritemap$st.png', IMAGE))
-				{
-					//trace('found Sprite PNG');
-					changedImage = true;
-					folderOrImg = image('$originalPath/spritemap$st');
-					break;
-				}
-			}
-
-			if(!changedImage)
-			{
-				//trace('Changing folderOrImg to FlxGraphic');
-				changedImage = true;
-				folderOrImg = image(originalPath);
-			}
-
-			if(!changedAnimJson)
-			{
-				//trace('found Animation Json');
-				changedAnimJson = true;
-				animationJson = getTextFromFile('images/$originalPath/Animation.json');
-			}
-		}
-
-		//trace(folderOrImg);
-		//trace(spriteJson);
-		//trace(animationJson);
-		spr.loadAtlasEx(folderOrImg, spriteJson, animationJson);
-	}
-	#end
+   
 }

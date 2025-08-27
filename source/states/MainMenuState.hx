@@ -17,10 +17,9 @@ class MainMenuState extends MusicBeatState
 	var optionShit:Array<String> = [
 		'story_mode',
 		'freeplay',
-		#if MODS_ALLOWED 'mods', #end
 		#if ACHIEVEMENTS_ALLOWED 'awards', #end
 		'credits',
-		#if !switch 'donate', #end
+		//#if !switch 'donate', #end
 		'options'
 	];
 
@@ -86,7 +85,7 @@ class MainMenuState extends MusicBeatState
 		incVer.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(incVer);
 
-		var psychVer:FlxText = new FlxText(5, FlxG.height - 20, 0, "Psych Engine v1.0.4", 12);
+		var psychVer:FlxText = new FlxText(5, FlxG.height - 20, 0, "Psych Engine 0.7.3", 12);
 		psychVer.scrollFactor.set();
 		psychVer.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(psychVer);
