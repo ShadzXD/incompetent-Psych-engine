@@ -73,6 +73,7 @@ class Character extends FlxAnimate
 	public var missingText:FlxText;
 	public var hasMissAnimations:Bool = false;
 	public var vocalsFile:String = '';
+	public var deathCounterText:String = 'Blue balls';
 
 	//Used on Character Editor
 	public var imageFile:String = '';
@@ -81,8 +82,6 @@ class Character extends FlxAnimate
 	public var originalFlipX:Bool = false;
 	public var editorIsPlayer:Null<Bool> = null;
 
-	public var lockAnimation:Bool = false;
-	var unlocking:Bool = false;
 	public function new(x:Float, y:Float, ?character:String = 'bf', ?isPlayer:Bool = false)
 	{
 		super(x, y);
@@ -188,6 +187,7 @@ class Character extends FlxAnimate
 		vocalsFile = json.vocals_file != null ? json.vocals_file : '';
 		originalFlipX = (json.flip_x == true);
 		editorIsPlayer = json._editor_isPlayer;
+		deathCounterText = json.death_counter_string == null ? "Blue Balls" : json.death_counter_string;
 
 		// antialiasing
 		noAntialiasing = (json.no_antialiasing == true);
@@ -223,9 +223,7 @@ class Character extends FlxAnimate
 				else addOffset(balls.anim, 0, 0);
 			}
 		}
-		#if flxanimate
-		//if(isAnimateAtlas) copyAtlasValues();
-		#end
+
 		//trace('Loaded file to character ' + curCharacter);
 	}
 
@@ -233,13 +231,12 @@ class Character extends FlxAnimate
 	{
 		//if(isAnimateAtlas) atlas.update(elapsed);
 
-		if(debugMode)
+		if(debugMode ||  animation.curAnim == null)
 		{
 			super.update(elapsed);
 			return;
 		}
-		if(!lockAnimation)
-		{
+		
 			if(heyTimer > 0)
 			{
 				var rate:Float = (PlayState.instance != null ? PlayState.instance.playbackRate : 1.0);
@@ -252,9 +249,9 @@ class Character extends FlxAnimate
 						specialAnim = false;
 						dance();
 					}
-				heyTimer = 0;
+					heyTimer = 0;
+				}
 			}
-		}
 			else if(specialAnim && isAnimationFinished())
 			{
 				specialAnim = false;
@@ -263,23 +260,8 @@ class Character extends FlxAnimate
 			else if (getAnimationName().endsWith('miss') && isAnimationFinished())
 			{
 				dance();
-			finishAnimation();
-				}
-		}
-		else
-		{
-			if (isAnimationFinished() && !unlocking)
-				{
-					unlocking = true;
-					trace('unlcoking');
-					  new FlxTimer().start(0.4, function(tmr:FlxTimer)
-					 {
-							lockAnimation = false;
-							unlocking = false;
-					 });
-				} 
-		}
-
+				finishAnimation();
+			}
 		
 		switch(curCharacter)
 		{
@@ -326,7 +308,9 @@ class Character extends FlxAnimate
 
 	public function isAnimationFinished():Bool
 	{
-				return anim.curAnim.finished;
+		if(isAnimationNull()) return false;
+
+		return anim.curAnim.finished;
 	}
 
 	public function finishAnimation():Void
@@ -364,7 +348,6 @@ class Character extends FlxAnimate
 	 */
 	public function dance()
 	{ 
-
 		if (!debugMode && !skipDance && !specialAnim)
 		{
 			if(danceIdle)
@@ -374,15 +357,12 @@ class Character extends FlxAnimate
 				if (danced)
 				{
 					playAnim('danceRight' + idleSuffix);
-					trace("gf gonna hit right");
 
 				}
 				else
 				{
 					playAnim('danceLeft' + idleSuffix);
-					trace("gf gonna hit left");
 				}
-				
 				
 			}
 			else if(hasAnimation('idle' + idleSuffix))
@@ -392,9 +372,7 @@ class Character extends FlxAnimate
 
 	public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void
 	{
-		if(AnimName != 'sad')specialAnim = false;
-		else specialAnim = true;
-		trace(specialAnim);
+		//trace(specialAnim);
 		anim.play(AnimName, Force, Reversed, Frame);
 		_lastPlayedAnimation = AnimName;
 

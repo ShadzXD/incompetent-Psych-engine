@@ -77,13 +77,13 @@ class Tank extends BaseStage
 		
 		if (isStoryMode && !seenCutscene)
 		{
-			//switch (songName)
-			//{
-				//case 'ugh':
-					//setStartCallback(ughIntro);
-				//case 'guns':
-					//setStartCallback(gunsIntro);
-			//}
+			switch (songName)
+			{
+				case 'ugh':
+					setStartCallback(ughIntro);
+				case 'guns':
+					setStartCallback(gunsIntro);
+			}
 		}
 	}
 	override function createPost()
@@ -131,8 +131,8 @@ class Tank extends BaseStage
 
 	// Cutscenes
 	var cutsceneHandler:CutsceneHandler;
-	//var tankman:FlxAnimate;
-	//var pico:FlxAnimate;
+	var tankman:FlxAnimate;
+	var pico:FlxAnimate;
 	var boyfriendCutscene:FlxSprite;
 	function prepareCutscene()
 	{
@@ -141,21 +141,18 @@ class Tank extends BaseStage
 		dadGroup.alpha = 0.00001;
 		camHUD.visible = false;
 		//inCutscene = true; //this would stop the camera movement, oops
-		/*
-		tankman = new FlxAnimate(dad.x + 419, dad.y + 225);
-		tankman.showPivot = false;
-		Paths.loadAnimateAtlas(tankman, 'cutscenes/tankman');
-		tankman.antialiasing = ClientPrefs.data.antialiasing;
+	
+		tankman = new FlxAnimate(dad.x - 30, dad.y - 20);
+		tankman.frames = FlxAnimateFrames.fromAnimate(Paths.getFolderPath('images/cutscenes/tankman', 'week7'));
 		addBehindDad(tankman);
-		cutsceneHandler.push(tankman);
-		*/
+		
 		cutsceneHandler.finishCallback = function()
 		{
 			var timeForStuff:Float = Conductor.crochet / 1000 * 4.5;
 			FlxG.sound.music.fadeOut(timeForStuff);
 			FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, timeForStuff, {ease: FlxEase.quadInOut});
 			startCountdown();
-
+			tankman.kill();
 			dadGroup.alpha = 1;
 			camHUD.visible = true;
 			boyfriend.animation.finishCallback = null;
@@ -190,10 +187,10 @@ class Tank extends BaseStage
 		
 		camFollow.setPosition(dad.x + 280, dad.y + 170);
 	}
-	/*
+
 	function ughIntro()
 	{
-		//prepareCutscene();
+		prepareCutscene();
 		cutsceneHandler.endTime = 12;
 		cutsceneHandler.music = 'DISTORTO';
 		Paths.sound('wellWellWell');
@@ -278,6 +275,7 @@ class Tank extends BaseStage
 		});
 	}
 	var dualWieldAnimPlayed = 0;
+	/*
 	function stressIntro()
 	{
 		prepareCutscene();
@@ -294,8 +292,8 @@ class Tank extends BaseStage
 		Paths.sound('stressCutscene');
 
 		pico = new FlxAnimate(gf.x + 150, gf.y + 450);
-		pico.showPivot = false;
-		Paths.loadAnimateAtlas(pico, 'cutscenes/picoAppears');
+		pico.frames = FlxAnimateFrames.fromAnimate(Paths.getPath('images/cutscenes/picoAppears'));
+
 		pico.anim.addBySymbol('dance', 'GF Dancing at Gunpoint', 24, true);
 		pico.anim.addBySymbol('dieBitch', 'GF Time to Die sequence', 24, false);
 		pico.anim.addBySymbol('picoAppears', 'Pico Saves them sequence', 24, false);
@@ -331,17 +329,17 @@ class Tank extends BaseStage
 			FlxTween.tween(FlxG.camera, {zoom: 0.9 * 1.2 * 1.2}, 2.25, {ease: FlxEase.quadInOut});
 
 			pico.anim.play('dieBitch', true);
-			pico.anim.onComplete = function()
+			pico.anim.curAnim.finished = function()
 			{
 				pico.anim.play('picoAppears', true);
-				pico.anim.onComplete = function()
+				pico.anim.finished = function()
 				{
 					pico.anim.play('picoEnd', true);
-					pico.anim.onComplete = function()
+					pico.anim.finished = function()
 					{
 						gfGroup.alpha = 1;
 						pico.visible = false;
-						pico.anim.onComplete = null;
+						pico.anim.finished = null;
 					}
 				};
 

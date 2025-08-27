@@ -32,7 +32,7 @@
 	"healthicon": "bf-pixel",
 	"flip_x": true,
 	"healthbar_colors": [123, 214, 246],
-	"camera_position": [580, 0],
+	"camera_position": [290, -160],
 	"sing_duration": 4,
 	"scale": 6,
 	"_editor_isPlayer": true

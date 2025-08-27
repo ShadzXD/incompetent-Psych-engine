@@ -1,0 +1,5 @@
+hscript stages do work with html5.
+
+But make sure to add it like this.
+
+Playstate.instance.add(your_variable_name_here);

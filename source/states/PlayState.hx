@@ -5,6 +5,7 @@ import backend.Rating;
 import backend.Song;
 import backend.StageData;
 import backend.WeekData;
+import backend.SongMetadata;
 import cutscenes.CutsceneHandler;
 import cutscenes.DialogueBoxPsych;
 import flixel.FlxBasic;
@@ -260,7 +261,7 @@ class PlayState extends MusicBeatState
 	{
 		//trace('Playback Rate: ' + playbackRate);
 		Paths.clearStoredMemory();
-
+	
 		startCallback = startCountdown;
 		endCallback = endSong;
 
@@ -330,6 +331,12 @@ class PlayState extends MusicBeatState
 
 		GameOverSubstate.resetVariables();
 		songName = Paths.formatToSongPath(SONG.song);
+
+		//if(Song.metaDataCheck(songName)) 
+		//{
+		//	songHasMetadata = true;
+		//}
+
 		if(SONG.stage == null || SONG.stage.length < 1) {
 			SONG.stage = StageData.vanillaSongStage(songName);
 		}
@@ -408,7 +415,6 @@ class PlayState extends MusicBeatState
 		for (folder in Mods.directoriesWithFile(Paths.getSharedPath(), 'scripts/'))
 			for (file in FileSystem.readDirectory(folder))
 			{
-				trace(file);
 				#if LUA_ALLOWED
 				if(file.toLowerCase().endsWith('.lua'))
 					new FunkinLua(folder + file);
@@ -458,13 +464,19 @@ class PlayState extends MusicBeatState
 		boyfriendGroup.add(boyfriend);
 		startCharacterScripts(boyfriend.curCharacter);
 
-		var camPos:FlxPoint = FlxPoint.get(girlfriendCameraOffset[0], girlfriendCameraOffset[1]);
-		if(gf != null)
+		var camPos:FlxPoint = FlxPoint.get(0, 0);
+		if(stageData.camera_start_pos != null)
 		{
-			camPos.x += gf.getGraphicMidpoint().x + gf.cameraPosition[0];
-			camPos.y += gf.getGraphicMidpoint().y + gf.cameraPosition[1];
+			camPos.set(stageData.camera_start_pos[0], stageData.camera_start_pos[1]);
+			trace('Using stage json CamPos ');
 		}
-
+		else if(gf != null)
+		{
+			camPos.set(gf.getMidpoint().x, gf.getMidpoint().y);
+			camPos.x += gf.cameraPosition[0] + girlfriendCameraOffset[0];
+			camPos.y += gf.cameraPosition[1] + girlfriendCameraOffset[1];
+		}
+		
 		if(dad.curCharacter.startsWith('gf')) {
 			dad.setPosition(GF_X, GF_Y);
 			if(gf != null)
@@ -485,8 +497,6 @@ class PlayState extends MusicBeatState
 		{
 			case 'test':
 				hudClass = new VanillaHUD();
-			case 'get-out-the-way':
-				hudClass = new TextHUD();
 			default:
 				hudClass = new PsychHUD();
 		}
@@ -574,9 +584,21 @@ class PlayState extends MusicBeatState
 		{
 			trace('Song specific script for $songName exists!');
 			initHScript(songScript);
-
 		}
 		#end
+
+		// SONG SPECIFIC SCRIPTS if you want to use LUA!
+		#if (LUA_ALLOWED)
+		for (folder in Mods.directoriesWithFile(Paths.getSharedPath(), 'data/$songName/'))
+			for (file in FileSystem.readDirectory(folder))
+			{
+				#if LUA_ALLOWED
+				if(file.toLowerCase().endsWith('.lua'))
+					new FunkinLua(folder + file);
+				#end
+			}
+		#end
+		//IF YOU WANT TO ADD A VIDEO, CALL THE FUNCTION FROM THIS SWITCH STATEMENT!
 		switch(songName)
 		{
 			default:
@@ -1525,6 +1547,15 @@ class PlayState extends MusicBeatState
 		if (health > 0 && !paused) resetRPC(Conductor.songPosition > 0.0);
 		super.onFocus();
 	}
+
+	override public function onFocusLost():Void
+	{
+		#if DISCORD_ALLOWED
+		if (health > 0 && !paused && autoUpdateRPC) DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")");
+		#end
+
+		super.onFocusLost();
+	}
 	//var iconsAnimations:Bool = true;
 	function set_health(value:Float):Float // You can alter how icon animations work here
 	{
@@ -1535,14 +1566,7 @@ class PlayState extends MusicBeatState
 		return health;
 	}
 
-	override public function onFocusLost():Void
-	{
-		#if DISCORD_ALLOWED
-		if (health > 0 && !paused && autoUpdateRPC) DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")");
-		#end
-
-		super.onFocusLost();
-	}
+	
 
 	// Updating Discord Rich Presence.
 	public var autoUpdateRPC:Bool = true; //performance setting for custom RPC things
@@ -2682,7 +2706,7 @@ class PlayState extends MusicBeatState
 			var animToPlay:String = singAnimations[Std.int(Math.abs(Math.min(singAnimations.length-1, direction)))] + 'miss' + suffix;
 			char.playAnim(animToPlay, true);
 
-			if(char != gf && gf != null && lastCombo > 5 && gf.animOffsets.exists('sad'))
+			if(char != gf && gf != null && lastCombo > 5  && gf.animOffsets.exists('sad'))
 			{
 				gf.playAnim('sad');
 				gf.specialAnim = true;
@@ -2810,6 +2834,7 @@ class PlayState extends MusicBeatState
 			if(combo > 9999) combo = 9999;
 			popUpScore(note);
 		}
+
 		var gainHealth:Bool = true; // prevent health gain, *if* sustains are treated as a singular note
 		if (gainHealth) health += note.hitHealth * healthGain;
 		var result:Dynamic = callOnLuas('goodNoteHit', [notes.members.indexOf(note), leData, leType, isSus]);
