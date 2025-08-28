@@ -67,13 +67,6 @@
       "url": "https://github.com/MaybeMaru/flixel-animate"
     },
     {
-      "name": "linc_luajit",
-      "type": "git",
-      "dir": null,
-      "ref": "master",
-      "url": "https://github.com/superpowers04/linc_luajit"
-    },
-    {
       "name": "hscript-iris",
       "type": "haxelib",
       "version": "1.1.3"
