@@ -61,10 +61,8 @@
     },
     {
       "name": "flixel-animate",
-      "type": "git",
-      "dir": "8c65d5b797359b0b9c77bdf57823fa0484ca9379",
-      "ref": "main",
-      "url": "https://github.com/MaybeMaru/flixel-animate"
+      "type": "haxelib",
+      "version": "1.2.1"
     },
     {
       "name": "hscript-iris",

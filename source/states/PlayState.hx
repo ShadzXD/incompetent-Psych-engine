@@ -1460,8 +1460,9 @@ class PlayState extends MusicBeatState
 	override function closeSubState()
 	{
 		super.closeSubState();
+		#if VIDEOS_ALLOWED
 		if(videoCutscene != null) videoCutscene.resume();
-
+		#end
 		stagesFunc(function(stage:BaseStage) stage.closeSubState());
 		if (paused)
 		{
@@ -1769,7 +1770,9 @@ class PlayState extends MusicBeatState
 					note.resetAnim = 0;
 				}
 		}
+		#if VIDEOS_ALLOWED
 		if(videoCutscene != null) videoCutscene.pause();
+		#end
 		openSubState(new PauseSubState());
 
 		#if DISCORD_ALLOWED

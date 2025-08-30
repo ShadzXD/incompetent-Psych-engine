@@ -106,7 +106,6 @@ class Main extends Sprite
 			game.height = Math.ceil(stageHeight / game.zoom);
 		}
 	
-		#if LUA_ALLOWED Lua.set_callbacks_function(cpp.Callable.fromStaticFunction(psychlua.CallbackHandler.call)); #end
 		Controls.instance = new Controls();
 		ClientPrefs.loadDefaultKeys();
 		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
@@ -150,12 +149,6 @@ class Main extends Sprite
 			var newPos:HScriptInfos = cast pos;
 			if (newPos.showLine == null) newPos.showLine = true;
 			var msgInfo:String = (newPos.funcName != null ? '(${newPos.funcName}) - ' : '')  + '${newPos.fileName}:';
-			#if LUA_ALLOWED
-			if (newPos.isLua == true) {
-				msgInfo += 'HScript:';
-				newPos.showLine = false;
-			}
-			#end
 			if (newPos.showLine == true) {
 				msgInfo += '${newPos.lineNumber}:';
 			}
@@ -168,12 +161,6 @@ class Main extends Sprite
 			var newPos:HScriptInfos = cast pos;
 			if (newPos.showLine == null) newPos.showLine = true;
 			var msgInfo:String = (newPos.funcName != null ? '(${newPos.funcName}) - ' : '')  + '${newPos.fileName}:';
-			#if LUA_ALLOWED
-			if (newPos.isLua == true) {
-				msgInfo += 'HScript:';
-				newPos.showLine = false;
-			}
-			#end
 			if (newPos.showLine == true) {
 				msgInfo += '${newPos.lineNumber}:';
 			}
@@ -186,12 +173,6 @@ class Main extends Sprite
 			var newPos:HScriptInfos = cast pos;
 			if (newPos.showLine == null) newPos.showLine = true;
 			var msgInfo:String = (newPos.funcName != null ? '(${newPos.funcName}) - ' : '')  + '${newPos.fileName}:';
-			#if LUA_ALLOWED
-			if (newPos.isLua == true) {
-				msgInfo += 'HScript:';
-				newPos.showLine = false;
-			}
-			#end
 			if (newPos.showLine == true) {
 				msgInfo += '${newPos.lineNumber}:';
 			}
