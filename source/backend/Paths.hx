@@ -22,7 +22,7 @@ import haxe.Json;
 @:access(openfl.display.BitmapData)
 class Paths
 {
-	inline public static var SOUND_EXT = #if web "mp3" #else "ogg" #end;
+	inline public static var SOUND_EXT = "ogg" ;
 	inline public static var VIDEO_EXT = "mp4";
 
 	public static function excludeAsset(key:String) {
@@ -146,7 +146,6 @@ class Paths
 	public static function getPath(file:String, ?type:AssetType = TEXT, ?parentfolder:String, ?modsAllowed:Bool = true):String
 	{
 	
-
 		if (parentfolder != null)
 			return getFolderPath(file, parentfolder);
 
@@ -180,13 +179,9 @@ class Paths
 	inline static public function shaderVertex(key:String, ?folder:String)
 		return getPath('shaders/$key.vert', TEXT, folder, true);
 
-	inline static public function lua(key:String, ?folder:String)
-		return getPath('$key.lua', TEXT, folder, true);
-
 	static public function video(key:String)
-	{
 		return 'assets/movies/$key.$VIDEO_EXT';
-	}
+	
 
 	inline static public function sound(key:String, ?modsAllowed:Bool = true):Sound
 		return returnSound('sounds/$key', modsAllowed);

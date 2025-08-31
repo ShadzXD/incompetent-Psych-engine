@@ -174,10 +174,10 @@ class ClientPrefs {
 		for (key in Reflect.fields(data))
 			if (key != 'gameplaySettings' && Reflect.hasField(FlxG.save.data, key))
 				Reflect.setField(data, key, Reflect.field(FlxG.save.data, key));
-		
+		#if FPS_ALLOWED
 		if(Main.fpsVar != null)
 			Main.fpsVar.visible = data.showFPS;
-
+		#end
 		#if (!html5 && !switch)
 		FlxG.autoPause = ClientPrefs.data.autoPause;
 

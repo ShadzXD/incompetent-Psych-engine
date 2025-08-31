@@ -118,7 +118,7 @@ class VisualsUISubState extends BaseOptionsMenu
 		option.decimals = 1;
 		addOption(option);
 		
-		#if !mobile
+		#if	FPS_ALLOWED
 		var option:Option = new Option('FPS Counter',
 			'If unchecked, hides FPS Counter.',
 			'showFPS',
@@ -194,7 +194,7 @@ class VisualsUISubState extends BaseOptionsMenu
 		super.destroy();
 	}
 
-	#if !mobile
+	#if FPS_ALLOWED
 	function onChangeFPSCounter()
 	{
 		if(Main.fpsVar != null)

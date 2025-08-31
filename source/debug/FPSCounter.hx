@@ -1,5 +1,5 @@
 package debug;
-
+#if FPS_ALLOWED
 import flixel.FlxG;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
@@ -71,3 +71,4 @@ class FPSCounter extends TextField
 	}
 
 }
+#end

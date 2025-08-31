@@ -24,12 +24,12 @@
 	<!--define name="LUA_ALLOWED"/-->
 	<define name="HSCRIPT_ALLOWED" />
 	<define name="ACHIEVEMENTS_ALLOWED" />
-	<!--define name="CUSTOM_ACHIEVEMENTS_ONLY" if = "ACHIEVEMENTS_ALLOWED"/-->
 	<define name="DISCORD_ALLOWED" if ="desktop" />
 	<define name="VIDEOS_ALLOWED" unless ="32bits"/> 
 	<define name="EDITORS_ALLOWED" if = "desktop"/> 
 	<define name="IRIS_DEBUG"/>
 	<define name="BASE_GAME_FILES"/> <!--REMOVE THIS LINE TO REMOVE ALL BASE GAME FILES!-->
+	<define name="FPS_ALLOWED" if = "desktop"/> 
 
 	<!-- ____________________________ Window Settings ___________________________ -->
 
@@ -64,19 +64,14 @@
 
 	<!-- Assets -->
 	<assets path="assets/fonts" />
-	<assets path="assets/shared"        exclude="*.ogg" if="web"/>
-	<assets path="assets/shared"        exclude="*.mp3" unless="web"/>
+	<assets path="assets/shared"        exclude="*.mp3"/>
 	<assets path="assets/movies"/>
-	<assets path="assets/embed"         exclude="*.ogg" if="web" embed="true"/>
-	<assets path="assets/embed"         exclude="*.mp3" unless="web" embed="true"/>
-	<assets path="assets/songs"          exclude="*.ogg" if="web"/>
-	<assets path="assets/songs"         exclude="*.mp3" unless="web"/>
-	<assets path="assets/week_assets"    rename="assets" exclude="*.ogg" if="web"/>
-	<assets path="assets/week_assets"    rename="assets" exclude="*.mp3" unless="web"/>
+	<assets path="assets/embed"         exclude="*.mp3"  embed="true"/>
+	<assets path="assets/songs"         exclude="*.mp3"/>
+	<assets path="assets/week_assets"    rename="assets" exclude="*.mp3"/>
 
 	<section if="BASE_GAME_FILES">
-		<assets path="assets/base_game" rename="assets" exclude="*.ogg" if="web"/>
-		<assets path="assets/base_game" rename="assets" exclude="*.mp3"  unless="web"/>
+		<assets path="assets/base_game" rename="assets" exclude="*.mp3" />
 	</section>
 
 	<!-- OpenAL config -->

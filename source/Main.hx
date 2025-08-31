@@ -1,6 +1,7 @@
 package;
+#if FPS_ALLOWED
 import debug.FPSCounter;
-
+#end
 import flixel.graphics.FlxGraphic;
 import flixel.FlxGame;
 import flixel.FlxState;
@@ -52,9 +53,9 @@ class Main extends Sprite
 		skipSplash: true, // if the default flixel splash screen should be skipped
 		startFullscreen: false // if the game should start at fullscreen mode
 	};
-
+	#if FPS_ALLOWED
 	public static var fpsVar:FPSCounter;
-
+	#end
 	// You can pretty much ignore everything from here on - your code should go in your states.
 
 	public static function main():Void
@@ -111,7 +112,7 @@ class Main extends Sprite
 		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
 		addChild(new FlxGame(game.width, game.height, game.initialState, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
 
-		#if !mobile
+		#if FPS_ALLOWED
 		fpsVar = new FPSCounter(0 , 0);
 		addChild(fpsVar);
 		Lib.current.stage.align = "tl";
