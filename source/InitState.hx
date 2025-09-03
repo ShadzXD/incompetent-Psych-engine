@@ -16,6 +16,9 @@ class InitState
 
     public static function loadSaveShit()
     {
+		#if LUA_ALLOWED
+		Mods.pushGlobalMods();
+		#end
 		Mods.loadTopMod();
 
 		FlxG.fixedTimestep = false;

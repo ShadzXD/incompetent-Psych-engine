@@ -2,10 +2,8 @@
   "dependencies": [
     {
       "name": "lime",
-      "type": "git",
-      "dir": null,
-      "ref": "b87ab9dd24e4f9f17b1000a84bfa0293bf43a459",
-      "url": "https://github.com/swordcubes-grave-of-shite/lime"
+      "type": "haxelib",
+      "version": "8.1.2"
     },
     {
       "name": "openfl",
