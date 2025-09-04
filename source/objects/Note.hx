@@ -16,7 +16,9 @@ typedef EventNote = {
 	strumTime:Float,
 	event:String,
 	value1:String,
-	value2:String
+	value2:String,
+	value3:String
+
 }
 
 typedef NoteSplashData = {

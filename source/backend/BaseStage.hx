@@ -5,7 +5,7 @@ import flixel.FlxObject;
 import flixel.FlxSubState;
 import backend.MusicBeatState;
 
-import objects.Note.EventNote;
+import objects.Note;
 import objects.Character;
 
 enum Countdown
@@ -66,6 +66,7 @@ class BaseStage extends FlxBasic
 	public function createPost() {}
 	//public function update(elapsed:Float) {}
 	public function countdownTick(count:Countdown, num:Int) {}
+	public function startSong() {}
 
 	// FNF steps, beats and sections
 	public var curBeat:Int = 0;
@@ -91,6 +92,12 @@ class BaseStage extends FlxBasic
 	function remove(object:FlxBasic) game.remove(object);
 	function insert(position:Int, object:FlxBasic) game.insert(position, object);
 	
+	// Note Hit/Miss
+	public function goodNoteHit(note:Note) {}
+	public function opponentNoteHit(note:Note) {}
+	public function noteMiss(note:Note) {}
+	public function noteMissPress(direction:Int) {}
+
 	public function addBehindGF(obj:FlxBasic) insert(members.indexOf(game.gfGroup), obj);
 	public function addBehindBF(obj:FlxBasic) insert(members.indexOf(game.boyfriendGroup), obj);
 	public function addBehindDad(obj:FlxBasic) insert(members.indexOf(game.dadGroup), obj);

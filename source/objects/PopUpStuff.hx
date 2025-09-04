@@ -4,10 +4,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import backend.Rating;
 using StringTools;
 
-enum PopUpType {
-  FUNKIN;
-  PIXEL;
-}
+
 
 class PopUpStuff extends FlxTypedGroup<FlxSprite>
 {
@@ -15,13 +12,13 @@ class PopUpStuff extends FlxTypedGroup<FlxSprite>
 	var placement:Float;
 	var uiPrefix:String = '';
 	var uiSuffix:String = '';
-	public var hudType:PopUpType;
+	public var hudType:String;
 	var size:Float = 0.6;
 	var speedRate:Float = 1;
 	var ratingsData:Array<Rating> = Rating.loadDefault();
 	var isBotplay:Bool = false;
 	// Stores Ratings and Combo Sprites in a group
-	override public function new(hud:PopUpType, ?fromPlayState:Bool = false, ?botplay:Bool = false)
+	override public function new(hud:String, ?fromPlayState:Bool = false, ?botplay:Bool = false)
 	{
 		super();
 
@@ -29,7 +26,6 @@ class PopUpStuff extends FlxTypedGroup<FlxSprite>
 
 		hudType = hud;
 
-		if(PlayState.isPixelStage) hudType = PIXEL;
 		
 		if(fromPlayState)speedRate = PlayState.instance.playbackRate;
 
@@ -107,18 +103,27 @@ class PopUpStuff extends FlxTypedGroup<FlxSprite>
 		}
 	}
 
-	private function loadStuff()
+	public function loadStuff()
 	{
 		switch(hudType)
 		{
-			case FUNKIN:
+			case 'FUNKIN':
 			uiPrefix = 'popups/base_game/';
 
-			case PIXEL:
+			case 'PIXEL':
 			uiPrefix = 'pixelUI/';
 			uiSuffix = '-pixel';
 			size = 5;
 			antialias = false;
+
+			case 'OSHA':
+			uiPrefix = 'popups/oshawott/';
+			antialias = false;
+
+			case 'COCOON':
+			uiPrefix = 'popups/cocoon/';
+			antialias = false;
+
 		}
 
 		if(!isBotplay) cachePopUpScore();

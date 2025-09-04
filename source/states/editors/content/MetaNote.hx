@@ -3,6 +3,7 @@ package states.editors.content;
 import objects.Note;
 import shaders.RGBPalette;
 import flixel.util.FlxDestroyUtil;
+import openfl.utils.Assets;
 
 class MetaNote extends Note
 {
@@ -143,14 +144,15 @@ class MetaNote extends Note
 class EventMetaNote extends MetaNote
 {
 	public var eventText:FlxText;
+	var eventNameStr:String;
 	public function new(time:Float, eventData:Dynamic)
 	{
 		super(time, -1, eventData);
 		this.isEvent = true;
 		events = eventData[1];
-		//trace('events: $events');
-		
-		loadGraphic(Paths.image('editors/eventIcon'));
+		eventNameStr = eventData[1][0][0];
+
+		loadGraphic(getEventImage(eventNameStr));
 		setGraphicSize(ChartingState.GRID_SIZE);
 		updateHitbox();
 
@@ -159,7 +161,17 @@ class EventMetaNote extends MetaNote
 		eventText.scrollFactor.x = 0;
 		updateEventText();
 	}
-	
+
+	static inline function getEventImage(eventName:String):String
+	{
+		var path:String = Paths.getPath('images/editors/events/');
+		var formattedImage:String = eventName.replace(' ', '').trim();
+		trace(formattedImage);
+		var imagePath:String = path + formattedImage + '.png';
+		if(Assets.exists(imagePath, IMAGE)) return imagePath;
+		else return path + 'eventIcon.png';
+		
+	}
 	override function draw()
 	{
 		if(eventText != null && eventText.exists && eventText.visible)
@@ -180,14 +192,18 @@ class EventMetaNote extends MetaNote
 		if(events.length == 1)
 		{
 			var event = events[0];
-			eventText.text = 'Event: ${event[0]} ($myTime ms)\nValue 1: ${event[1]}\nValue 2: ${event[2]}';
+			eventText.text = 'Event: ${event[0]} ($myTime ms)\nValue 1: ${event[1]}\nValue 2: ${event[2]}\nValue 3: ${event[3]}';
+			loadGraphic(getEventImage(event[0]));
 		}
 		else if(events.length > 1)
 		{
 			var eventNames:Array<String> = [for (event in events) event[0]];
 			eventText.text = '${events.length} Events ($myTime ms):\n${eventNames.join(', ')}';
+			loadGraphic(getEventImage('lolll'));
 		}
 		else eventText.text = 'ERROR FAILSAFE';
+		setGraphicSize(ChartingState.GRID_SIZE);
+		updateHitbox();
 	}
 
 	override function destroy()
