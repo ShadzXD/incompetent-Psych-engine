@@ -3,6 +3,9 @@ package cutscenes;
 import flixel.addons.text.FlxTypeText;
 import backend.Song;
 
+/*
+* Class for the week 6 Dialouge.
+*/
 class DialogueBox extends FlxSpriteGroup
 {
 	var box:FlxSprite;

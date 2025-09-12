@@ -2661,12 +2661,13 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 
 		value3InputText = new PsychUIInputText(objX + 150, objY, 120, '', 8);
 		value3InputText.onChange = function(old:String, cur:String) changeEventsValue(cur, 3);
+		objY += 40;
 		eventDescriptionText = new FlxText(objX, objY, 280, defaultEvents[0][1]);
 
 		tab_group.add(new FlxText(eventDropDown.x, eventDropDown.y - 15, 80, 'Event:'));
 		tab_group.add(new FlxText(value1InputText.x, value1InputText.y - 15, 80, 'Value 1:'));
 		tab_group.add(new FlxText(value2InputText.x, value2InputText.y - 15, 80, 'Value 2:'));
-		tab_group.add(new FlxText(value3InputText.x, value3InputText.y - 30, 80, 'Value 3:'));
+		tab_group.add(new FlxText(value3InputText.x, value3InputText.y - 15, 80, 'Value 3:'));
 
 		tab_group.add(removeButton);
 		tab_group.add(addButton);

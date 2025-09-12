@@ -268,7 +268,7 @@ class StickerInfo
 
   public function new(stickerSet:String):Void
   {
-		var json = tjson.TJSON.parse(Paths.getTextFromFile('data/stickers.json'));
+		var json = tjson.TJSON.parse(Paths.getTextFromFile('stickers.json'));
 
     // doin this dipshit nonsense cuz i dunno how to deal with casting a json object with
     // a dash in its name (sticker-packs)

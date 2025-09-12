@@ -166,7 +166,7 @@ class EventMetaNote extends MetaNote
 	{
 		var path:String = Paths.getPath('images/editors/events/');
 		var formattedImage:String = eventName.replace(' ', '').trim();
-		trace(formattedImage);
+		//trace(formattedImage);
 		var imagePath:String = path + formattedImage + '.png';
 		if(Assets.exists(imagePath, IMAGE)) return imagePath;
 		else return path + 'eventIcon.png';

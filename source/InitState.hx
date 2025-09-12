@@ -49,14 +49,5 @@ class InitState
 		}
 		#end
 
-		#if html5
-		if(ClientPrefs.data.cacheOnGPU)
-		{
-			ClientPrefs.data.cacheOnGPU = false;
-			ClientPrefs.saveSettings();
-		}
-		#end
-
-
     }
 }

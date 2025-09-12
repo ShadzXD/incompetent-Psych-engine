@@ -51,7 +51,6 @@ class PhillyStreets extends BaseStage
 		{
 			var skyImage = Paths.image('phillyStreets/phillySkybox');
 			scrollingSky = new FlxTiledSprite(skyImage, skyImage.width + 400, skyImage.height, true, false);
-			scrollingSky.antialiasing = ClientPrefs.data.antialiasing;
 			scrollingSky.setPosition(-650, -375);
 			scrollingSky.scrollFactor.set(0.1, 0.1);
 			scrollingSky.scale.set(0.65, 0.65);
@@ -131,7 +130,7 @@ class PhillyStreets extends BaseStage
 			darkenable.push(picoFade);
 		}
 
-		abot = new ABotSpeaker(gfGroup.x, gfGroup.y + 550);
+		abot = new ABotSpeaker(gfGroup.x - 50, gfGroup.y + 450);
 		updateABotEye(true);
 		add(abot);
 		
@@ -603,7 +602,7 @@ class PhillyStreets extends BaseStage
 
 	override function beatHit()
 	{
-		//if(curBeat % 2 == 0) abot.beatHit();
+		if(curBeat % 2 == 0) abot.beatHit();
 		switch(currentNeneState) {
 			case STATE_READY:
 				if (blinkCountdown == 0)

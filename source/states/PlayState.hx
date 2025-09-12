@@ -569,6 +569,8 @@ class PlayState extends MusicBeatState
 		//IF YOU WANT TO ADD A VIDEO, CALL THE FUNCTION FROM THIS SWITCH STATEMENT!
 		switch(songName)
 		{
+			case 'tutorial':
+				startDialogue(DialogueBoxPsych.parseDialogue(Paths.json(songName + '/dialogue')));
 			default:
 				startCallback();
 		}
@@ -813,7 +815,8 @@ class PlayState extends MusicBeatState
 	{
 		// TO DO: Make this more flexible, maybe?
 		if(psychDialogue != null) return;
-
+		trace('hiii');
+		trace(dialogueFile);
 		if(dialogueFile.dialogue.length > 0) {
 			inCutscene = true;
 			psychDialogue = new DialogueBoxPsych(dialogueFile, song);
@@ -834,7 +837,7 @@ class PlayState extends MusicBeatState
 			psychDialogue.cameras = [camHUD];
 			add(psychDialogue);
 		} else {
-			FlxG.log.warn('Your dialogue file is badly formatted!');
+			trace('Your dialogue file is badly formatted!');
 			startAndEnd();
 		}
 	}
@@ -1119,6 +1122,7 @@ class PlayState extends MusicBeatState
 			vocals.pause();
 			opponentVocals.pause();
 		}
+		stagesFunc(function(stage:BaseStage) stage.startSong());
 
 		// Song duration in a float, useful for the time left feature
 		songLength = FlxG.sound.music.length;
@@ -1371,7 +1375,7 @@ class PlayState extends MusicBeatState
 
 	function eventEarlyTrigger(event:EventNote):Float {
 		var returnedValue:Null<Float> = callOnScripts('eventEarlyTrigger', [event.event, event.value1, event.value2, event.strumTime], true, [], [0]);
-		if(returnedValue != null && returnedValue != 0 && returnedValue != LuaUtils.Function_Continue) {
+		if(returnedValue != null && returnedValue != 0) {
 			return returnedValue;
 		}
 
@@ -1912,6 +1916,7 @@ class PlayState extends MusicBeatState
 		var flValue1:Null<Float> = Std.parseFloat(value1);
 		var flValue2:Null<Float> = Std.parseFloat(value2);
 		var flValue3:Null<Float> = Std.parseFloat(value3);
+				FlxG.log.add('hey');
 
 		if(Math.isNaN(flValue1)) flValue1 = null;
 		if(Math.isNaN(flValue2)) flValue2 = null;
@@ -2154,14 +2159,10 @@ class PlayState extends MusicBeatState
 				startVideo(value1, true, false, false, true);
 
 			case 'Zoom Camera':
+				if(isZooming) return;
 				isZooming = true;
-				FlxTween.tween(FlxG.camera, {zoom: flValue1}, flValue2, {ease: LuaUtils.getTweenEaseByString(value3), onComplete:function(twn:FlxTween)
-				{
-					defaultCamZoom = flValue1;
-					isZooming = false;
-				}
+				FlxG.log.add('time to zoomies!');
 
-			});
 		}
 		stagesFunc(function(stage:BaseStage) stage.eventCalled(eventName, value1, value2, flValue1, flValue2, strumTime));
 		callOnScripts('onEvent', [eventName, value1, value2, strumTime]);

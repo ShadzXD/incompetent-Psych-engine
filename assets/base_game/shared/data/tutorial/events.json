@@ -1,0 +1,71 @@
+{
+	"events": [
+		[
+			9600,
+			[
+				["Zoom Camera", "1.3", "0.6", "elasticinout"]
+			]
+		],
+		[
+			14400,
+			[
+				["Zoom Camera", "1", "0.6", "elasticinout"]
+			]
+		],
+		[
+			19200,
+			[
+				["Zoom Camera", "1.3", "0.6", "elasticinout"]
+			]
+		],
+		[
+			24000,
+			[
+				["Zoom Camera", "1", "0.6", "elasticinout"]
+			]
+		],
+		[
+			28800,
+			[
+				["Zoom Camera", "1.3", "0.6", "elasticinout"]
+			]
+		],
+		[
+			33600,
+			[
+				["Zoom Camera", "1", "0.6", "elasticinout"]
+			]
+		],
+		[
+			38400,
+			[
+				["Zoom Camera", "1.3", "0.6", "elasticinout"]
+			]
+		],
+		[
+			43200,
+			[
+				["Zoom Camera", "1", "0.6", "elasticinout"]
+			]
+		],
+		[
+			48000,
+			[
+				["Zoom Camera", "1.3", "0.6", "elasticinout"]
+			]
+		],
+		[
+			50400,
+			[
+				["Zoom Camera", "1", "0.6", "elasticinout"]
+			]
+		],
+		[
+			57600,
+			[
+				["Zoom Camera", "0.9", "0.8", "smoothstepin"]
+			]
+		]
+	],
+	"format": "psych_v1"
+}
