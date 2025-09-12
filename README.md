@@ -16,8 +16,6 @@ A fork of Psych Engine 0.7.3, inspired by [Doido Engine!](https://github.com/Doi
 
 **This engine does NOT support the mod folder and LUA!**
 
-**HScript is not 100% Compatible with HTML5! Stages will not work!**
-
 # **How to compile!**
 
 1. Open a terminal of choice and do the command: *haxelib install hmm*
