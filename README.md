@@ -3,17 +3,15 @@
 
 A fork of Psych Engine 0.7.3, inspired by [Doido Engine!](https://github.com/DoidoTeam/FNF-Doido-Engine)
 
-**Incompetent! Psych engine**, is a fork that focuses mainly on making Psych engine more simple for hard coding use whilst, also not altering the codebase completely. 
+**Incompetent! Psych engine**, is a fork that focuses mainly on making Psych engine more reliant for hard coding use by cleaning up the code base. 
 
 # **Features!**
-
-- Allows compilation to HTML5!
-- New Events for midsong.
+- New midsong Events.
 - Features ripped straight from V-Slice.
 - Some bug fixes to base Psych 0.7.3
 - Inbuilt camera movement on note hit. (Can be disabled from the options)
 - Cleaned up Boyfriend Sprites!
-- HUD and Ratings have been split off to their own classes for PlayState clean up.
+- HUD and Ratings have been split off to their own classes, allowing for easier HUD Creation.
 - Alot of Features from Psych 1.0.x Backported.
 
 **This engine does NOT support the mod folder and LUA!**
