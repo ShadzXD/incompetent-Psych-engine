@@ -3,25 +3,19 @@ package objects;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import backend.Rating;
 using StringTools;
-
-enum PopUpType {
-  FUNKIN;
-  PIXEL;
-}
-
 class PopUpStuff extends FlxTypedGroup<FlxSprite>
 {
 	var antialias:Bool = true;
 	var placement:Float;
 	var uiPrefix:String = '';
 	var uiSuffix:String = '';
-	public var hudType:PopUpType;
+	public var hudType:String;
 	var size:Float = 0.6;
 	var speedRate:Float = 1;
 	var ratingsData:Array<Rating> = Rating.loadDefault();
 	var isBotplay:Bool = false;
 	// Stores Ratings and Combo Sprites in a group
-	override public function new(hud:PopUpType, ?fromPlayState:Bool = false, ?botplay:Bool = false)
+	override public function new(hud:String, ?fromPlayState:Bool = false, ?botplay:Bool = false)
 	{
 		super();
 
@@ -55,7 +49,7 @@ class PopUpStuff extends FlxTypedGroup<FlxSprite>
 		rating.updateHitbox();
 		add(rating);
 		
-			FlxTween.tween(rating, {alpha: 0}, 0.2 / speedRate, {
+		FlxTween.tween(rating, {alpha: 0}, 0.2 / speedRate, {
 			onComplete: function(tween:FlxTween)
 			{
 				rating.destroy();
@@ -107,14 +101,14 @@ class PopUpStuff extends FlxTypedGroup<FlxSprite>
 		}
 	}
 
-	private function loadStuff()
+	public function loadStuff()
 	{
 		switch(hudType)
 		{
-			case FUNKIN:
+			case 'FUNKIN':
 			uiPrefix = 'popups/base_game/';
 
-			case PIXEL:
+			case 'PIXEL':
 			uiPrefix = 'pixelUI/';
 			uiSuffix = '-pixel';
 			size = 5;
