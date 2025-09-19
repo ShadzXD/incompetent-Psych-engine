@@ -463,7 +463,7 @@ class PlayState extends MusicBeatState
 		}
 		stagesFunc(function(stage:BaseStage) stage.createPost());
 	
-		comboClass = new PopUpStuff(FUNKIN, true, cpuControlled);
+		comboClass = new PopUpStuff('FUNKIN', true, cpuControlled);
 		comboClass.cameras = [camHUD];
 		comboClass.visible = !ClientPrefs.data.hideHud;
 		add(comboClass);
@@ -2140,14 +2140,14 @@ class PlayState extends MusicBeatState
 				startVideo(value1, true, false, false, true);
 
 			case 'Zoom Camera':
+			if(isZooming) return;
 			isZooming = true;
 			FlxTween.tween(FlxG.camera, {zoom: flValue1}, flValue2, {ease: FlxEase.linear, onComplete:function(twn:FlxTween)
 			{
 				defaultCamZoom = flValue1;
 				isZooming = false;
 			}
-
-			});
+		});
 		}
 		stagesFunc(function(stage:BaseStage) stage.eventCalled(eventName, value1, value2, flValue1, flValue2, strumTime));
 		callOnScripts('onEvent', [eventName, value1, value2, strumTime]);
@@ -2180,7 +2180,6 @@ class PlayState extends MusicBeatState
 		camFollow.setPosition(gf.getMidpoint().x, gf.getMidpoint().y);
 		camFollow.x += gf.cameraPosition[0] + girlfriendCameraOffset[0];
 		camFollow.y += gf.cameraPosition[1] + girlfriendCameraOffset[1];
-		tweenCamIn();
 	}
 
 	var cameraTwn:FlxTween;
@@ -2192,7 +2191,6 @@ class PlayState extends MusicBeatState
 			camFollow.setPosition(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
 			camFollow.x += dad.cameraPosition[0] + opponentCameraOffset[0];
 			camFollow.y += dad.cameraPosition[1] + opponentCameraOffset[1];
-			tweenCamIn();
 		}
 		else
 		{
@@ -2204,15 +2202,7 @@ class PlayState extends MusicBeatState
 		camFollow.x += camOffsetNoteHit.x;
 		camFollow.y += camOffsetNoteHit.y;
 	}
-	public function tweenCamIn() {
-		if (songName == 'tutorial' && cameraTwn == null && FlxG.camera.zoom != 1.3) {
-			cameraTwn = FlxTween.tween(FlxG.camera, {zoom: 1.3}, (Conductor.stepCrochet * 4 / 1000), {ease: FlxEase.elasticInOut, onComplete:
-				function (twn:FlxTween) {
-					cameraTwn = null;
-				}
-			});
-		}
-	}
+
 
 	public function finishSong(?ignoreNoteOffset:Bool = false):Void
 	{
@@ -2652,8 +2642,7 @@ class PlayState extends MusicBeatState
 		var result:Dynamic = callOnLuas('opponentNoteHitPre', [notes.members.indexOf(note), Math.abs(note.noteData), note.noteType, note.isSustainNote]);
 		if(result != LuaUtils.Function_Stop && result != LuaUtils.Function_StopHScript && result != LuaUtils.Function_StopAll) callOnHScript('opponentNoteHitPre', [note]);
 
-		if (songName != 'tutorial')
-			camZooming = true;
+		camZooming = true;
 
 		if(note.noteType == 'Hey!' && dad.animOffsets.exists('hey')) {
 			dad.playAnim('hey', true);

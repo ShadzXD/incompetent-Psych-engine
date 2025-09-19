@@ -23,7 +23,7 @@ class PopUpStuff extends FlxTypedGroup<FlxSprite>
 
 		hudType = hud;
 
-		if(PlayState.isPixelStage) hudType = PIXEL;
+		if(PlayState.isPixelStage) hudType = 'PIXEL';
 		
 		if(fromPlayState)speedRate = PlayState.instance.playbackRate;
 

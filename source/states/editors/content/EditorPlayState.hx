@@ -99,7 +99,7 @@ class EditorPlayState extends MusicBeatSubstate
 		bg.alpha = 0.9;
 		add(bg);
 		
-		comboClass = new PopUpStuff(FUNKIN);
+		comboClass = new PopUpStuff('FUNKIN');
 		comboClass.visible = !ClientPrefs.data.hideHud;
 		add(comboClass);
 
