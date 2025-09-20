@@ -22,7 +22,6 @@ class PsychHUD extends MainHUD
 	
 		//if (PlayState.isPixelStage == true) hudFont = 'pixel.otf';
 
-        //var showTime:Bool = (ClientPrefs.data.timeBarType != 'Disabled');
 		timeTxt = new FlxText(PlayState.STRUM_X + (FlxG.width / 2) - 248, ClientPrefs.data.downScroll ? FlxG.height - 44 : 19, 400, "", 27);
 		timeTxt.setFormat(Paths.font(hudFont), 27, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		timeTxt.scrollFactor.set();
@@ -31,7 +30,6 @@ class PsychHUD extends MainHUD
 		timeTxt.borderSize = 1.25;
 		add(timeTxt);
 		
-		//Less CPU Intesive like this.
 		var lerpValue:Float =  0.12 / (ClientPrefs.data.framerate / 60);
 		healthBar = new Bar(0, FlxG.height * (!ClientPrefs.data.downScroll ? 0.88 : 0.1), 'healthBar', function(){
 			healthLerp = FlxMath.lerp(healthLerp, health, lerpValue);
