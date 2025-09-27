@@ -288,11 +288,10 @@ class Note extends FlxSprite
 			copyAngle = false;
 
 			animation.play(colArray[noteData % colArray.length] + 'holdend');
+			scale.y = 0.62;
 
 			updateHitbox();
-
 			offsetX -= width / 2;
-
 			if (PlayState.isPixelStage)
 				offsetX += 30;
 
@@ -300,7 +299,7 @@ class Note extends FlxSprite
 			{
 				prevNote.animation.play(colArray[prevNote.noteData % colArray.length] + 'hold');
 
-				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.05;
+				prevNote.scale.y = Conductor.stepCrochet / 100 * 1.048; //having it multiply causes some fucky sucky shitlmao
 				if(createdFrom != null && createdFrom.songSpeed != null) prevNote.scale.y *= createdFrom.songSpeed;
 
 				if(PlayState.isPixelStage) {
