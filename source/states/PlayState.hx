@@ -1386,7 +1386,7 @@ class PlayState extends MusicBeatState
 
 	function eventEarlyTrigger(event:EventNote):Float {
 		var returnedValue:Null<Float> = callOnScripts('eventEarlyTrigger', [event.event, event.value1, event.value2, event.strumTime], true, [], [0]);
-		if(returnedValue != null && returnedValue != 0) {
+		if(returnedValue != null && returnedValue != 0 && returnedValue != LuaUtils.Function_Continue) {
 			return returnedValue;
 		}
 
