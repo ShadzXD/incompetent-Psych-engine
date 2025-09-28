@@ -125,10 +125,17 @@ class GameOverSubstate extends MusicBeatSubstate
 				PlayState.chartingMode = false;
 	
 				Mods.loadTopMod();
-				if (PlayState.isStoryMode)
-					FlxG.switchState(() -> new StoryMenuState());
-				else
-					FlxG.switchState(() -> new FreeplayState());
+				#if STICKERS_ALLOWED
+					if(PlayState.isStoryMode)
+						openSubState(new StickerSubState(STORY));
+					else
+						openSubState(new StickerSubState(FREEPLAY));
+				#else
+					if(PlayState.isStoryMode)
+						FlxG.switchState(() -> new StoryMenuState());
+					else 
+						FlxG.switchState(() -> new FreeplayState());
+				#end
 
 				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 				PlayState.instance.callOnScripts('onGameOverConfirm', [false]);

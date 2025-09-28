@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="options_spr.png">
+	<!-- Created with Adobe Animate version 24.0.0.305 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="Options!0000" x="0" y="0" width="716" height="196"/>
+	<SubTexture name="Options!0001" x="0" y="0" width="716" height="196"/>
+	<SubTexture name="Options!0002" x="0" y="201" width="716" height="196"/>
+	<SubTexture name="Options!0003" x="0" y="201" width="716" height="196"/>
+</TextureAtlas>

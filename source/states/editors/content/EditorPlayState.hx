@@ -474,7 +474,7 @@ class EditorPlayState extends MusicBeatSubstate
 			}
 
 			strumLineNotes.add(babyArrow);
-			babyArrow.postAddedToGroup();
+			babyArrow.playerPosition();
 		}
 	}
 
@@ -532,7 +532,8 @@ class EditorPlayState extends MusicBeatSubstate
 		note.ratingMod = daRating.ratingMod;
 		if(!note.ratingDisabled) daRating.hits++;
 		note.rating = daRating.name;
-		score = daRating.score;
+		score = daRating.scoreNote(noteDiff);
+
 
 		if(daRating.noteSplash && !note.noteSplashData.disabled)
 			spawnNoteSplashOnNote(note);
@@ -754,11 +755,12 @@ class EditorPlayState extends MusicBeatSubstate
 	}
 
 	function spawnNoteSplash(x:Float, y:Float, data:Int, ?note:Note = null, strum:StrumNote) {
-				var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
-		splash.setupNoteSplash(x, y, data, note);
+		var splash:NoteSplash = new NoteSplash();
+		splash.babyArrow = strum;
+		splash.spawnSplashNote(note);
 		grpNoteSplashes.add(splash);
 	}
 
 	function updateScore()
-		scoreTxt.text = 'Hits: $songHits | Misses: $songMisses';
+		scoreTxt.text = 'Misses: $songMisses';
 }

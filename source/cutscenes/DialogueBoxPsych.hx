@@ -17,6 +17,8 @@ typedef DialogueLine = {
 	var boxState:Null<String>;
 	var speed:Null<Float>;
 	@:optional var sound:Null<String>;
+	@:optional var iconName:Null<String>; //leave this empty if you dont want to use icons!
+
 }
 
 // TO DO: Clean code? Maybe? idk
@@ -44,7 +46,8 @@ class DialogueBoxPsych extends FlxSpriteGroup
 	var skipText:FlxText;
 
 	var textBoxTypes:Array<String> = ['normal', 'angry'];
-	
+	var dialogueSoFar:Array<DialogueLine> = [];
+
 	var curCharacter:String = "";
 	//var charPositionList:Array<String> = ['left', 'center', 'right'];
 
@@ -92,7 +95,7 @@ class DialogueBoxPsych extends FlxSpriteGroup
 		daText.setScale(0.7);
 		add(daText);
 
-		skipText = new FlxText(FlxG.width - 320, FlxG.height - 30, 300,'Press BACK to Skip', 16);
+		skipText = new FlxText(FlxG.width - 670, FlxG.height - 30, 600,'Press CTRL to open LOG // Press BACK to Skip', 16);
 		skipText.setFormat(null, 16, FlxColor.WHITE, RIGHT, OUTLINE_FAST, FlxColor.BLACK);
 		skipText.borderSize = 2;
 		add(skipText);
@@ -167,6 +170,12 @@ class DialogueBoxPsych extends FlxSpriteGroup
 			if(bgFade.alpha > 0.5) bgFade.alpha = 0.5;
 
 			var back:Bool = Controls.instance.BACK;
+			if(FlxG.keys.justPressed.CONTROL)
+			{
+				FlxG.state.persistentUpdate = false;
+				FlxG.state.persistentDraw = true;
+				FlxG.state.openSubState(new DialogueLogSubstate(dialogueSoFar));
+			}
 			if(Controls.instance.ACCEPT || back) {
 				if(!daText.finishedText && !back)
 				{
@@ -197,6 +206,7 @@ class DialogueBoxPsych extends FlxSpriteGroup
 						daText.destroy();
 					}
 					skipText.visible = false;
+
 					updateBoxOffsets(box);
 					FlxG.sound.music.fadeOut(1, 0, (_) -> FlxG.sound.music.stop());
 				} else {
@@ -326,6 +336,7 @@ class DialogueBoxPsych extends FlxSpriteGroup
 		if(curDialogue.text == null || curDialogue.text.length < 1) curDialogue.text = ' ';
 		if(curDialogue.boxState == null) curDialogue.boxState = 'normal';
 		if(curDialogue.speed == null || Math.isNaN(curDialogue.speed)) curDialogue.speed = 0.05;
+		if(curDialogue != null) dialogueSoFar.unshift(curDialogue);
 
 		var animName:String = curDialogue.boxState;
 		var boxType:String = textBoxTypes[0];
@@ -383,13 +394,9 @@ class DialogueBoxPsych extends FlxSpriteGroup
 		}
 	}
 
-	inline public static function parseDialogue(path:String):DialogueFile {
-		#if MODS_ALLOWED
-		return cast (FileSystem.exists(path)) ? Json.parse(File.getContent(path)) : dummy();
-		#else
+	inline public static function parseDialogue(path:String):DialogueFile 
 		return cast (Assets.exists(path, TEXT)) ? Json.parse(Assets.getText(path)) : dummy();
-		#end
-	}
+	
 
 	inline public static function dummy():DialogueFile
 	{

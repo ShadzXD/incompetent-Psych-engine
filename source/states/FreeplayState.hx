@@ -10,6 +10,7 @@ import objects.HealthIcon;
 import objects.MusicPlayer;
 import substates.GameplayChangersSubstate;
 import substates.ResetScoreSubState;
+import substates.StickerSubState;
 import flixel.util.FlxDestroyUtil;
 import haxe.Json;
 import openfl.utils.Assets;
@@ -48,9 +49,28 @@ class FreeplayState extends MusicBeatState
 	var bottomBG:FlxSprite;
 
 	var player:MusicPlayer;
+	var stickerSubState:StickerSubState;
+	public function new(?stickers:StickerSubState = null)
+  	{
+    	super();
 
+    	if (stickers?.members != null)
+    	{
+      		stickerSubState = stickers;
+    	}
+ 	}
 	override function create()
 	{
+		#if STICKERS_ALLOWED
+		if (stickerSubState != null)
+   	 	{
+      		this.persistentUpdate = true;
+      		this.persistentDraw = true;
+
+      		openSubState(stickerSubState);
+      		stickerSubState.degenStickers();
+    	}
+		#end
 		
 		persistentUpdate = true;
 		PlayState.isStoryMode = false;
