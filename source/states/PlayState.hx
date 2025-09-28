@@ -219,7 +219,7 @@ class PlayState extends MusicBeatState
 	// Lua shit
 	public static var instance:PlayState;
 
-	#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
+	#if (HSCRIPT_ALLOWED)
 	private var luaDebugGroup:FlxTypedGroup<psychlua.DebugLuaText>;
 	#end
 	public var introSoundsSuffix:String = '';
@@ -234,14 +234,19 @@ class PlayState extends MusicBeatState
 
 	var camOffsetNoteHit:FlxPoint;
 
-	//EDIT THIS VALUE TO CHANGE HOW MUCH THE CAMERA MOVES ON NOTE HIT!
-	public static var moveValue:Int = 17;
-
+	/**
+	 * Variable used for whenever the camera moves on a note hit.
+	 */
+	public var moveValue:Int = 20;
 	var camMoveTween:FlxTween;
 	var isZooming:Bool = false;
 	public var hudClass:MainHUD;
 	var hasOpponentVocals:Bool = false;
 	var comboClass:PopUpStuff;
+	/**
+	* Check to see if the video has been preloaded at least once.
+	*/
+	var preloadedVideoAtLeastOnce:Bool = false;
 	var songHasMetadata:Bool;
 	override public function create()
 	{
@@ -641,7 +646,7 @@ class PlayState extends MusicBeatState
 		return playbackRate;
 	}
 
-	#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
+	#if (HSCRIPT_ALLOWED)
 	public function addTextToDebug(text:String, color:FlxColor) {
 
 		#if sys
@@ -789,7 +794,7 @@ class PlayState extends MusicBeatState
 			#end
 			return videoCutscene;
 		}
-		#if ( HSCRIPT_ALLOWED)
+		#if (HSCRIPT_ALLOWED)
 		else addTextToDebug("Video not found: " + fileName, FlxColor.RED);
 		#else
 		else FlxG.log.error("Video not found: " + fileName);
@@ -1111,6 +1116,7 @@ class PlayState extends MusicBeatState
 		#if FLX_PITCH FlxG.sound.music.pitch = playbackRate; #end
 		FlxG.sound.music.onComplete = finishSong.bind();
 		vocals.play();
+		if(hasOpponentVocals)
 		opponentVocals.play();
 
 		setSongTime(Math.max(0, startOnTime - 500) + Conductor.offset);
@@ -1120,6 +1126,7 @@ class PlayState extends MusicBeatState
 			//trace('Oopsie doopsie! Paused sound');
 			FlxG.sound.music.pause();
 			vocals.pause();
+			if(hasOpponentVocals)
 			opponentVocals.pause();
 		}
 		stagesFunc(function(stage:BaseStage) stage.startSong());
@@ -1365,8 +1372,20 @@ class PlayState extends MusicBeatState
 			case 'Play Sound':
 				Paths.sound(event.value1); //Precache sound
 			case 'Play Video':
+				/**
+				 * We have to do this to avoid issues with lag or the video being misplaced.
+				*/
+				if(!preloadedVideoAtLeastOnce)
+				{
+					preloadedVideoAtLeastOnce = true;
+					videoCutscene = new VideoSprite(Paths.video('lol'), false, false, false);
+   			 		videoCutscene.alpha = 0.001;
+    				add(videoCutscene);
+				}
 				#if hxvlc
+				videoCutscene.play();
 				startVideo(event.value1, true, false, false, false);
+				trace('pre-loaded ' +  event.value1);
 				#end
 
 		}
@@ -2143,7 +2162,7 @@ class PlayState extends MusicBeatState
 				{
 					var len:Int = e.message.indexOf('\n') + 1;
 					if(len <= 0) len = e.message.length;
-					#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
+					#if (HSCRIPT_ALLOWED)
 					addTextToDebug('ERROR ("Set Property" Event) - ' + e.message.substr(0, len), FlxColor.RED);
 					#else
 					FlxG.log.warn('ERROR ("Set Property" Event) - ' + e.message.substr(0, len));
@@ -2161,8 +2180,15 @@ class PlayState extends MusicBeatState
 			case 'Zoom Camera':
 				if(isZooming) return;
 				isZooming = true;
-				FlxG.log.add('time to zoomies!');
-
+				var split:Array<String> = value2.split(',');
+				var tweenTime:Float = Std.parseFloat(split[0]);
+	
+				FlxTween.tween(FlxG.camera, {zoom: flValue1}, tweenTime, {ease: LuaUtils.getTweenEaseByString(split[1]), onComplete:function(twn:FlxTween)
+				{
+					defaultCamZoom = flValue1;
+					isZooming = false;
+				}
+			});
 		}
 		stagesFunc(function(stage:BaseStage) stage.eventCalled(eventName, value1, value2, flValue1, flValue2, strumTime));
 		callOnScripts('onEvent', [eventName, value1, value2, strumTime]);
@@ -2681,6 +2707,7 @@ class PlayState extends MusicBeatState
 				char.holdTimer = 0;
 			}
 		}
+		if(!hasOpponentVocals)
 		vocals.volume = 1;
 		stagesFunc(function(stage:BaseStage) stage.opponentNoteHit(note));
 		strumPlayAnim(true, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate);
@@ -2773,14 +2800,15 @@ class PlayState extends MusicBeatState
 			if(combo > 9999) combo = 9999;
 			popUpScore(note);
 		}
+
+		health += note.hitHealth * healthGain;
+
 		else
 		{
 			songScore += 10;
 			RecalculateRating(false);
 		} 
 			
-		var gainHealth:Bool = true; // prevent health gain, *if* sustains are treated as a singular note
-		if (gainHealth) health += note.hitHealth * healthGain;
 		var result:Dynamic = callOnLuas('goodNoteHit', [notes.members.indexOf(note), leData, leType, isSus]);
 		if(result != LuaUtils.Function_Stop && result != LuaUtils.Function_StopHScript && result != LuaUtils.Function_StopAll) callOnHScript('goodNoteHit', [note]);
 		spawnHoldSplashOnNote(note);
@@ -3274,7 +3302,7 @@ class PlayState extends MusicBeatState
 				return true;
 			}
 		}
-			#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
+			#if (HSCRIPT_ALLOWED)
 			addTextToDebug('Missing shader $name .frag AND .vert files!', FlxColor.RED);
 			#else
 			FlxG.log.warn('Missing shader $name .frag AND .vert files!');

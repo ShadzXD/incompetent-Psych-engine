@@ -3,9 +3,6 @@ package objects;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import backend.Rating;
 using StringTools;
-
-
-
 class PopUpStuff extends FlxTypedGroup<FlxSprite>
 {
 	var antialias:Bool = true;
@@ -25,6 +22,8 @@ class PopUpStuff extends FlxTypedGroup<FlxSprite>
 		placement = FlxG.width * 0.35;
 
 		hudType = hud;
+
+		if(PlayState.isPixelStage) hudType = 'PIXEL';
 
 		
 		if(fromPlayState)speedRate = PlayState.instance.playbackRate;
@@ -51,7 +50,7 @@ class PopUpStuff extends FlxTypedGroup<FlxSprite>
 		rating.updateHitbox();
 		add(rating);
 		
-			FlxTween.tween(rating, {alpha: 0}, 0.2 / speedRate, {
+		FlxTween.tween(rating, {alpha: 0}, 0.2 / speedRate, {
 			onComplete: function(tween:FlxTween)
 			{
 				rating.destroy();

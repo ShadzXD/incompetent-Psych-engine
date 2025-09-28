@@ -17,7 +17,11 @@ typedef LuaTweenOptions = {
 	loopDelay:Float,
 	ease:EaseFunction
 }
-
+/**
+* Class used for Utilities for both LUA and HScript.
+* Keeping this here because its neat!
+* Also note to self: NEVER TOUCH THIS FUCKING CLASS AGAIN, ITS WAY TOO INTEGRATED WIUTH PSYCH!!!!!
+*/
 class LuaUtils
 {
 	public static final Function_Stop:Dynamic = "##PSYCHLUA_FUNCTIONSTOP";
@@ -465,7 +469,7 @@ class LuaUtils
 			case 'sineout': return FlxEase.sineOut;
 			case 'smoothstepin': return FlxEase.smoothStepIn;
 			case 'smoothstepinout': return FlxEase.smoothStepInOut;
-			case 'smoothstepout': return FlxEase.smoothStepInOut;
+			case 'smoothstepout': return FlxEase.smoothStepOut;
 			case 'smootherstepin': return FlxEase.smootherStepIn;
 			case 'smootherstepinout': return FlxEase.smootherStepInOut;
 			case 'smootherstepout': return FlxEase.smootherStepOut;
