@@ -5,15 +5,15 @@ import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.system.System;
 import openfl.events.Event;
+import openfl.display.Sprite;
+import openfl.display.Shape;
 
 /**
-	The FPS class provides an easy-to-use monitor to display
-	the current frame rate of an OpenFL project
-**/
-/*
-	FIXED UP CLASS WRITTEN BY Itz-miles!
-	*/
-class FPSCounter extends TextField
+ * The FPS class provides an easy-to-use monitor to display
+ * 	the current frame rate of an OpenFL project
+ * FIXED UP CLASS WRITTEN BY Itz-miles!
+ * */
+class FPSCounter extends Sprite
 {
 	/**
 		The current frame rate, expressed using frames-per-second
@@ -23,7 +23,8 @@ class FPSCounter extends TextField
 	@:noCompletion private var times:Array<Float>;
 
 	public static var updateInterval:Int = 250; // keep this high
-
+  	var infoDisplay:TextField;
+	var background:Shape;
 	public function new(x:Float = 10, y:Float = 10)
 	{
 		super();
@@ -31,15 +32,31 @@ class FPSCounter extends TextField
 		this.x = x;
 		this.y = y;
 
-		selectable = false;
-		mouseEnabled = false;
-		defaultTextFormat = new TextFormat("VCR OSD Mono", 17, 0xFFFFFF);
-		autoSize = LEFT;
-		multiline = true;
-		backgroundColor = 0xFF000000;
+    	background = new Shape();
+    	background.graphics.beginFill(0x3d3f41, 1);
+		background.graphics.drawRect(0, 0, 135, 53);
+   		background.graphics.endFill();
+    	background.alpha = 0.4;
+    	addChild(background);
 
-		text = "FPS: ";
-		cacheAsBitmap = false;
+		infoDisplay = new TextField();
+    	infoDisplay.x = x;
+
+    	infoDisplay.width = 500;
+   		infoDisplay.selectable = false;
+    	infoDisplay.mouseEnabled = false;
+    	infoDisplay.defaultTextFormat = new TextFormat('Monsterrat', 15, 0xFFFFFF);
+    	infoDisplay.antiAliasType = NORMAL;
+    	infoDisplay.sharpness = 100;
+		infoDisplay.autoSize = LEFT;
+		infoDisplay.multiline = true;
+		infoDisplay.backgroundColor = 0xFF000000;
+    	infoDisplay.multiline = true;
+    	addChild(infoDisplay);
+
+
+		infoDisplay.text = "FPS: ";
+		infoDisplay.cacheAsBitmap = false;
 
 		addEventListener(Event.DEACTIVATE, _ -> focus = false);
 		addEventListener(Event.ACTIVATE, _ -> focus = true);
@@ -64,9 +81,8 @@ class FPSCounter extends TextField
 
 		then = now;
 		currentFPS = times.length < FlxG.updateFramerate ? times.length : FlxG.updateFramerate;
-		text = 'FPS: $currentFPS / ' + ClientPrefs.data.framerate
+		infoDisplay.text = 'FPS: $currentFPS / ' + ClientPrefs.data.framerate
 	 + '\nRAM: ${flixel.util.FlxStringUtil.formatBytes(System.totalMemory)}';
-		// The frametime is currently a lie. Using deltaTime causes the TextField to regen more frequently, which is hideously memory intensive.
 
 	}
 

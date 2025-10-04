@@ -92,7 +92,7 @@ class MusicPlayer extends FlxGroup
 
 		var songName:String = instance.songs[FreeplayState.curSelected].songName;
 		if (playing && !wasPlaying)
-			songTxt.text = 'PLAYING: ' + instance.songs[FreeplayState.curSelected].songName + ' (PAUSED)';
+			songTxt.text = 'PLAYING: ' + instance.songs[FreeplayState.curSelected].songName;
 		else
 			songTxt.text = 'PLAYING: ' + instance.songs[FreeplayState.curSelected].songName + ' (PAUSED)';
 
