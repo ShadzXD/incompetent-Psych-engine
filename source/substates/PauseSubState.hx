@@ -8,7 +8,7 @@ import flixel.util.FlxStringUtil;
 import options.OptionsState;
 import states.FreeplayState;
 import states.StoryMenuState;
-
+import backend.SongMetadata;
 class PauseSubState extends MusicBeatSubstate
 {
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
@@ -26,9 +26,10 @@ class PauseSubState extends MusicBeatSubstate
 
 	var missingTextBG:FlxSprite;
 	var missingText:FlxText;
-
 	public static var songName:String = null;
-
+	var availableCreditsList:Array<String> = []; //array which has available credits pushed onto it.
+	var currentCreditTobeShown:Int = 0; 
+	var levelInfo:FlxText;
 	override function create()
 	{
 		if(Difficulty.list.length < 2) menuItemsOG.remove('Change Difficulty'); //No need to change difficulty if there is only one!
@@ -74,12 +75,26 @@ class PauseSubState extends MusicBeatSubstate
 		bg.alpha = 0;
 		bg.scrollFactor.set();
 		add(bg);
+		
+		var levelName:FlxText = new FlxText(20, 15, 0, PlayState.SONG.song, 32);
+		levelName.scrollFactor.set();
+		levelName.setFormat(Paths.font("vcr.ttf"), 32);
+		levelName.updateHitbox();
+		add(levelName);
 
-		var levelInfo:FlxText = new FlxText(20, 15, 0, PlayState.SONG.song, 32);
+		var metaData:SongMetadata = new SongMetadata();
+		if(metaData.songComposer != null) availableCreditsList.push('Composer: ' + metaData.songComposer);
+		if(metaData.songCharter != null) availableCreditsList.push('Charter: ' + metaData.songCharter);
+		if(metaData.songCoder != null) availableCreditsList.push('Coder: ' + metaData.songCoder);
+		if(metaData.songArtist != null) availableCreditsList.push('Artist: ' + metaData.songArtist);
+
+		levelInfo  = new FlxText(20, 15 + 128, 0, availableCreditsList[currentCreditTobeShown], 32);
 		levelInfo.scrollFactor.set();
-		levelInfo.setFormat(Paths.font("vcr.ttf"), 32);
+		levelInfo.setFormat(Paths.font("vcr.ttf"), 32, RIGHT);
 		levelInfo.updateHitbox();
+		levelInfo.alpha = 0;
 		add(levelInfo);
+		new FlxTimer().start(10, function(t) scrollCredits(), 0);
 
 		var levelDifficulty:FlxText = new FlxText(20, 15 + 32, 0, Difficulty.getString().toUpperCase(), 32);
 		levelDifficulty.scrollFactor.set();
@@ -112,16 +127,18 @@ class PauseSubState extends MusicBeatSubstate
 
 		blueballedTxt.alpha = 0;
 		levelDifficulty.alpha = 0;
-		levelInfo.alpha = 0;
+		levelName.alpha = 0;
 
-		levelInfo.x = FlxG.width - (levelInfo.width + 20);
+		levelName.x = FlxG.width - (levelName.width + 20);
 		levelDifficulty.x = FlxG.width - (levelDifficulty.width + 20);
 		blueballedTxt.x = FlxG.width - (blueballedTxt.width + 20);
+		levelInfo.x = FlxG.width - (levelInfo.width + 20);
 
 		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
-		FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
+		FlxTween.tween(levelName, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
 		FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
 		FlxTween.tween(blueballedTxt, {alpha: 1, y: blueballedTxt.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
+		FlxTween.tween(levelInfo, {alpha: 1}, 0.4, {ease: FlxEase.quartInOut, startDelay: 1});
 
 		grpMenuShit = new FlxTypedGroup<Alphabet>();
 		add(grpMenuShit);
@@ -442,5 +459,17 @@ class PauseSubState extends MusicBeatSubstate
 	function updateSkipTimeText()
 	{
 		skipTimeText.text = FlxStringUtil.formatTime(Math.max(0, Math.floor(curTime / 1000)), false) + ' / ' + FlxStringUtil.formatTime(Math.max(0, Math.floor(FlxG.sound.music.length / 1000)), false);
+	}
+	
+	function scrollCredits()
+	{
+		currentCreditTobeShown++;
+		currentCreditTobeShown = FlxMath.wrap(currentCreditTobeShown, 0, availableCreditsList.length -1);
+		levelInfo.alpha = 0;
+		FlxTween.tween(levelInfo, {alpha: 1}, 1, {ease: FlxEase.quartInOut});
+		levelInfo.text = availableCreditsList[currentCreditTobeShown];
+		levelInfo.updateHitbox();
+		levelInfo.x = FlxG.width - (levelInfo.width + 20); //have to do this each time.
+
 	}
 }

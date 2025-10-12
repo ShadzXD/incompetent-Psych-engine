@@ -1,14 +1,15 @@
 0.6.0 features - The Vslice Update
 
 - Weekend 1
-- Better zoom camera event using other tween options
-- Decent Sticker System
-- Blammed Erect actually having a moving camera (finished)
-- hopefully fix mid song video shit
-- have the ability to add custom idle anims (pro  b not happening!)
+- Decent Sticker System (prob not happening!)
+- Blammed Erect actually having a moving camera
+- have the ability to add custom idle anims (prob not happening!)
 - Finish chart editing events icns
-- add in psych 1.0 Note splash editor (finished)
 - add in metadata.
-- fix scripts and allow for multiple scripts
-- have the gf tutorial shit softcoded.
-- kill off html5.
+- fix scripts and allow for multiple scripts 
+- have the zoom camera event use value 3
+- add resolution stuff to options
+- Fix HTML5 precaching everything
+- Finish Dialogue stuff
+- have character death stuff caked into character editor.
+- have the position camera event use proper tweens

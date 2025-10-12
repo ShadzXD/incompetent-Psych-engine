@@ -124,6 +124,7 @@ class PopUpStuff extends FlxTypedGroup<FlxSprite>
 			antialias = false;
 
 		}
+		antialias = antialias && ClientPrefs.data.antialiasing;
 
 		if(!isBotplay) cachePopUpScore();
 	}

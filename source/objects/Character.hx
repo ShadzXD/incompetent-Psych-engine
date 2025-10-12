@@ -122,11 +122,7 @@ class Character extends FlxAnimate
 
 		try
 		{
-			#if MODS_ALLOWED
-			loadCharacterFile(Json.parse(File.getContent(path)));
-			#else
 			loadCharacterFile(Json.parse(Assets.getText(path)));
-			#end
 		}
 		catch(e:Dynamic)
 		{
@@ -150,23 +146,9 @@ class Character extends FlxAnimate
 		scale.set(1, 1);
 		updateHitbox();
 
-		if(!isAnimateAtlas)
-		{
-			frames = Paths.getMultiAtlas(json.image.split(','));
-		}
-		else
-		{
-			try
-			{
-				frames = FlxAnimateFrames.fromAnimate(Paths.getPath('images/' + json.image));
+		if(!isAnimateAtlas)frames = Paths.getMultiAtlas(json.image.split(','));
+		else frames = FlxAnimateFrames.fromAnimate(Paths.getPath('images/' + json.image));
 
-			}
-			catch(e:haxe.Exception)
-			{
-				FlxG.log.warn('Could not load atlas ${json.image}: $e');
-				trace(e.stack);
-			}
-		}
 
 		imageFile = json.image;
 		jsonScale = json.scale;

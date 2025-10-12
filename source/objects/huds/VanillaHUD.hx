@@ -1,11 +1,11 @@
-package huds;
+package objects.huds;
 
 import objects.HealthIcon;
 import objects.Bar;
 import flixel.util.FlxStringUtil;
-/*
-* Recreation of Base Friday Night Funkin's hud (V-Slice)
-*/
+/**
+ *  Recreation of Base Friday Night Funkin's hud (V-Slice)
+ */
 class VanillaHUD extends MainHUD
 {
     var healthLerp:Float = 1;

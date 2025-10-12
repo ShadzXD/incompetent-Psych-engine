@@ -124,13 +124,12 @@ class PhillyStreets extends BaseStage
 		if(!ClientPrefs.data.lowQuality)
 		{
 			picoFade = new FlxSprite();
-			picoFade.antialiasing = ClientPrefs.data.antialiasing;
 			picoFade.alpha = 0;
 			add(picoFade);
 			darkenable.push(picoFade);
 		}
 
-		abot = new ABotSpeaker(gfGroup.x - 50, gfGroup.y + 450);
+		abot = new ABotSpeaker(gfGroup.x - 50, gfGroup.y + 530);
 		updateABotEye(true);
 		add(abot);
 		
@@ -236,7 +235,7 @@ class PhillyStreets extends BaseStage
 			switch (songName)
 			{
 				case 'darnell':
-					darnellCutscene();
+				darnellCutscene();
 			}
 		}
 	}
@@ -248,11 +247,11 @@ class PhillyStreets extends BaseStage
 		camFollow.x += 250;
 		FlxG.camera.snapToTarget();
 		FlxG.camera.zoom = 1.3;
-		spraycan.cutscene = true;
+		//spraycan.cutscene = true;
 
 		cutsceneHandler = new CutsceneHandler();
 		cutsceneHandler.endTime = 10;
-
+		
 		var cutsceneMusic:FlxSound = new FlxSound().loadEmbedded(Paths.music('darnellCanCutscene'));
 		cutsceneMusic.looped = true;
 		FlxG.sound.list.add(cutsceneMusic);
@@ -809,7 +808,7 @@ class PhillyStreets extends BaseStage
 				boyfriend.holdTimer = 0;
 				boyfriend.playAnim('cock', true);
 				boyfriend.specialAnim = true;
-				gunPrepSnd.play();
+				//gunPrepSnd.play();
 
 				boyfriend.animation.callback = function(name:String, frameNumber:Int, frameIndex:Int)
 				{
@@ -837,7 +836,7 @@ class PhillyStreets extends BaseStage
 				boyfriend.playAnim('shoot', true);
 				boyfriend.specialAnim = true;
 				FlxG.sound.play(Paths.soundRandom('shots/shot', 1, 4));
-				spraycan.playCanShot();
+				//spraycan.playCanShot();
 
 				new FlxTimer().start(1/24, function(tmr)
 				{
@@ -893,7 +892,7 @@ class PhillyStreets extends BaseStage
 				dad.holdTimer = 0;
 				dad.playAnim('lightCan', true);
 				dad.specialAnim = true;
-				lightCanSnd.play(true, sndTime - 65);
+			//	lightCanSnd.play(true, sndTime - 65);
 				
 				game.isCameraOnForcedPos = true;
 				game.defaultCamZoom += 0.1;
@@ -904,8 +903,8 @@ class PhillyStreets extends BaseStage
 				dad.holdTimer = 0;
 				dad.playAnim('kickCan', true);
 				dad.specialAnim = true;
-				kickCanSnd.play(true, sndTime - 50);
-				spraycan.playCanStart();
+				//kickCanSnd.play(true, sndTime - 50);
+				//spraycan.playCanStart();
 				camFollow.x += 250;
 				game.cameraSpeed = 1.5;
 				game.defaultCamZoom -= 0.1;
@@ -919,7 +918,7 @@ class PhillyStreets extends BaseStage
 				dad.holdTimer = 0;
 				dad.playAnim('kneeCan', true);
 				dad.specialAnim = true;
-				kneeCanSnd.play(true, sndTime - 22);
+				//kneeCanSnd.play(true, sndTime - 22);
 		}
 	}
 	

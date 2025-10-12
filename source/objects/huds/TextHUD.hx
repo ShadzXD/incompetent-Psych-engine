@@ -1,10 +1,10 @@
-package huds;
+package objects.huds;
 
 import flixel.util.FlxStringUtil;
 
-/*
-* Hud that only includes Score Text and Timer. 
-*/
+/**
+ * Hud that only includes Score Text and Timer. 
+ */
 class TextHUD extends MainHUD
 {
 	var scoreTxtTween:FlxTween;

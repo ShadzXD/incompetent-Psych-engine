@@ -32,7 +32,7 @@ import states.stages.objects.*;
 import substates.GameOverSubstate;
 import substates.PauseSubState;
 
-import huds.*;
+import objects.huds.*;
 import objects.PopUpStuff;
 
 #if !flash
@@ -216,11 +216,10 @@ class PlayState extends MusicBeatState
 	var boyfriendIdleTime:Float = 0.0;
 	var boyfriendIdled:Bool = false;
 
-	// Lua shit
 	public static var instance:PlayState;
 
 	#if (HSCRIPT_ALLOWED)
-	private var luaDebugGroup:FlxTypedGroup<psychlua.DebugLuaText>;
+	private var hscriptDebugGroup:FlxTypedGroup<psychlua.DebugLuaText>;
 	#end
 	public var introSoundsSuffix:String = '';
 
@@ -248,6 +247,7 @@ class PlayState extends MusicBeatState
 	*/
 	var preloadedVideoAtLeastOnce:Bool = false;
 	var songHasMetadata:Bool;
+	var useHealth:Bool = true;
 	override public function create()
 	{
 		//trace('Playback Rate: ' + playbackRate);
@@ -323,11 +323,8 @@ class PlayState extends MusicBeatState
 		GameOverSubstate.resetVariables();
 		songName = Paths.formatToSongPath(SONG.song);
 
-		if(Song.metaDataCheck(songName)) 
-		{
-			songHasMetadata = true;
-		}
-
+		backend.SongMetadata.songMetaDataCheck(songName);
+		
 		if(SONG.stage == null || SONG.stage.length < 1) {
 			SONG.stage = StageData.vanillaSongStage(songName);
 		}
@@ -397,9 +394,9 @@ class PlayState extends MusicBeatState
 		add(boyfriendGroup);
 
 		#if (HSCRIPT_ALLOWED)
-		luaDebugGroup = new FlxTypedGroup<psychlua.DebugLuaText>();
-		luaDebugGroup.cameras = [camOther];
-		add(luaDebugGroup);
+		hscriptDebugGroup = new FlxTypedGroup<psychlua.DebugLuaText>();
+		hscriptDebugGroup.cameras = [camOther];
+		add(hscriptDebugGroup);
 		#end
 
 		// "GLOBAL" SCRIPTS
@@ -454,7 +451,7 @@ class PlayState extends MusicBeatState
 		if(stageData.camera_start_pos != null)
 		{
 			camPos.set(stageData.camera_start_pos[0], stageData.camera_start_pos[1]);
-			trace('Using stage json CamPos ');
+			trace('Using stage set Cam Position');
 		}
 		else if(gf != null)
 		{
@@ -475,10 +472,10 @@ class PlayState extends MusicBeatState
 		comboClass.visible = !ClientPrefs.data.hideHud;
 		add(comboClass);
 	
-		/*
-		* Most UI hud elements have been moved to their own seperate class.
-		* Please go to them if you want to change the ui.
-		*/
+		/**
+		 * Most UI hud elements have been moved to their own seperate class.
+		 * Please go to them if you want to change the ui.
+		 */
 		switch(songName)
 		{
 			case 'test':
@@ -488,6 +485,7 @@ class PlayState extends MusicBeatState
 		}
 		hudClass.cameras = [camHUD];
 		hudClass.visible = !ClientPrefs.data.hideHud;
+		useHealth = hudClass.useHealth;
 		add(hudClass);
 		
 		noteGroup = new FlxTypedGroup<FlxBasic>();
@@ -649,17 +647,17 @@ class PlayState extends MusicBeatState
 	public function addTextToDebug(text:String, color:FlxColor) {
 
 		#if sys
-		var newText:psychlua.DebugLuaText = luaDebugGroup.recycle(psychlua.DebugLuaText);
+		var newText:psychlua.DebugLuaText = hscriptDebugGroup.recycle(psychlua.DebugLuaText);
 		newText.text = text;
 		newText.color = color;
 		newText.disableTime = 6;
 		newText.alpha = 1;
 		newText.setPosition(10, 8 - newText.height);
 
-		luaDebugGroup.forEachAlive(function(spr:psychlua.DebugLuaText) {
+		hscriptDebugGroup.forEachAlive(function(spr:psychlua.DebugLuaText) {
 			spr.y += newText.height + 2;
 		});
-		luaDebugGroup.add(newText);
+		hscriptDebugGroup.add(newText);
 
 		Sys.println(text);
 		#end
@@ -739,7 +737,7 @@ class PlayState extends MusicBeatState
 	}
 
 	public var videoCutscene:VideoSprite = null;
-	public function startVideo(name:String, forMidSong:Bool = false, canSkip:Bool = false, loop:Bool = false, playOnLoad:Bool = true)
+	public function startVideo(name:String, forMidSong:Bool = false, canSkip:Bool = true, loop:Bool = false, playOnLoad:Bool = true)
 	{
 		#if VIDEOS_ALLOWED
 		inCutscene = !forMidSong;
@@ -819,7 +817,6 @@ class PlayState extends MusicBeatState
 	{
 		// TO DO: Make this more flexible, maybe?
 		if(psychDialogue != null) return;
-		trace('hiii');
 		trace(dialogueFile);
 		if(dialogueFile.dialogue.length > 0) {
 			inCutscene = true;
@@ -1527,10 +1524,13 @@ class PlayState extends MusicBeatState
 	//var iconsAnimations:Bool = true;
 	function set_health(value:Float):Float // You can alter how icon animations work here
 	{
+		if(!useHealth) return 1;
 		value = FlxMath.roundDecimal(value, 5); //Fix Float imprecision
 		health = value;
 		if (health >= 2) health = 2;
+	
 		hudClass.healthStuff(health);
+		
 		return health;
 	}
 
@@ -1828,7 +1828,8 @@ class PlayState extends MusicBeatState
 		DiscordClient.changePresence("Chart Editor", null, null, true);
 		DiscordClient.resetClientID();
 		#end
-
+		FlxTransitionableState.skipNextTransIn = true;
+		FlxTransitionableState.skipNextTransOut = true;
 		FlxG.switchState(() -> new ChartingState());
 	}
 
@@ -1936,7 +1937,6 @@ class PlayState extends MusicBeatState
 		var flValue1:Null<Float> = Std.parseFloat(value1);
 		var flValue2:Null<Float> = Std.parseFloat(value2);
 		var flValue3:Null<Float> = Std.parseFloat(value3);
-		FlxG.log.add('hey');
 
 		if(Math.isNaN(flValue1)) flValue1 = null;
 		if(Math.isNaN(flValue2)) flValue2 = null;
@@ -1945,31 +1945,14 @@ class PlayState extends MusicBeatState
 		switch(eventName) {
 			case 'Hey!':
 				var value:Int = 2;
-				switch(value1.toLowerCase().trim()) {
-					case 'bf' | 'boyfriend' | '0':
-						value = 0;
-					case 'gf' | 'girlfriend' | '1':
-						value = 1;
-				}
+				var char:Character = CoolUtil.characterFromString(value1);
 
 				if(flValue2 == null || flValue2 <= 0) flValue2 = 0.6;
 
-				if(value != 0) {
-					if(dad.curCharacter.startsWith('gf')) { //Tutorial GF is actually Dad! The GF is an imposter!! ding ding ding ding ding ding ding, dindinding, end my suffering
-						dad.playAnim('cheer', true);
-						dad.specialAnim = true;
-						dad.heyTimer = flValue2;
-					} else if (gf != null) {
-						gf.playAnim('cheer', true);
-						gf.specialAnim = true;
-						gf.heyTimer = flValue2;
-					}
-				}
-				if(value != 1) {
-					boyfriend.playAnim('hey', true);
-					boyfriend.specialAnim = true;
-					boyfriend.heyTimer = flValue2;
-				}
+				char.playAnim('hey', true);
+				char.specialAnim = true;
+				char.heyTimer = flValue2;
+				
 
 			case 'Set GF Speed':
 				if(flValue1 == null || flValue1 < 1) flValue1 = 1;
@@ -1985,21 +1968,7 @@ class PlayState extends MusicBeatState
 				}
 
 			case 'Play Animation':
-				//trace('Anim to play: ' + value1);
-				var char:Character = dad;
-				switch(value2.toLowerCase().trim()) {
-					case 'bf' | 'boyfriend':
-						char = boyfriend;
-					case 'gf' | 'girlfriend':
-						char = gf;
-					default:
-						if(flValue2 == null) flValue2 = 0;
-						switch(Math.round(flValue2)) {
-							case 1: char = boyfriend;
-							case 2: char = gf;
-						}
-				}
-
+				var char:Character = CoolUtil.characterFromString(value1);
 				if (char != null)
 				{
 					char.playAnim(value1, true);
@@ -2021,21 +1990,7 @@ class PlayState extends MusicBeatState
 				}
 
 			case 'Alt Idle Animation':
-				var char:Character = dad;
-				switch(value1.toLowerCase().trim()) {
-					case 'gf' | 'girlfriend':
-						char = gf;
-					case 'boyfriend' | 'bf':
-						char = boyfriend;
-					default:
-						var val:Int = Std.parseInt(value1);
-						if(Math.isNaN(val)) val = 0;
-
-						switch(val) {
-							case 1: char = boyfriend;
-							case 2: char = gf;
-						}
-				}
+				var char:Character = CoolUtil.characterFromString(value1);
 
 				if (char != null)
 				{
@@ -2184,7 +2139,7 @@ class PlayState extends MusicBeatState
 				var split:Array<String> = value2.split(',');
 				var tweenTime:Float = Std.parseFloat(split[0]);
 	
-				FlxTween.tween(FlxG.camera, {zoom: flValue1}, tweenTime, {ease: LuaUtils.getTweenEaseByString(split[1]), onComplete:function(twn:FlxTween)
+				FlxTween.tween(FlxG.camera, {zoom: flValue1}, tweenTime, {ease: CoolUtil.getTweenEaseByString(split[1]), onComplete:function(twn:FlxTween)
 				{
 					defaultCamZoom = flValue1;
 					isZooming = false;
@@ -2411,7 +2366,7 @@ class PlayState extends MusicBeatState
 		if(!note.ratingDisabled) daRating.hits++;
 		note.rating = daRating.name;
 		score = daRating.scoreNote(noteDiff);
-		trace(score);
+		//trace(score);
 		if(daRating.noteSplash && !note.noteSplashData.disabled)
 			spawnNoteSplashOnNote(note);
 
@@ -3221,67 +3176,8 @@ class PlayState extends MusicBeatState
 	{
 		if(!ClientPrefs.data.shaders) return new FlxRuntimeShader();
 
-		#if (!flash && MODS_ALLOWED && sys)
-		if(!runtimeShaders.exists(name) && !initLuaShader(name))
-		{
-			FlxG.log.warn('Shader $name is missing!');
-			return new FlxRuntimeShader();
-		}
-
-		var arr:Array<String> = runtimeShaders.get(name);
-		return new FlxRuntimeShader(arr[0], arr[1]);
-		#else
 		FlxG.log.warn("Platform unsupported for Runtime Shaders!");
 		return null;
-		#end
-	}
-
-	public function initLuaShader(name:String, ?glslVersion:Int = 120)
-	{
-		if(!ClientPrefs.data.shaders) return false;
-
-		#if (MODS_ALLOWED && !flash && sys)
-		if(runtimeShaders.exists(name))
-		{
-			FlxG.log.warn('Shader $name was already initialized!');
-			return true;
-		}
-
-		for (folder in Mods.directoriesWithFile(Paths.getSharedPath(), 'shaders/'))
-		{
-			var frag:String = folder + name + '.frag';
-			var vert:String = folder + name + '.vert';
-			var found:Bool = false;
-			if(FileSystem.exists(frag))
-			{
-				frag = File.getContent(frag);
-				found = true;
-			}
-			else frag = null;
-
-			if(FileSystem.exists(vert))
-			{
-				vert = File.getContent(vert);
-				found = true;
-			}
-			else vert = null;
-
-			if(found)
-			{
-				runtimeShaders.set(name, [frag, vert]);
-				//trace('Found shader $name!');
-				return true;
-			}
-		}
-			#if (HSCRIPT_ALLOWED)
-			addTextToDebug('Missing shader $name .frag AND .vert files!', FlxColor.RED);
-			#else
-			FlxG.log.warn('Missing shader $name .frag AND .vert files!');
-			#end
-		#else
-		FlxG.log.warn('This platform doesn\'t support Runtime Shaders!');
-		#end
-		return false;
 	}
 	#end
 }

@@ -422,11 +422,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 
 			var characterPath:String = 'characters/$intended.json';
 			var path:String = Paths.getPath(characterPath, TEXT, null, true);
-			#if MODS_ALLOWED
-			if (FileSystem.exists(path))
-			#else
 			if (Assets.exists(path))
-			#end
 			{
 				_char = intended;
 				check_player.checked = character.isPlayer;

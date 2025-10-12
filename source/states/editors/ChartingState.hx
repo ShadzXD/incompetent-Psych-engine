@@ -3083,7 +3083,6 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		if(noteTypeDropDown != null)
 		{
 			var exts:Array<String> = ['.txt'];
-			#if LUA_ALLOWED exts.push('.lua'); #end
 			#if HSCRIPT_ALLOWED exts.push('.hx'); #end
 			noteTypes = loadFileList('custom_notetypes/', exts);
 			for (id => noteType in Note.defaultNoteTypes)
@@ -4861,6 +4860,8 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		setSongPlaying(false);
 		updateChartData();
 		StageData.loadDirectory(PlayState.SONG);
+		FlxTransitionableState.skipNextTransIn = true;
+		FlxTransitionableState.skipNextTransOut = true;
 		LoadingState.loadAndSwitchState(new PlayState());
 		ClientPrefs.toggleVolumeKeys(true);
 	}
@@ -4941,11 +4942,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 			try
 			{
 				var path:String = Paths.getPath('characters/' + char + '.json', TEXT);
-				#if MODS_ALLOWED
-				var unparsedJson = File.getContent(path);
-				#else
 				var unparsedJson = Assets.getText(path);
-				#end
 				return cast Json.parse(unparsedJson);
 			}
 			catch (e:Dynamic) {}

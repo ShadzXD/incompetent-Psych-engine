@@ -61,6 +61,5 @@ class Rating
 		var factor:Float = 1.0 - (1.0 / (1.0 + Math.exp(-slope * (absTiming - offset))));
 		var score:Int = Std.int(500 * factor + 10);
 		return score;
-
 	}
 }

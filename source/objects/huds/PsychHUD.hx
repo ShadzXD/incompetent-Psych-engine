@@ -1,13 +1,13 @@
-package huds;
+package objects.huds;
 
 import flixel.util.FlxStringUtil;
 import objects.Bar;
 import objects.HealthIcon;
 
-/*
-* Recreation of Psych Engine's hud.
-* You can extend this one if your hud is similiar.
-*/
+/**
+ * Recreation of Psych Engine's hud.
+ * You can extend this one if your hud is similiar.
+ */
 class PsychHUD extends MainHUD
 {
 	var scoreTxtTween:FlxTween;

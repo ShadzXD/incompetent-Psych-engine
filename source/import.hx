@@ -3,7 +3,6 @@
 #if DISCORD_ALLOWED
 import backend.Discord;
 #end
-
 #if ACHIEVEMENTS_ALLOWED
 import backend.Achievements;
 #end

@@ -1,13 +1,14 @@
-package huds;
+package objects.huds;
 import flixel.group.FlxGroup;
 import objects.HealthIcon;
 import objects.Bar;
 
 @:access(states.PlayState)
-/*
-* Main class used for general functions.
-* Also used for retrieving PlayState Variables.
-*/
+/**
+ * Main class used for general functions.
+ * Also used for retrieving PlayState Variables.
+ */
+
 class MainHUD extends FlxGroup
 {
 	//Things you can edit by overriding in the subclass.
@@ -22,6 +23,10 @@ class MainHUD extends FlxGroup
 	public var songLength:Float;
 	public var timeTxt:FlxText;
 	public var health:Float = 1;
+	/**
+	 * Whether a hud will use health.
+	 */
+	public var useHealth:Bool = false;
 	public function new()
 	{
 		super();
