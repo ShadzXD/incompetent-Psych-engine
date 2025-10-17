@@ -71,19 +71,6 @@ class PlayState extends MusicBeatState
 	public static var STRUM_X = 48.5;
 	public static var STRUM_X_MIDDLESCROLL = -271.5;
 
-	public static var ratingStuff:Array<Dynamic> = [
-		['You Suck!', 0.2], //From 0% to 19%
-		['Shit', 0.4], //From 20% to 39%
-		['Bad', 0.5], //From 40% to 49%
-		['Bruh', 0.6], //From 50% to 59%
-		['Meh', 0.69], //From 60% to 68%
-		['Nice', 0.7], //69%
-		['Good', 0.8], //From 70% to 79%
-		['Great', 0.9], //From 80% to 89%
-		['Sick!', 1], //From 90% to 99%
-		['Perfect!!', 1] //The value on this one isn't used actually, since Perfect is always "1"
-	];
-
 	//event variables
 	private var isCameraOnForcedPos:Bool = false;
 
@@ -238,16 +225,20 @@ class PlayState extends MusicBeatState
 	 */
 	public var moveValue:Int = 20;
 	var camMoveTween:FlxTween;
-	var isZooming:Bool = false;
-	public var hudClass:MainHUD;
+	private var isZooming:Bool = false;
 	var hasOpponentVocals:Bool = false;
-	var comboClass:PopUpStuff;
+	public var hudClass:MainHUD;
+	public var comboClass:PopUpStuff;
 	/**
 	* Check to see if the video has been preloaded at least once.
 	*/
-	var preloadedVideoAtLeastOnce:Bool = false;
-	var songHasMetadata:Bool;
+	private var preloadedVideoAtLeastOnce:Bool = false;
+	private var songHasMetadata:Bool;
 	var useHealth:Bool = true;
+	/**
+	 * Which HUD Type the game should use.
+	 */
+	public var hudType:String = null;
 	override public function create()
 	{
 		//trace('Playback Rate: ' + playbackRate);
@@ -404,8 +395,6 @@ class PlayState extends MusicBeatState
 		for (folder in Mods.directoriesWithFile(Paths.getSharedPath(), 'scripts/'))
 			for (file in FileSystem.readDirectory(folder))
 			{
-				
-
 				#if HSCRIPT_ALLOWED
 				if(file.toLowerCase().endsWith('.hx'))
 					initHScript(folder + file);
@@ -1042,27 +1031,6 @@ class PlayState extends MusicBeatState
 				invalidateNote(daNote);
 			}
 			--i;
-		}
-	}
-
-
-	public dynamic function fullComboFunction()
-	{
-		var sicks:Int = ratingsData[0].hits;
-		var goods:Int = ratingsData[1].hits;
-		var bads:Int = ratingsData[2].hits;
-		var shits:Int = ratingsData[3].hits;
-
-		ratingFC = "";
-		if(songMisses == 0)
-		{
-			if (bads > 0 || shits > 0) ratingFC = 'FC';
-			else if (goods > 0) ratingFC = 'GFC';
-			else if (sicks > 0) ratingFC = 'SFC';
-		}
-		else {
-			if (songMisses < 10) ratingFC = 'SDCB';
-			else ratingFC = 'Clear';
 		}
 	}
 
@@ -3074,9 +3042,7 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	public var ratingName:String = '?';
 	public var ratingPercent:Float;
-	public var ratingFC:String;
 	public function RecalculateRating(badHit:Bool = false) {
 		setOnScripts('score', songScore);
 		setOnScripts('misses', songMisses);
@@ -3086,36 +3052,20 @@ class PlayState extends MusicBeatState
 		var ret:Dynamic = callOnScripts('onRecalculateRating', null, true);
 		if(ret != LuaUtils.Function_Stop)
 		{
-			ratingName = '?';
 			if(totalPlayed != 0) //Prevent divide by 0
 			{
 				// Rating Percent
 				ratingPercent = Math.min(1, Math.max(0, totalNotesHit / totalPlayed));
-				//trace((totalNotesHit / totalPlayed) + ', Total: ' + totalPlayed + ', notes hit: ' + totalNotesHit);
-
-				// Rating Name
-				ratingName = ratingStuff[ratingStuff.length-1][0]; //Uses last string
-				if(ratingPercent < 1)
-					for (i in 0...ratingStuff.length-1)
-						if(ratingPercent < ratingStuff[i][1])
-						{
-							ratingName = ratingStuff[i][0];
-							break;
-						}
+				hudClass.recalculateRating(ratingPercent);
 			}
-			fullComboFunction();
 		}
 		
 		if(ClientPrefs.data.scoreZoom && !badHit)hudClass.doScoreBop();
 		checkBotplay(badHit);
-		
-		setOnScripts('rating', ratingPercent);
-		setOnScripts('ratingName', ratingName);
-		setOnScripts('ratingFC', ratingFC);
 	}
 	public function checkBotplay(badHit:Bool = false)
 	{
-		if(!cpuControlled) hudClass.updateScore(badHit, songScore, songMisses, ratingName, ratingPercent); // score will only update after rating is calculated, if it's a badHit, it shouldn't bounce
+		if(!cpuControlled) hudClass.updateScore(badHit, songScore, songMisses, ratingPercent); // score will only update after rating is calculated, if it's a badHit, it shouldn't bounce
 		else hudClass.botplayStuff();
 	}
 

@@ -8,20 +8,18 @@ import objects.HealthIcon;
  * Recreation of Psych Engine's hud.
  * You can extend this one if your hud is similiar.
  */
+ @:access(states.PlayState)
+
 class PsychHUD extends MainHUD
 {
 	var scoreTxtTween:FlxTween;
-
-
     var healthLerp:Float = 1;
 	var iconOffset:Int = 26;
+	var ratingName:String = '?';
 
-    public function new()
+	public function new()
     {
 		super();
-	
-		//if (PlayState.isPixelStage == true) hudFont = 'pixel.otf';
-
 		timeTxt = new FlxText(PlayState.STRUM_X + (FlxG.width / 2) - 248, ClientPrefs.data.downScroll ? FlxG.height - 44 : 19, 400, "", 27);
 		timeTxt.setFormat(Paths.font(hudFont), 27, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		timeTxt.scrollFactor.set();
@@ -30,9 +28,9 @@ class PsychHUD extends MainHUD
 		timeTxt.borderSize = 1.25;
 		add(timeTxt);
 		
-		var lerpValue:Float =  0.12 / (ClientPrefs.data.framerate / 60);
+		final lerpValue:Float =  0.12 / (ClientPrefs.data.framerate / 60);
 		healthBar = new Bar(0, FlxG.height * (!ClientPrefs.data.downScroll ? 0.88 : 0.1), 'healthBar', function(){
-			healthLerp = FlxMath.lerp(healthLerp, health, lerpValue);
+			healthLerp = FlxMath.lerp(healthLerp, healthValue, lerpValue);
 			return healthLerp;
 		}, 0, 2);		
 		healthBar.screenCenter(X);
@@ -57,7 +55,8 @@ class PsychHUD extends MainHUD
 		scoreText.scrollFactor.set();
 		scoreText.borderSize = 1.25;
 		add(scoreText);
-    }
+	}
+    
 
     override function update(elapsed:Float)
     {
@@ -77,10 +76,13 @@ class PsychHUD extends MainHUD
 
 		timeTxt.text = FlxStringUtil.formatTime(songSeconds, false) + ' // ' + FlxStringUtil.formatTime(songLength, false);
     }
-    override public function updateScore(miss:Bool = false, ?score:Int, ?misses:Int, ?ratingName:String,?percent:Float)
+
+
+    override public function updateScore(miss:Bool = false, ?score:Int, ?misses:Int, ?percent:Float)
 	{
+		// Rating Name
 		var str:String = ratingName;
-		
+
 		var percent:Float = CoolUtil.floorDecimal(percent * 100, 2);
 		str += ' (${percent}%)';
 		
@@ -91,7 +93,19 @@ class PsychHUD extends MainHUD
 		+ ' | Rating: ${str}';
 	
 		 scoreText.text = tempScore;
-	} 
+	}
+
+	override function recalculateRating(percent:Float)
+	{
+		ratingName = ratingStuff[ratingStuff.length-1][0]; //Uses last string
+		if(percent < 1)
+		for (i in 0...ratingStuff.length-1)
+		if(percent < ratingStuff[i][1])
+		{
+			ratingName = ratingStuff[i][0];
+			break;
+		}
+	}
 
 	override public function botplayStuff() scoreText.text = botplayText;
 

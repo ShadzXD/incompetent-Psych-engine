@@ -49,12 +49,12 @@ class CreditsState extends MusicBeatState
 			[''],
 			['Engine Contributors'],
 			['CrowPlexus',			'crowplexus',		'Input System v3, Major Help and Other PRs',				 'https://twitter.com/crowplexus',		'A1A1A1'],
-			['Keoiki',				'keoiki',			'Note Splash Animations and Latin Alphabet',				 'https://twitter.com/Keoiki_',			'D2D2D2'],
-			['SqirraRNG',			'sqirra',			'Crash Handler and Base code for\nChart Editor\'s Waveform', 'https://twitter.com/gedehari',		'E1843A'],
+			['Keoiki',				'keoiki',			'Note Splash Animations',				 'https://twitter.com/Keoiki_',			'D2D2D2'],
+			['SqirraRNG',			'sqirra',			'Base Crash Handler and Base code for\nChart Editor\'s Waveform', 'https://twitter.com/gedehari',		'E1843A'],
 			['EliteMasterEric',		'mastereric',		'Runtime Shaders support',									 'https://twitter.com/EliteMasterEric',	'FFBD40'],
 			['iFlicky',				'flicky',			'Made the Dialogue Sounds',	 'https://twitter.com/flicky_i',		'9E29CF'],
 			['KadeDev',				'kade',				'Fixed some issues on Chart Editor and Other PRs',			 'https://twitter.com/kade0912',		'64A250'],
-			['MaybeMaru',	'missing_icon',	'Creator of Flixel-Animate',	 'https://github.com/MaybeMaru',	'A1A1A1']
+			['MaybeMaru',			'missing_icon',		'Creator of Flixel-Animate',	 'https://github.com/MaybeMaru',	'A1A1A1']
 		];
 		
 		for(i in defaultList) {

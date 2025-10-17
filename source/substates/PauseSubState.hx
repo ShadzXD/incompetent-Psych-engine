@@ -30,6 +30,8 @@ class PauseSubState extends MusicBeatSubstate
 	var availableCreditsList:Array<String> = []; //array which has available credits pushed onto it.
 	var currentCreditTobeShown:Int = 0; 
 	var levelInfo:FlxText;
+	var creditsScrollTimer:FlxTimer;
+	var shouldScrollCredits:Bool = true;
 	override function create()
 	{
 		if(Difficulty.list.length < 2) menuItemsOG.remove('Change Difficulty'); //No need to change difficulty if there is only one!
@@ -83,18 +85,22 @@ class PauseSubState extends MusicBeatSubstate
 		add(levelName);
 
 		var metaData:SongMetadata = new SongMetadata();
-		if(metaData.songComposer != null) availableCreditsList.push('Composer: ' + metaData.songComposer);
-		if(metaData.songCharter != null) availableCreditsList.push('Charter: ' + metaData.songCharter);
-		if(metaData.songCoder != null) availableCreditsList.push('Coder: ' + metaData.songCoder);
-		if(metaData.songArtist != null) availableCreditsList.push('Artist: ' + metaData.songArtist);
+		if(metaData != null)
+		{
+			if(metaData.songComposer != null) availableCreditsList.push('Composer: ' + metaData.songComposer);
+			if(metaData.songCharter != null) availableCreditsList.push('Charter: ' + metaData.songCharter);
+			if(metaData.songCoder != null) availableCreditsList.push('Coder: ' + metaData.songCoder);
+			if(metaData.songArtist != null) availableCreditsList.push('Artist: ' + metaData.songArtist);
 
-		levelInfo  = new FlxText(20, 15 + 128, 0, availableCreditsList[currentCreditTobeShown], 32);
-		levelInfo.scrollFactor.set();
-		levelInfo.setFormat(Paths.font("vcr.ttf"), 32, RIGHT);
-		levelInfo.updateHitbox();
-		levelInfo.alpha = 0;
-		add(levelInfo);
-		new FlxTimer().start(10, function(t) scrollCredits(), 0);
+			levelInfo  = new FlxText(20, 15 + 128, 0, availableCreditsList[currentCreditTobeShown], 32);
+			levelInfo.scrollFactor.set();
+			levelInfo.setFormat(Paths.font("vcr.ttf"), 32, RIGHT);
+			levelInfo.updateHitbox();
+			levelInfo.alpha = 0;
+			add(levelInfo);
+			creditsScrollTimer = new FlxTimer().start(10, function(t) scrollCredits(), 0);
+		}
+	
 
 		var levelDifficulty:FlxText = new FlxText(20, 15 + 32, 0, Difficulty.getString().toUpperCase(), 32);
 		levelDifficulty.scrollFactor.set();
@@ -379,6 +385,7 @@ class PauseSubState extends MusicBeatSubstate
 		super.destroy();
 	}
 
+
 	function changeSelection(change:Int = 0):Void
 	{
 		curSelected += change;
@@ -463,6 +470,8 @@ class PauseSubState extends MusicBeatSubstate
 	
 	function scrollCredits()
 	{
+		if(levelInfo == null || !shouldScrollCredits) return;
+		
 		currentCreditTobeShown++;
 		currentCreditTobeShown = FlxMath.wrap(currentCreditTobeShown, 0, availableCreditsList.length -1);
 		levelInfo.alpha = 0;
@@ -470,6 +479,11 @@ class PauseSubState extends MusicBeatSubstate
 		levelInfo.text = availableCreditsList[currentCreditTobeShown];
 		levelInfo.updateHitbox();
 		levelInfo.x = FlxG.width - (levelInfo.width + 20); //have to do this each time.
-
+	}
+	
+	override function close()
+	{
+		shouldScrollCredits = false;
+		super.close();
 	}
 }

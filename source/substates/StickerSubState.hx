@@ -203,10 +203,7 @@ class StickerSubState extends MusicBeatSubstate
             */
              switch (nextState)
              {
-                case FREEPLAY:
-                  FlxG.switchState(new states.FreeplayState(this));
-                case STORY:
-                  FlxG.switchState(new states.StoryMenuState(this));
+
                 default:
                   FlxG.switchState(new states.FreeplayState(this));
              }

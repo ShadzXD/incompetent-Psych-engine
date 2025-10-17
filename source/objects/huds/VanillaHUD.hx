@@ -14,9 +14,9 @@ class VanillaHUD extends MainHUD
     public function new()
     {
 		super();
-		var lerpValue:Float =  0.14 / (ClientPrefs.data.framerate / 60);
+		final lerpValue:Float =  0.14 / (ClientPrefs.data.framerate / 60);
 		healthBar = new Bar(0, FlxG.height * (!ClientPrefs.data.downScroll ? 0.88 : 0.1), 'healthBar', function(){
-			healthLerp = FlxMath.lerp(healthLerp, health, lerpValue);
+			healthLerp = FlxMath.lerp(healthLerp, healthValue, lerpValue);
 			return healthLerp;
 		}, 0, 2);		
 		healthBar.screenCenter(X);
@@ -60,7 +60,7 @@ class VanillaHUD extends MainHUD
 		iconP2.animation.curAnim.curFrame = (healthBar.percent > 80) ? 1 : 0; //If health is over 80%, change opponent icon to frame 1 (losing icon), otherwise, frame 0 (normal)
     }
 
-    override public function updateScore(miss:Bool = false, ?score:Int, ?misses:Int, ?ratingName:String,?percent:Float)
+    override public function updateScore(miss:Bool = false, ?score:Int, ?misses:Int, ?percent:Float)
 	{
 		var tempScore:String = 'Score: ${FlxStringUtil.formatMoney(score, false, true)}';
 		scoreText.text = tempScore;

@@ -29,7 +29,7 @@
 	<define name="IRIS_DEBUG"/>
 	<define name="BASE_GAME_FILES"/> <!--REMOVE THIS LINE TO REMOVE ALL BASE GAME FILES!-->
 	<define name="FPS_ALLOWED" if = "desktop"/> 
-	<define name="STICKERS_ALLOWED"/> 
+	<!--define name="STICKERS_ALLOWED"--> 
 
 	<!-- ____________________________ Window Settings ___________________________ -->
 

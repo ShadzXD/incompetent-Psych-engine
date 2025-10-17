@@ -11,7 +11,7 @@ class TextHUD extends MainHUD
 
     public function new()
     {
-		super();
+		super('TEXT');
 	
 		timeTxt = new FlxText(PlayState.STRUM_X + (FlxG.width / 2) - 248, ClientPrefs.data.downScroll ? FlxG.height - 44 : 19, 400, "", 27);
 		timeTxt.setFormat(Paths.font(hudFont), 27, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -19,7 +19,6 @@ class TextHUD extends MainHUD
 		timeTxt.alpha = 0;
 		timeTxt.borderSize = 1.25;
 		add(timeTxt);
-
 	
 		scoreText = new FlxText(0, FlxG.height * (!ClientPrefs.data.downScroll ? 0.9 : 0.1), FlxG.width, "", 20);
 		scoreText.setFormat(Paths.font(hudFont), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);

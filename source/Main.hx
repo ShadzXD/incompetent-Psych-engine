@@ -229,7 +229,7 @@ class Main extends Sprite
 	#if CRASH_HANDLER
 	function onCrash(e:UncaughtErrorEvent):Void
 	{
-		e.preventDefault();
+		e.preventDefault(); //stops the game from crashing on a crash,,, lollll
 		e.stopImmediatePropagation();
 		var errMsg:String = "";
 		var callStack:Array<StackItem> = CallStack.exceptionStack(true);

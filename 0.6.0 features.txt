@@ -1,7 +1,6 @@
 0.6.0 features - The Vslice Update
 
 - Weekend 1
-- Decent Sticker System (prob not happening!)
 - Blammed Erect actually having a moving camera
 - have the ability to add custom idle anims (prob not happening!)
 - Finish chart editing events icns
