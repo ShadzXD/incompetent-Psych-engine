@@ -162,16 +162,8 @@ class LuaUtils
 
 	public static function getObjectDirectly(objectName:String, ?checkForTextsToo:Bool = true, ?allowMaps:Bool = false):Dynamic
 	{
-		switch(objectName)
-		{
-			case 'this' | 'instance' | 'game':
-				return PlayState.instance;
-			
-			default:
-				var obj:Dynamic = PlayState.instance.getLuaObject(objectName, checkForTextsToo);
-				if(obj == null) obj = getVarInArray(getTargetInstance(), objectName, allowMaps);
-				return obj;
-		}
+					return PlayState.instance;
+
 	}
 
 	inline public static function getTextObject(name:String):FlxText

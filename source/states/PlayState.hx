@@ -68,8 +68,8 @@ import psychlua.HScript.HScriptInfos;
 **/
 class PlayState extends MusicBeatState
 {
-	public static var STRUM_X = 48.5;
-	public static var STRUM_X_MIDDLESCROLL = -271.5;
+	public static final STRUM_X = 48.5;
+	public static final STRUM_X_MIDDLESCROLL = -271.5;
 
 	//event variables
 	private var isCameraOnForcedPos:Bool = false;
@@ -200,8 +200,6 @@ class PlayState extends MusicBeatState
 
 	//Achievement shit
 	var keysPressed:Array<Int> = [];
-	var boyfriendIdleTime:Float = 0.0;
-	var boyfriendIdled:Bool = false;
 
 	public static var instance:PlayState;
 
@@ -211,7 +209,7 @@ class PlayState extends MusicBeatState
 	public var introSoundsSuffix:String = '';
 
 	// Less laggy controls
-	private var keysArray:Array<String>;
+	private final keysArray:Array<String>;
 	public var songName:String;
 
 	// Callbacks for stages
@@ -486,7 +484,6 @@ class PlayState extends MusicBeatState
 		strumLineNotes = new FlxTypedGroup<StrumNote>();
 		noteGroup.add(strumLineNotes);
 
-
 		var splash:NoteSplash = new NoteSplash(100, 100);
 		grpNoteSplashes.add(splash);
 		splash.alpha = 0.000001; //cant make it invisible or it won't allow precaching
@@ -513,6 +510,7 @@ class PlayState extends MusicBeatState
 			camFollow = prevCamFollow;
 			prevCamFollow = null;
 		}
+
 		add(camFollow);
 		camOffsetNoteHit = new FlxPoint();
 
@@ -649,7 +647,10 @@ class PlayState extends MusicBeatState
 		hscriptDebugGroup.add(newText);
 
 		Sys.println(text);
+		#else
+		FlxG.log.add(text);
 		#end
+
 	}
 	#end
 
@@ -699,7 +700,6 @@ class PlayState extends MusicBeatState
 		scriptFile = Paths.getSharedPath(scriptFile);
 		if(Paths.exists(scriptFile))
 			doPush = true;
-		
 
 		if(doPush)
 		{
@@ -710,10 +710,6 @@ class PlayState extends MusicBeatState
 		}
 		#end
 	}
-
-	public function getLuaObject(tag:String, text:Bool=true):FlxSprite 
-		return null;
-	
 
 	function startCharacterPos(char:Character, ?gfCheck:Bool = false) {
 		if(gfCheck && char.curCharacter.startsWith('gf')) { //IF DAD IS GIRLFRIEND, HE GOES TO HER POSITION
@@ -806,7 +802,6 @@ class PlayState extends MusicBeatState
 	{
 		// TO DO: Make this more flexible, maybe?
 		if(psychDialogue != null) return;
-		trace(dialogueFile);
 		if(dialogueFile.dialogue.length > 0) {
 			inCutscene = true;
 			psychDialogue = new DialogueBoxPsych(dialogueFile, song);
@@ -835,7 +830,7 @@ class PlayState extends MusicBeatState
 	var startTimer:FlxTimer;
 	var finishTimer:FlxTimer = null;
 
-	// For being able to mess with the sprites on Lua
+	// For being able to mess with the sprites on Hscript
 	public var countdownReady:FlxSprite;
 	public var countdownSet:FlxSprite;
 	public var countdownGo:FlxSprite;
@@ -1346,7 +1341,7 @@ class PlayState extends MusicBeatState
    			 		videoCutscene.alpha = 0.001;
     				add(videoCutscene);
 					if(playbackRate != 1) trace('Playback rate is not 1 and theres a cutscene!');
-					
+				
 				}
 				#if hxvlc
 				videoCutscene.play();
@@ -1382,7 +1377,6 @@ class PlayState extends MusicBeatState
 			value1: event[1][i][1],
 			value2: event[1][i][2],
 			value3: event[1][i][3]
-
 		};
 		eventNotes.push(subEvent);
 		eventPushed(subEvent);
@@ -1392,8 +1386,8 @@ class PlayState extends MusicBeatState
 	public var skipArrowStartTween:Bool = false; //for lua
 	private function generateStaticArrows(player:Int):Void
 	{
-		var strumLineX:Float = ClientPrefs.data.middleScroll ? STRUM_X_MIDDLESCROLL : STRUM_X;
-		var strumLineY:Float = ClientPrefs.data.downScroll ? (FlxG.height - 150) : 50;
+		final strumLineX:Float = ClientPrefs.data.middleScroll ? STRUM_X_MIDDLESCROLL : STRUM_X;
+		final strumLineY:Float = ClientPrefs.data.downScroll ? (FlxG.height - 150) : 50;
 		for (i in 0...4)
 		{
 			// FlxG.log.add(i);
@@ -1547,23 +1541,13 @@ class PlayState extends MusicBeatState
 	public var canReset:Bool = true;
 	var startedCountdown:Bool = false;
 	var canPause:Bool = true;
-	var freezeCamera:Bool = false;
 	var allowDebugKeys:Bool = true;
-
+	var freezeCamera:Bool;
 	override public function update(elapsed:Float)
 	{
-		if(!inCutscene && !paused && !freezeCamera) {
-			FlxG.camera.followLerp = 2.4 * cameraSpeed * playbackRate;
-			if(!startingSong && !endingSong && boyfriend.getAnimationName().startsWith('idle')) {
-				boyfriendIdleTime += elapsed;
-				if(boyfriendIdleTime >= 0.15) { // Kind of a mercy thing for making the achievement easier to get as it's apparently frustrating to some playerss
-					boyfriendIdled = true;
-				}
-			} else {
-				boyfriendIdleTime = 0;
-			}
-		}
-		else FlxG.camera.followLerp = 0;
+		if(!freezeCamera)
+		FlxG.camera.followLerp = 2.4 * cameraSpeed * playbackRate;
+
 		callOnScripts('onUpdate', [elapsed]);
 
 		super.update(elapsed);
@@ -1770,7 +1754,7 @@ class PlayState extends MusicBeatState
 				}
 		}
 		#if VIDEOS_ALLOWED
-		if(videoCutscene != null) videoCutscene.pause();
+		videoCutscene?.pause();
 		#end
 		openSubState(new PauseSubState());
 
@@ -2208,9 +2192,6 @@ class PlayState extends MusicBeatState
 				return false;
 			}
 		}
-
-		//timeBar.visible = false;
-		//timeTxt.visible = false;
 		canPause = false;
 		endingSong = true;
 		camZooming = false;
@@ -2257,7 +2238,6 @@ class PlayState extends MusicBeatState
 					FlxG.switchState(() -> new StoryMenuState());
 					canResync = false;
 
-					// if ()
 					if(!ClientPrefs.getGameplaySetting('practice') && !ClientPrefs.getGameplaySetting('botplay')) {
 						StoryMenuState.weekCompleted.set(WeekData.weeksList[storyWeek], true);
 						Highscore.saveWeekScore(WeekData.getWeekFileName(), campaignScore, storyDifficulty);
@@ -2358,7 +2338,6 @@ class PlayState extends MusicBeatState
 	public var strumsBlocked:Array<Bool> = [];
 	private function onKeyPress(event:KeyboardEvent):Void
 	{
-
 		var eventKey:FlxKey = event.keyCode;
 		var key:Int = getKeyFromEvent(keysArray, eventKey);
 
@@ -3016,7 +2995,6 @@ class PlayState extends MusicBeatState
 		setOnHScript(variable, arg, exclusions);
 	}
 
-
 	public function setOnHScript(variable:String, arg:Dynamic, exclusions:Array<String> = null) {
 		#if HSCRIPT_ALLOWED
 		if(exclusions == null) exclusions = [];
@@ -3063,6 +3041,7 @@ class PlayState extends MusicBeatState
 		if(ClientPrefs.data.scoreZoom && !badHit)hudClass.doScoreBop();
 		checkBotplay(badHit);
 	}
+	
 	public function checkBotplay(badHit:Bool = false)
 	{
 		if(!cpuControlled) hudClass.updateScore(badHit, songScore, songMisses, ratingPercent); // score will only update after rating is calculated, if it's a badHit, it shouldn't bounce
@@ -3096,7 +3075,7 @@ class PlayState extends MusicBeatState
 						unlock = (boyfriend.holdTimer >= 10 && !usedPractice);
 
 					case 'hype':
-						unlock = (!boyfriendIdled && !usedPractice);
+						unlock = (!usedPractice);
 
 					case 'two_keys':
 						unlock = (!usedPractice && keysPressed.length <= 2);
