@@ -1795,7 +1795,6 @@ class PlayState extends MusicBeatState
 		if(FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 		#if DISCORD_ALLOWED
-		DiscordClient.changePresence("Chart Editor", null, null, true);
 		DiscordClient.resetClientID();
 		#end
 		FlxG.switchState(() -> new CharacterEditorState(SONG.player2));
@@ -1880,6 +1879,7 @@ class PlayState extends MusicBeatState
 			var value3:String = '';
 			if(eventNotes[0].value3 != null)
 				value3 = eventNotes[0].value3;
+
 			triggerEvent(eventNotes[0].event, value1, value2, value3,leStrumTime);
 			eventNotes.shift();
 		}
@@ -2777,7 +2777,6 @@ class PlayState extends MusicBeatState
 	}
 
 	override function destroy() {
-	
 
 		#if HSCRIPT_ALLOWED
 		for (script in hscriptArray)
@@ -2895,7 +2894,6 @@ class PlayState extends MusicBeatState
 		setOnScripts('curSection', curSection);
 		callOnScripts('onSectionHit');
 	}
-
 
 	#if HSCRIPT_ALLOWED
 	public function startHScriptsNamed(scriptFile:String)
