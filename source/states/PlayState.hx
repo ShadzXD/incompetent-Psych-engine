@@ -68,8 +68,8 @@ import psychlua.HScript.HScriptInfos;
 **/
 class PlayState extends MusicBeatState
 {
-	public static final STRUM_X = 48.5;
-	public static final STRUM_X_MIDDLESCROLL = -271.5;
+	public static var STRUM_X = 48.5;
+	public static var STRUM_X_MIDDLESCROLL = -271.5;
 
 	//event variables
 	private var isCameraOnForcedPos:Bool = false;
@@ -209,7 +209,7 @@ class PlayState extends MusicBeatState
 	public var introSoundsSuffix:String = '';
 
 	// Less laggy controls
-	private final keysArray:Array<String>;
+	private var keysArray:Array<String>;
 	public var songName:String;
 
 	// Callbacks for stages
