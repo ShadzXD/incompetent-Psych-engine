@@ -1,4 +1,4 @@
-this branch isnt maintained, most stuff is unfinished!
+Unfinished 0.6.0 branch, wont ever be finished.
 
 # **Incompetent! Psych Engine**
 ![incompetent](https://github.com/user-attachments/assets/9621e3c9-2c7f-4150-90cc-d6fce8b2f030)
