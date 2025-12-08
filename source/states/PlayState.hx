@@ -5,7 +5,6 @@ import backend.Rating;
 import backend.Song;
 import backend.StageData;
 import backend.WeekData;
-import backend.SongMetadata;
 import cutscenes.CutsceneHandler;
 import cutscenes.DialogueBoxPsych;
 import flixel.FlxBasic;
@@ -231,7 +230,6 @@ class PlayState extends MusicBeatState
 	* Check to see if the video has been preloaded at least once.
 	*/
 	private var preloadedVideoAtLeastOnce:Bool = false;
-	private var songHasMetadata:Bool;
 	var useHealth:Bool = true;
 	/**
 	 * Which HUD Type the game should use.
@@ -311,8 +309,6 @@ class PlayState extends MusicBeatState
 
 		GameOverSubstate.resetVariables();
 		songName = Paths.formatToSongPath(SONG.song);
-
-		backend.SongMetadata.songMetaDataCheck(songName);
 		
 		if(SONG.stage == null || SONG.stage.length < 1) {
 			SONG.stage = StageData.vanillaSongStage(songName);

@@ -8,7 +8,6 @@ import flixel.util.FlxStringUtil;
 import options.OptionsState;
 import states.FreeplayState;
 import states.StoryMenuState;
-import backend.SongMetadata;
 class PauseSubState extends MusicBeatSubstate
 {
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
@@ -31,7 +30,7 @@ class PauseSubState extends MusicBeatSubstate
 	var currentCreditTobeShown:Int = 0; 
 	var levelInfo:FlxText;
 	var creditsScrollTimer:FlxTimer;
-	var shouldScrollCredits:Bool = true;
+	var shouldScrollCredits:Bool = false;
 	override function create()
 	{
 		if(Difficulty.list.length < 2) menuItemsOG.remove('Change Difficulty'); //No need to change difficulty if there is only one!
@@ -83,7 +82,8 @@ class PauseSubState extends MusicBeatSubstate
 		levelName.setFormat(Paths.font("vcr.ttf"), 32);
 		levelName.updateHitbox();
 		add(levelName);
-
+		/*
+		Unused metadata stuff
 		var metaData:SongMetadata = new SongMetadata();
 		if(metaData != null)
 		{
@@ -100,7 +100,7 @@ class PauseSubState extends MusicBeatSubstate
 			add(levelInfo);
 			creditsScrollTimer = new FlxTimer().start(10, function(t) scrollCredits(), 0);
 		}
-	
+		*/
 
 		var levelDifficulty:FlxText = new FlxText(20, 15 + 32, 0, Difficulty.getString().toUpperCase(), 32);
 		levelDifficulty.scrollFactor.set();
@@ -138,13 +138,11 @@ class PauseSubState extends MusicBeatSubstate
 		levelName.x = FlxG.width - (levelName.width + 20);
 		levelDifficulty.x = FlxG.width - (levelDifficulty.width + 20);
 		blueballedTxt.x = FlxG.width - (blueballedTxt.width + 20);
-		levelInfo.x = FlxG.width - (levelInfo.width + 20);
 
 		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
 		FlxTween.tween(levelName, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
 		FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
 		FlxTween.tween(blueballedTxt, {alpha: 1, y: blueballedTxt.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
-		FlxTween.tween(levelInfo, {alpha: 1}, 0.4, {ease: FlxEase.quartInOut, startDelay: 1});
 
 		grpMenuShit = new FlxTypedGroup<Alphabet>();
 		add(grpMenuShit);
