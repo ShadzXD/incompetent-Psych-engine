@@ -16,9 +16,6 @@ class InitState
 
     public static function loadSaveShit()
     {
-		#if LUA_ALLOWED
-		Mods.pushGlobalMods();
-		#end
 		Mods.loadTopMod();
 
 		FlxG.fixedTimestep = false;
@@ -48,15 +45,6 @@ class InitState
 			trace('LOADED FULLSCREEN SETTING!!');
 		}
 		#end
-
-		#if html5
-		if(ClientPrefs.data.cacheOnGPU)
-		{
-			ClientPrefs.data.cacheOnGPU = false;
-			ClientPrefs.saveSettings();
-		}
-		#end
-
 
     }
 }

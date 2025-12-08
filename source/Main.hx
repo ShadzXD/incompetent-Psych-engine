@@ -206,6 +206,15 @@ class Main extends Sprite
 			if (e.keyCode == FlxKey.ENTER && e.altKey)
 				e.stopImmediatePropagation();
 		}, false, 100);
+
+		var json = tjson.TJSON.parse(Paths.getTextFromFile('data/stickers.json'));
+
+		for (field in Reflect.fields(json.stickers))
+		{
+			var stickerStuff:Array<String> = Reflect.field(json.stickers, field);
+			for (keys in stickerStuff)Paths.dumpExclusions.push('menus/transitionSwag/stickers-set-1/' + keys + '.png'); //code loaded on launch so the game doesnt crash when destroying images.
+		}
+		for(bruh in Paths.dumpExclusions) trace('cached sprite ' + bruh);
 	}
 
 	static function resetSpriteCache(sprite:Sprite):Void {
@@ -220,7 +229,7 @@ class Main extends Sprite
 	#if CRASH_HANDLER
 	function onCrash(e:UncaughtErrorEvent):Void
 	{
-		e.preventDefault();
+		e.preventDefault(); //stops the game from crashing on a crash,,, lollll
 		e.stopImmediatePropagation();
 		var errMsg:String = "";
 		var callStack:Array<StackItem> = CallStack.exceptionStack(true);

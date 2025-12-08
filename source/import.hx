@@ -3,7 +3,6 @@
 #if DISCORD_ALLOWED
 import backend.Discord;
 #end
-
 #if ACHIEVEMENTS_ALLOWED
 import backend.Achievements;
 #end
@@ -14,7 +13,9 @@ import sys.io.*;
 #elseif js
 import js.html.*;
 #end
-
+#if STICKERS_ALLOWED
+import substates.StickerSubState;
+#end
 import backend.Paths;
 import backend.Controls;
 import backend.CoolUtil;
@@ -51,6 +52,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.group.FlxSpriteGroup;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.addons.transition.FlxTransitionableState;
 
 using StringTools;
 #end

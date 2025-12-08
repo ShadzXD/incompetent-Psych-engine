@@ -1,17 +1,17 @@
-package funkin.play.stages;
+package states.stages;
 
 import openfl.filters.ShaderFilter;
-import funkin.backend.shaders.RainShader;
+import shaders.RainShader;
 
 import flixel.addons.display.FlxTiledSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 
-import funkin.play.GameOverSubstate;
-import funkin.play.stages.objects.*;
+import substates.GameOverSubstate;
+import states.stages.objects.*;
 
-import funkin.play.notes.Note;
+import objects.Note;
 
-import funkin.play.cutscenes.CutsceneHandler;
+import cutscenes.CutsceneHandler;
 
 enum NeneState
 {
@@ -49,54 +49,53 @@ class PhillyStreets extends BaseStage
 	{
 		if(!ClientPrefs.data.lowQuality)
 		{
-			var skyImage = Paths.image('game/stages/phillyStreets/phillySkybox');
+			var skyImage = Paths.image('phillyStreets/phillySkybox');
 			scrollingSky = new FlxTiledSprite(skyImage, skyImage.width + 400, skyImage.height, true, false);
-			scrollingSky.antialiasing = ClientPrefs.data.antialiasing;
 			scrollingSky.setPosition(-650, -375);
 			scrollingSky.scrollFactor.set(0.1, 0.1);
 			scrollingSky.scale.set(0.65, 0.65);
 			add(scrollingSky);
 			darkenable.push(scrollingSky);
 		
-			var phillySkyline:BGSprite = new BGSprite('game/stages/phillyStreets/phillySkyline', -545, -273, 0.2, 0.2);
+			var phillySkyline:BGSprite = new BGSprite('phillyStreets/phillySkyline', -545, -273, 0.2, 0.2);
 			add(phillySkyline);
 			darkenable.push(phillySkyline);
 
-			var phillyForegroundCity:BGSprite = new BGSprite('game/stages/phillyStreets/phillyForegroundCity', 625, 94, 0.3, 0.3);
+			var phillyForegroundCity:BGSprite = new BGSprite('phillyStreets/phillyForegroundCity', 625, 94, 0.3, 0.3);
 			add(phillyForegroundCity);
 			darkenable.push(phillyForegroundCity);
 		}
 
-		var phillyConstruction:BGSprite = new BGSprite('game/stages/phillyStreets/phillyConstruction', 1800, 364, 0.7, 1);
+		var phillyConstruction:BGSprite = new BGSprite('phillyStreets/phillyConstruction', 1800, 364, 0.7, 1);
 		add(phillyConstruction);
 		darkenable.push(phillyConstruction);
 
-		var phillyHighwayLights:BGSprite = new BGSprite('game/stages/phillyStreets/phillyHighwayLights', 284, 305, 1, 1);
+		var phillyHighwayLights:BGSprite = new BGSprite('phillyStreets/phillyHighwayLights', 284, 305, 1, 1);
 		add(phillyHighwayLights);
 		darkenable.push(phillyHighwayLights);
 
 		if(!ClientPrefs.data.lowQuality)
 		{
-			var phillyHighwayLightsLightmap:BGSprite = new BGSprite('game/stages/phillyStreets/phillyHighwayLights_lightmap', 284, 305, 1, 1);
+			var phillyHighwayLightsLightmap:BGSprite = new BGSprite('phillyStreets/phillyHighwayLights_lightmap', 284, 305, 1, 1);
 			phillyHighwayLightsLightmap.blend = ADD;
 			phillyHighwayLightsLightmap.alpha = 0.6;
 			add(phillyHighwayLightsLightmap);
 			darkenable.push(phillyHighwayLightsLightmap);
 		}
 
-		var phillyHighway:BGSprite = new BGSprite('game/stages/phillyStreets/phillyHighway', 139, 209, 1, 1);
+		var phillyHighway:BGSprite = new BGSprite('phillyStreets/phillyHighway', 139, 209, 1, 1);
 		add(phillyHighway);
 		darkenable.push(phillyHighway);
 
 		if(!ClientPrefs.data.lowQuality)
 		{
-			var phillySmog:BGSprite = new BGSprite('game/stages/phillyStreets/phillySmog', -6, 245, 0.8, 1);
+			var phillySmog:BGSprite = new BGSprite('phillyStreets/phillySmog', -6, 245, 0.8, 1);
 			add(phillySmog);
 			darkenable.push(phillySmog);
 
 			for (i in 0...2)
 			{
-				var car:BGSprite = new BGSprite('game/stages/phillyStreets/phillyCars', 1200, 818, 0.9, 1, ['car1', 'car2', 'car3', 'car4'], false);
+				var car:BGSprite = new BGSprite('phillyStreets/phillyCars', 1200, 818, 0.9, 1, ['car1', 'car2', 'car3', 'car4'], false);
 				add(car);
 				switch(i)
 				{
@@ -107,31 +106,30 @@ class PhillyStreets extends BaseStage
 			}
 			phillyCars2.flipX = true;
 
-			phillyTraffic = new BGSprite('game/stages/phillyStreets/phillyTraffic', 1840, 608, 0.9, 1, ['redtogreen', 'greentored'], false);
+			phillyTraffic = new BGSprite('phillyStreets/phillyTraffic', 1840, 608, 0.9, 1, ['redtogreen', 'greentored'], false);
 			add(phillyTraffic);
 			darkenable.push(phillyTraffic);
 
-			var phillyTrafficLightmap:BGSprite = new BGSprite('game/stages/phillyStreets/phillyTraffic_lightmap', 1840, 608, 0.9, 1);
+			var phillyTrafficLightmap:BGSprite = new BGSprite('phillyStreets/phillyTraffic_lightmap', 1840, 608, 0.9, 1);
 			phillyTrafficLightmap.blend = ADD;
 			phillyTrafficLightmap.alpha = 0.6;
 			add(phillyTrafficLightmap);
 			darkenable.push(phillyTrafficLightmap);
 		}
 
-		var phillyForeground:BGSprite = new BGSprite('game/stages/phillyStreets/phillyForeground', 88, 317, 1, 1);
+		var phillyForeground:BGSprite = new BGSprite('phillyStreets/phillyForeground', 88, 317, 1, 1);
 		add(phillyForeground);
 		darkenable.push(phillyForeground);
 		
 		if(!ClientPrefs.data.lowQuality)
 		{
 			picoFade = new FlxSprite();
-			picoFade.antialiasing = ClientPrefs.data.antialiasing;
 			picoFade.alpha = 0;
 			add(picoFade);
 			darkenable.push(picoFade);
 		}
 
-		abot = new ABotSpeaker(gfGroup.x, gfGroup.y + 550);
+		abot = new ABotSpeaker(gfGroup.x - 50, gfGroup.y + 530);
 		updateABotEye(true);
 		add(abot);
 		
@@ -139,9 +137,9 @@ class PhillyStreets extends BaseStage
 			setupRainShader();
 
 		var _song = PlayState.SONG;
-		if(_song.gameOverSound == null || _song.gameOverSound.trim().length < 1) GameOverSubstate.deathSoundName = 'gameover/pico/fnf_loss_sfx-pico';
-		if(_song.gameOverLoop == null || _song.gameOverLoop.trim().length < 1) GameOverSubstate.loopSoundName = 'gameover/pico/gameOver-pico';
-		if(_song.gameOverEnd == null  || _song.gameOverEnd.trim().length < 1)  GameOverSubstate.endSoundName = 'gameover/pico/gameOverEnd-pico';
+		if(_song.gameOverSound == null || _song.gameOverSound.trim().length < 1) GameOverSubstate.deathSoundName = 'fnf_loss_sfx-pico';
+		if(_song.gameOverLoop == null || _song.gameOverLoop.trim().length < 1) GameOverSubstate.loopSoundName = 'gameOver-pico';
+		if(_song.gameOverEnd == null || _song.gameOverEnd.trim().length < 1) GameOverSubstate.endSoundName = 'gameOverEnd-pico';
 		if(_song.gameOverChar == null || _song.gameOverChar.trim().length < 1) GameOverSubstate.characterName = 'pico-dead';
 		setDefaultGF('nene');
 		
@@ -150,7 +148,7 @@ class PhillyStreets extends BaseStage
 			switch (songName)
 			{
 				case 'darnell':
-					if(!seenCutscene) setStartCallback(videoCutscene.bind('weekend1/darnellCutscene'));
+					//if(!seenCutscene) setStartCallback(videoCutscene.bind('darnellCutscene'));
 				case '2hot':
 					setEndCallback(function()
 					{
@@ -160,7 +158,7 @@ class PhillyStreets extends BaseStage
 						FlxTransitionableState.skipNextTransIn = true;
 						FlxG.camera.visible = false;
 						camHUD.visible = false;
-						game.startVideo('weekend1/2hotCutscene');
+						game.startVideo('2hotCutscene');
 					});
 			}
 		}
@@ -183,7 +181,7 @@ class PhillyStreets extends BaseStage
 			if(!noteTypes.contains(note.noteType)) noteTypes.push(note.noteType);
 		}
 
-		spraycanPile = new BGSprite('game/stages/phillyStreets/SpraycanPile', 920, 1045, 1, 1);
+		spraycanPile = new BGSprite('SpraycanPile', 920, 1045, 1, 1);
 		precache();
 		add(spraycanPile);
 		darkenable.push(spraycanPile);
@@ -237,7 +235,7 @@ class PhillyStreets extends BaseStage
 			switch (songName)
 			{
 				case 'darnell':
-					darnellCutscene();
+				darnellCutscene();
 			}
 		}
 	}
@@ -249,20 +247,20 @@ class PhillyStreets extends BaseStage
 		camFollow.x += 250;
 		FlxG.camera.snapToTarget();
 		FlxG.camera.zoom = 1.3;
-		spraycan.cutscene = true;
+		//spraycan.cutscene = true;
 
 		cutsceneHandler = new CutsceneHandler();
 		cutsceneHandler.endTime = 10;
-
-		var cutsceneMusic:FlxSound = new FlxSound().loadEmbedded(Paths.music('cutscenes/darnellCanCutscene'));
+		
+		var cutsceneMusic:FlxSound = new FlxSound().loadEmbedded(Paths.music('darnellCanCutscene'));
 		cutsceneMusic.looped = true;
 		FlxG.sound.list.add(cutsceneMusic);
 
-		var darnellLaugh:FlxSound = new FlxSound().loadEmbedded(Paths.sound('cutscenes/darnell_laugh'));
+		var darnellLaugh:FlxSound = new FlxSound().loadEmbedded(Paths.sound('cutscene/darnell_laugh'));
 		darnellLaugh.volume = 0.6;
 		FlxG.sound.list.add(darnellLaugh);
 
-		var neneLaugh:FlxSound = new FlxSound().loadEmbedded(Paths.sound('cutscenes/nene_laugh'));
+		var neneLaugh:FlxSound = new FlxSound().loadEmbedded(Paths.sound('cutscene/nene_laugh'));
 		neneLaugh.volume = 0.6;
 		FlxG.sound.list.add(neneLaugh);
 
@@ -328,7 +326,7 @@ class PhillyStreets extends BaseStage
 			boyfriend.playAnim('intro2', true);
 			boyfriend.specialAnim = true;
 
-			FlxG.sound.play(Paths.soundRandom('game/weekend1/shots/shot', 1, 4));
+			FlxG.sound.play(Paths.soundRandom('shots/shot', 1, 4));
 
 			FlxTween.tween(FlxG.camera.scroll, {x: camFollow.x + 100 - FlxG.width/2}, 2.5, {ease: FlxEase.quadInOut});
 
@@ -395,7 +393,7 @@ class PhillyStreets extends BaseStage
 		else
 			abot.lookLeft();
 
-		if(finishInstantly) abot.eyes.anim.curFrame = abot.eyes.anim.length - 1;
+		if(finishInstantly) abot.eyes.anim.frameIndex =24;
 	}
 
 	override function startSong()
@@ -440,15 +438,15 @@ class PhillyStreets extends BaseStage
 
 			lightCanSnd = new FlxSound();
 			FlxG.sound.list.add(lightCanSnd);
-			lightCanSnd.loadEmbedded(Paths.sound('game/weekend1/Darnell_Lighter'));
+			lightCanSnd.loadEmbedded(Paths.sound('Darnell_Lighter'));
 			
 			kickCanSnd = new FlxSound();
 			FlxG.sound.list.add(kickCanSnd);
-			kickCanSnd.loadEmbedded(Paths.sound('game/weekend1/Kick_Can_UP'));
+			kickCanSnd.loadEmbedded(Paths.sound('Kick_Can_UP'));
 
 			kneeCanSnd = new FlxSound();
 			FlxG.sound.list.add(kneeCanSnd);
-			kneeCanSnd.loadEmbedded(Paths.sound('game/weekend1/Kick_Can_FORWARD'));
+			kneeCanSnd.loadEmbedded(Paths.sound('Kick_Can_FORWARD'));
 			didCreateCan = true;
 		}
 
@@ -458,14 +456,14 @@ class PhillyStreets extends BaseStage
 			if(didCreateCasing) return;
 			if(!ClientPrefs.data.lowQuality)
 			{
-				casingFrames = Paths.getSparrowAtlas('game/stages/phillyStreets/PicoBullet'); //precache
+				casingFrames = Paths.getSparrowAtlas('PicoBullet'); //precache
 				casingGroup = new FlxSpriteGroup();
 				add(casingGroup);
 			}
 			
 			gunPrepSnd = new FlxSound();
 			FlxG.sound.list.add(gunPrepSnd);
-			gunPrepSnd.loadEmbedded(Paths.sound('game/weekend1/Gun_Prep'));
+			gunPrepSnd.loadEmbedded(Paths.sound('Gun_Prep'));
 			didCreateCasing = true;
 		}
 
@@ -480,7 +478,7 @@ class PhillyStreets extends BaseStage
 				case 'weekend-1-firegun':
 					bonkSnd = new FlxSound();
 					FlxG.sound.list.add(bonkSnd);
-					bonkSnd.loadEmbedded(Paths.sound('game/weekend1/Pico_Bonk'));
+					bonkSnd.loadEmbedded(Paths.sound('Pico_Bonk'));
 			}
 		}
 		
@@ -495,7 +493,7 @@ class PhillyStreets extends BaseStage
 		}
 
 		for (i in 1...5)
-			Paths.sound('game/weekend1/shots/shot$i');
+			Paths.sound('shots/shot$i');
 	}
 
 	function setupRainShader()
@@ -603,7 +601,7 @@ class PhillyStreets extends BaseStage
 
 	override function beatHit()
 	{
-		//if(curBeat % 2 == 0) abot.beatHit();
+		if(curBeat % 2 == 0) abot.beatHit();
 		switch(currentNeneState) {
 			case STATE_READY:
 				if (blinkCountdown == 0)
@@ -810,7 +808,7 @@ class PhillyStreets extends BaseStage
 				boyfriend.holdTimer = 0;
 				boyfriend.playAnim('cock', true);
 				boyfriend.specialAnim = true;
-				gunPrepSnd.play();
+				//gunPrepSnd.play();
 
 				boyfriend.animation.callback = function(name:String, frameNumber:Int, frameIndex:Int)
 				{
@@ -837,8 +835,8 @@ class PhillyStreets extends BaseStage
 				boyfriend.holdTimer = 0;
 				boyfriend.playAnim('shoot', true);
 				boyfriend.specialAnim = true;
-				FlxG.sound.play(Paths.soundRandom('game/weekend1/shots/shot', 1, 4));
-				spraycan.playCanShot();
+				FlxG.sound.play(Paths.soundRandom('shots/shot', 1, 4));
+				//spraycan.playCanShot();
 
 				new FlxTimer().start(1/24, function(tmr)
 				{
@@ -894,8 +892,8 @@ class PhillyStreets extends BaseStage
 				dad.holdTimer = 0;
 				dad.playAnim('lightCan', true);
 				dad.specialAnim = true;
-				lightCanSnd.play(true, sndTime - 65);
-				@:privateAccess
+			//	lightCanSnd.play(true, sndTime - 65);
+				
 				game.isCameraOnForcedPos = true;
 				game.defaultCamZoom += 0.1;
 				game.moveCamera(true);
@@ -905,25 +903,22 @@ class PhillyStreets extends BaseStage
 				dad.holdTimer = 0;
 				dad.playAnim('kickCan', true);
 				dad.specialAnim = true;
-				kickCanSnd.play(true, sndTime - 50);
-				spraycan.playCanStart();
+				//kickCanSnd.play(true, sndTime - 50);
+				//spraycan.playCanStart();
 				camFollow.x += 250;
 				game.cameraSpeed = 1.5;
 				game.defaultCamZoom -= 0.1;
 				
-				new FlxTimer().start(1.1, function(_) 
-				{
-					@:privateAccess
+				new FlxTimer().start(1.1, function(_) {
 					game.isCameraOnForcedPos = false;
 					game.moveCameraSection();
 					game.cameraSpeed = 1;
 				});
-				
 			case 'weekend-1-kneecan':
 				dad.holdTimer = 0;
 				dad.playAnim('kneeCan', true);
 				dad.specialAnim = true;
-				kneeCanSnd.play(true, sndTime - 22);
+				//kneeCanSnd.play(true, sndTime - 22);
 		}
 	}
 	
@@ -961,10 +956,12 @@ class PhillyStreets extends BaseStage
 									if(tmr2.loopsLeft == 0)
 									{
 										boyfriend.visible = true;
+										//trace('test 2');
 									}
 								}, 30);
 							}
 						}, 30);
+						//trace('test');
 					}
 					boyfriend.animation.finishCallback = null;
 				}
@@ -972,8 +969,8 @@ class PhillyStreets extends BaseStage
 				game.health -= 0.4;
 				if(game.health <= 0.0 && !game.practiceMode)
 				{
-					GameOverSubstate.deathSoundName = 'gameover/pico/fnf_loss_sfx-pico-explode';
-					GameOverSubstate.loopSoundName = 'gameover/pico/gameOverStart-pico-explode';
+					GameOverSubstate.deathSoundName = 'fnf_loss_sfx-pico-explode';
+					GameOverSubstate.loopSoundName = 'gameOverStart-pico-explode';
 					GameOverSubstate.characterName = 'pico-explosion-dead';
 				}
 		}

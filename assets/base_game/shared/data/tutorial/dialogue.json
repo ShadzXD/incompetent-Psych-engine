@@ -1,0 +1,28 @@
+{
+	"dialogue": [
+		{
+			"sound": "",
+			"speed": 0.05,
+			"portrait": "bf",
+			"boxState": "angry",
+			"expression": "excited",
+			"text": "asdjklashjlkdhasjkldhjklhsshshshhahashahahhhhhhsda"
+		},
+		{
+			"sound": "",
+			"speed": 0.05,
+			"portrait": "bf",
+			"boxState": "angry",
+			"expression": "excited",
+			"text": "bums"
+		},
+		{
+			"sound": "",
+			"speed": 0.05,
+			"portrait": "bf",
+			"boxState": "angry",
+			"expression": "excited",
+			"text": "asfdsfsds"
+		}
+	]
+}

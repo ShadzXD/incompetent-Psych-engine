@@ -18,10 +18,10 @@ import states.TitleState;
 	public var noteSkin:String = 'Default';
 	public var splashSkin:String = 'Psych';
 	public var noteSplashAlpha:Float = 0.6;
-	public var susSplashAlpha:Float = 0.9;
+	public var susSplashAlpha:Float = 1;
 	public var lowQuality:Bool = false;
 	public var shaders:Bool = true;
-	public var cacheOnGPU:Bool = #if !switch false #else true #end; //From Stilic
+	public var cacheOnGPU:Bool = #if desktop true #else false #end; //From Stilic
 	public var framerate:Int = 60;
 	public var camZooms:Bool = true;
 	public var hideHud:Bool = false;

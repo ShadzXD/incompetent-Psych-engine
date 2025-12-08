@@ -9,7 +9,7 @@ import states.editors.MasterEditorMenu;
 
 class MainMenuState extends MusicBeatState
 {
-	public static var psychEngineVersion:String = '0.5.2 (Alpha)'; // This is also used for Discord RPC
+	public static var psychEngineVersion:String = '0.6.0 (Alpha)'; // This is also used for Discord RPC
 	public static var curSelected:Int = 0;
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
@@ -28,9 +28,6 @@ class MainMenuState extends MusicBeatState
 
 	override function create()
 	{
-		#if MODS_ALLOWED
-		Mods.pushGlobalMods();
-		#end
 		Mods.loadTopMod();
 
 		#if DISCORD_ALLOWED
@@ -96,10 +93,6 @@ class MainMenuState extends MusicBeatState
 		var leDate = Date.now();
 		if (leDate.getDay() == 5 && leDate.getHours() >= 18)
 			Achievements.unlock('friday_night_play');
-
-		#if MODS_ALLOWED
-		Achievements.reloadList();
-		#end
 		#end
 
 		super.create();

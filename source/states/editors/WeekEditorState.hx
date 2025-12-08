@@ -284,8 +284,7 @@ class WeekEditorState extends MusicBeatState implements PsychUIEventHandler.Psyc
 
 		var isMissing:Bool = true;
 		if(assetName != null && assetName.length > 0) {
-			if( #if MODS_ALLOWED FileSystem.exists(Paths.modsImages('menubackgrounds/menu_' + assetName)) || #end
-			Assets.exists(Paths.getPath('images/menus/storymode/menubackgrounds/menu_' + assetName + '.png', IMAGE), IMAGE)) {
+			if(Assets.exists(Paths.getPath('images/menus/storymode/menubackgrounds/menu_' + assetName + '.png', IMAGE), IMAGE)) {
 				bgSprite.loadGraphic(Paths.image('menus/storymode/menubackgrounds/menu_' + assetName));
 				isMissing = false;
 			}
@@ -303,8 +302,7 @@ class WeekEditorState extends MusicBeatState implements PsychUIEventHandler.Psyc
 		
 		var isMissing:Bool = true;
 		if(assetName != null && assetName.length > 0) {
-			if( #if MODS_ALLOWED FileSystem.exists(Paths.modsImages('storymenu/' + assetName)) || #end
-			Assets.exists(Paths.getPath('images/menus/storymode/storymenu/' + assetName + '.png', IMAGE), IMAGE)) {
+			if(Assets.exists(Paths.getPath('images/menus/storymode/storymenu/' + assetName + '.png', IMAGE), IMAGE)) {
 				weekThing.loadGraphic(Paths.image('menus/storymode/' + assetName));
 				isMissing = false;
 			}

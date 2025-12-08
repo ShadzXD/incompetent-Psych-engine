@@ -1,16 +1,9 @@
 {
 	"events": [
 		[
-			0,
+			45176.4705882353,
 			[
-				["Flash Camera", "2", "0xFFFFFF"],
-				["Simple Lyrics Script", "kljlk", ""]
-			]
-		],
-		[
-			11470.5882352941,
-			[
-				["Simple Lyrics Script", "im bout to fuck her butt, we about to suck her cock", ""]
+				["Add Camera Zoom", "0.8", "0.04"]
 			]
 		]
 	],

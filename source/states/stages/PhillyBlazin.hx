@@ -1,14 +1,15 @@
-package funkin.play.stages;
+
+package states.stages;
 
 import openfl.filters.ShaderFilter;
-import funkin.backend.shaders.RainShader;
+import shaders.RainShader;
 
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.addons.display.FlxTiledSprite;
 
-import funkin.play.GameOverSubstate;
-import funkin.play.stages.objects.*;
-import funkin.play.notes.Note;
+import substates.GameOverSubstate;
+import states.stages.objects.*;
+import objects.Note;
 
 class PhillyBlazin extends BaseStage
 {
@@ -36,31 +37,30 @@ class PhillyBlazin extends BaseStage
 
 		if(!ClientPrefs.data.lowQuality)
 		{
-			var skyImage = Paths.image('game/stages/phillyStreets/phillyBlazin/skyBlur');
+			var skyImage = Paths.image('phillyBlazin/skyBlur');
 			scrollingSky = new FlxTiledSprite(skyImage, Std.int(skyImage.width * 1.1) + 475, Std.int(skyImage.height / 1.1), true, false);
-			scrollingSky.antialiasing = ClientPrefs.data.antialiasing;
 			scrollingSky.setPosition(-500, -120);
 			scrollingSky.scrollFactor.set();
 			add(scrollingSky);
 
-			skyAdditive = new BGSprite('game/stages/phillyStreets/phillyBlazin/skyBlur', -600, -175, 0.0, 0.0);
+			skyAdditive = new BGSprite('phillyBlazin/skyBlur', -600, -175, 0.0, 0.0);
 			setupScale(skyAdditive);
 			skyAdditive.visible = false;
 			add(skyAdditive);
 			
-			lightning = new BGSprite('game/stages/phillyStreets/phillyBlazin/lightning', -50, -300, 0.0, 0.0, ['lightning0'], false);
+			lightning = new BGSprite('phillyBlazin/lightning', -50, -300, 0.0, 0.0, ['lightning0'], false);
 			setupScale(lightning);
 			lightning.visible = false;
 			add(lightning);
 		}
 		
-		var phillyForegroundCity:BGSprite = new BGSprite('game/stages/phillyStreets/phillyBlazin/streetBlur', -600, -175, 0.0, 0.0);
+		var phillyForegroundCity:BGSprite = new BGSprite('phillyBlazin/streetBlur', -600, -175, 0.0, 0.0);
 		setupScale(phillyForegroundCity);
 		add(phillyForegroundCity);
 		
 		if(!ClientPrefs.data.lowQuality)
 		{
-			foregroundMultiply = new BGSprite('game/stages/phillyStreets/phillyBlazin/streetBlur', -600, -175, 0.0, 0.0);
+			foregroundMultiply = new BGSprite('phillyBlazin/streetBlur', -600, -175, 0.0, 0.0);
 			setupScale(foregroundMultiply);
 			foregroundMultiply.blend = MULTIPLY;
 			foregroundMultiply.visible = false;
@@ -82,9 +82,9 @@ class PhillyBlazin extends BaseStage
 			setupRainShader();
 
 		var _song = PlayState.SONG;
-		if(_song.gameOverSound == null || _song.gameOverSound.trim().length < 1) GameOverSubstate.deathSoundName = 'gameover/pico/fnf_loss_sfx-pico-gutpunch';
-		if(_song.gameOverLoop == null || _song.gameOverLoop.trim().length < 1) GameOverSubstate.loopSoundName = 'gameover/pico/gameOver-pico';
-		if(_song.gameOverEnd == null  || _song.gameOverEnd.trim().length < 1)  GameOverSubstate.endSoundName = 'gameover/pico/gameOverEnd-pico';
+		if(_song.gameOverSound == null || _song.gameOverSound.trim().length < 1) GameOverSubstate.deathSoundName = 'fnf_loss_sfx-pico-gutpunch';
+		if(_song.gameOverLoop == null || _song.gameOverLoop.trim().length < 1) GameOverSubstate.loopSoundName = 'gameOver-pico';
+		if(_song.gameOverEnd == null || _song.gameOverEnd.trim().length < 1) GameOverSubstate.endSoundName = 'gameOverEnd-pico';
 		if(_song.gameOverChar == null || _song.gameOverChar.trim().length < 1) GameOverSubstate.characterName = 'pico-blazin';
 		GameOverSubstate.deathDelay = 0.15;
 
@@ -141,7 +141,7 @@ class PhillyBlazin extends BaseStage
 			note.noAnimation = true;
 			note.noMissAnimation = true;
 		}
-		remove(dadGroup, true);
+		remove(dadGroup);
 		addBehindBF(dadGroup);
 	}
 
@@ -167,7 +167,7 @@ class PhillyBlazin extends BaseStage
 	{
 		for (i in 1...4)
 		{
-			Paths.sound('game/weekend1/lightning/Lightning$i');
+			Paths.sound('lightning/Lightning$i');
 		}
 	}
 
@@ -230,7 +230,7 @@ class PhillyBlazin extends BaseStage
 		FlxTween.color(abot, LIGHTNING_FADE_DURATION, 0xFF606060, 0xFF888888);
 
 		// Sound
-		FlxG.sound.play(Paths.soundRandom('game/weekend1/lightning/Lightning', 1, 3));
+		FlxG.sound.play(Paths.soundRandom('lightning/Lightning', 1, 3));
 	}
 
 	// Note functions

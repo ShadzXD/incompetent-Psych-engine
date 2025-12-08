@@ -2,7 +2,9 @@
 package states.errors;
 
 import flixel.util.FlxGradient;
-
+/**
+ * State which gets called instead of crashing the entire game.
+ */
 class CrashState extends MusicBeatState
 {
     var errorMssg:String;
@@ -19,12 +21,12 @@ class CrashState extends MusicBeatState
 
         Paths.clearStoredMemory();
         Paths.clearUnusedMemory();
-        FlxG.sound.play(Paths.sound('badnoise1'));
         FlxG.sound.music.stop();
+        FlxG.sound.play(Paths.sound('badnoise1'));
         FlxG.sound.playMusic(Paths.music('crash'), 0);
 		FlxG.sound.music.fadeIn(3, 0, 0.5);
 
-        var bg:FlxSprite = FlxGradient.createGradientFlxSprite(FlxG.width, FlxG.height, [0xFF000000, 0xFF1B1919], 1);
+        var bg:FlxSprite = FlxGradient.createGradientFlxSprite(FlxG.width, FlxG.height, [0xFF090107, 0xFF340227], 1);
         add(bg);
 
         var shitText:FlxText = new FlxText(0, 10, FlxG.width, "OH SHIT, YOUR SHITS FUCKED!", 40);
@@ -53,7 +55,10 @@ class CrashState extends MusicBeatState
         if(controls.ACCEPT && allowInput)
         {
             FlxG.switchState(() -> new MainMenuState());
+            allowInput = false;
             FlxG.sound.music.stop();
+			FlxG.sound.playMusic(Paths.music('freakyMenu'));
+
         }
     }
 }

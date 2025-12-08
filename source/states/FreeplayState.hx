@@ -10,6 +10,7 @@ import objects.HealthIcon;
 import objects.MusicPlayer;
 import substates.GameplayChangersSubstate;
 import substates.ResetScoreSubState;
+import substates.StickerSubState;
 import flixel.util.FlxDestroyUtil;
 import haxe.Json;
 import openfl.utils.Assets;
@@ -48,9 +49,28 @@ class FreeplayState extends MusicBeatState
 	var bottomBG:FlxSprite;
 
 	var player:MusicPlayer;
+	var stickerSubState:StickerSubState;
+	public function new(?stickers:StickerSubState = null)
+  	{
+    	super();
 
+    	if (stickers?.members != null)
+    	{
+      		stickerSubState = stickers;
+    	}
+ 	}
 	override function create()
 	{
+		#if STICKERS_ALLOWED
+		if (stickerSubState != null)
+   	 	{
+      		this.persistentUpdate = true;
+      		this.persistentDraw = true;
+
+      		openSubState(stickerSubState);
+      		stickerSubState.degenStickers();
+    	}
+		#end
 		
 		persistentUpdate = true;
 		PlayState.isStoryMode = false;
@@ -204,6 +224,8 @@ class FreeplayState extends MusicBeatState
 	var holdTime:Float = 0;
 	override function update(elapsed:Float)
 	{
+		if (FlxG.sound.music != null)
+			Conductor.songPosition = FlxG.sound.music.time;
 		if(WeekData.weeksList.length < 1)
 			return;
 		if (FlxG.sound.music.volume < 0.7)
@@ -229,7 +251,11 @@ class FreeplayState extends MusicBeatState
 
 		var shiftMult:Int = 1;
 		if(FlxG.keys.pressed.SHIFT) shiftMult = 3;
-
+		if(player.playingMusic)
+		{
+			     var mult:Float = FlxMath.lerp(1, iconArray[curSelected].scale.x, Math.exp(-elapsed * 5));
+				iconArray[curSelected].scale.set(mult, mult);
+		}
 		if (!player.playingMusic)
 		{
 			scoreText.text = 'PERSONAL BEST: ' +  FlxStringUtil.formatMoney(lerpScore, false, true) + ' (' + ratingSplit.join('.') + '%)';
@@ -297,6 +323,8 @@ class FreeplayState extends MusicBeatState
 				destroyFreeplayVocals();
 				FlxG.sound.music.volume = 0;
 				instPlaying = -1;
+				iconArray[curSelected].scale.set(1, 1);
+				iconArray[curSelected].updateHitbox();
 
 				player.playingMusic = false;
 				player.switchPlayMusic();
@@ -331,6 +359,7 @@ class FreeplayState extends MusicBeatState
 				Mods.currentModDirectory = songs[curSelected].folder;
 				var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty);
 				Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());
+
 				if (PlayState.SONG.needsVoices)
 				{
 					vocals = new FlxSound();
@@ -377,7 +406,6 @@ class FreeplayState extends MusicBeatState
 					}
 					catch(e:Dynamic)
 					{
-						//trace('FUUUCK');
 						opponentVocals = FlxDestroyUtil.destroy(opponentVocals);
 					}
 				}
@@ -385,6 +413,7 @@ class FreeplayState extends MusicBeatState
 				FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song), 0.8);
 				FlxG.sound.music.pause();
 				instPlaying = curSelected;
+				Conductor.bpm = PlayState.SONG.bpm;
 
 				player.playingMusic = true;
 				player.curTime = 0;
@@ -454,11 +483,7 @@ class FreeplayState extends MusicBeatState
 		try
 		{
 			var path:String = Paths.getPath('characters/$char.json', TEXT);
-			#if MODS_ALLOWED
-			var character:Dynamic = Json.parse(File.getContent(path));
-			#else
 			var character:Dynamic = Json.parse(Assets.getText(path));
-			#end
 			return character.vocals_file;
 		}
 		catch (e:Dynamic) {}
@@ -605,6 +630,16 @@ class FreeplayState extends MusicBeatState
 			icon.visible = icon.active = true;
 			_lastVisibles.push(i);
 		}
+	}
+	
+	override function beatHit()
+	{
+		if (player.playingMusic)
+		{
+			iconArray[curSelected].scale.set(1.1, 1.1);
+			iconArray[curSelected].updateHitbox();
+		}
+
 	}
 
 	override function destroy():Void

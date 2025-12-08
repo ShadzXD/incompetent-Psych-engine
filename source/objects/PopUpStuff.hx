@@ -24,6 +24,7 @@ class PopUpStuff extends FlxTypedGroup<FlxSprite>
 		hudType = hud;
 
 		if(PlayState.isPixelStage) hudType = 'PIXEL';
+
 		
 		if(fromPlayState)speedRate = PlayState.instance.playbackRate;
 
@@ -113,7 +114,17 @@ class PopUpStuff extends FlxTypedGroup<FlxSprite>
 			uiSuffix = '-pixel';
 			size = 5;
 			antialias = false;
+
+			case 'OSHA':
+			uiPrefix = 'popups/oshawott/';
+			antialias = false;
+
+			case 'COCOON':
+			uiPrefix = 'popups/cocoon/';
+			antialias = false;
+
 		}
+		antialias = antialias && ClientPrefs.data.antialiasing;
 
 		if(!isBotplay) cachePopUpScore();
 	}
