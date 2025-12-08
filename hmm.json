@@ -62,12 +62,26 @@
     {
       "name": "flixel-animate",
       "type": "haxelib",
-      "version": "1.2.1"
+      "version": "1.3.1"
     },
     {
       "name": "hscript-iris",
       "type": "haxelib",
       "version": "1.1.3"
+    },
+    {
+      "name": "funkin.vis",
+      "type": "git",
+      "dir": null,
+      "ref": "22b1ce089dd924f15cdc4632397ef3504d464e90",
+      "url": "https://github.com/FunkinCrew/funkVis"
+    },
+    {
+      "name": "grig.audio",
+      "type": "git",
+      "dir": "src",
+      "ref": "8567c4dad34cfeaf2ff23fe12c3796f5db80685e",
+      "url": "https://github.com/FunkinCrew/grig.audio"
     }
 
   ]
